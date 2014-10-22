@@ -1,3 +1,3 @@
 TLeafDiarAndroid
 ================
-edited by susu
+edited by seulgi
