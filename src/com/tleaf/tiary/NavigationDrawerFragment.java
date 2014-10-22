@@ -10,6 +10,8 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -122,13 +124,14 @@ public class NavigationDrawerFragment extends Fragment {
         
         ArrayList<MyMenuItem> arItem = new ArrayList<MyMenuItem>();
 		arItem.add(new MyMenuItem(R.drawable.home, getString(R.string.home)));
-		arItem.add(new MyMenuItem(R.drawable.person, getString(R.string.mypage)));
+		arItem.add(new MyMenuItem(R.drawable.person6, getString(R.string.mypage)));
 		arItem.add(new MyMenuItem(R.drawable.write, getString(R.string.write)));
 		arItem.add(new MyMenuItem(R.drawable.folder, getString(R.string.folder)));
 		arItem.add(new MyMenuItem(R.drawable.tag, getString(R.string.tag)));
-		arItem.add(new MyMenuItem(R.drawable.emotion, getString(R.string.emotion)));
+		arItem.add(new MyMenuItem(R.drawable.emotion3, getString(R.string.emotion)));
+		arItem.add(new MyMenuItem(R.drawable.tree2, getString(R.string.shack)));
 		arItem.add(new MyMenuItem(R.drawable.setting, getString(R.string.setting)));
-
+		
 		MenuListAdapter mAdapter = new MenuListAdapter(this.getActivity(), R.layout.item_drawer, arItem); //this.getActivity()
         mDrawerListView.setAdapter(mAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
@@ -155,6 +158,8 @@ public class NavigationDrawerFragment extends Fragment {
         // set up the drawer's list view with items and click listener
 
         ActionBar actionBar = getActionBar();
+        
+//        actionBar.setBackgroundDrawable(new ColorDrawable(Color.rgb(39, 167, 255)));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 

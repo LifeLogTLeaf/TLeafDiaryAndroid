@@ -30,7 +30,7 @@ public class DiaryListViewFragement extends Fragment {
 
 		ArrayList<Diary> arItem = new ArrayList<Diary>();
 	
-		String[] tags = {"#생일", "#이태원", "#홍석천"};
+		String[] tags = {"생일", "이태원", "홍석천"};
 		Diary d = new Diary();
 		d.setDate(20141011);
 		d.setImage("image");

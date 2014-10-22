@@ -72,26 +72,28 @@ public class DiaryListAdapter extends BaseAdapter {
 		txt_content.setText(arrItem.get(position).getContent());
 		
 		TextView txt_tag = (TextView)convertView.findViewById(R.id.item_txt_diary_tag);
-		ImageView img_tag = (ImageView)convertView.findViewById(R.id.item_img_diary_tag);
-		img_tag.setImageResource(R.drawable.tag2);
+//		ImageView img_tag = (ImageView)convertView.findViewById(R.id.item_img_diary_tag);
+//		img_tag.setImageResource(R.drawable.tag2);
 		
 		String[] tags = arrItem.get(position).getTags();
-		String tag = null;
-		for(int i=0; i< tags.length; i++) {
-			tag += tags[i] + " ";
-		}
-		txt_tag.setText(tag);
+		//사용자에게 더 있음을 알려주는 ui
+//		String tag = "";
+//		for(int i=0; i< tags.length; i++) {
+//			tag += tags[i] + ",";
+//		}
+//		txt_tag.setText(tag);
+		txt_tag.setText(tags[0]); 
 		
 		
 		TextView txt_folder = (TextView)convertView.findViewById(R.id.item_txt_diary_folder);
 		txt_folder.setText(arrItem.get(position).getFolder());
-		ImageView img_folder = (ImageView)convertView.findViewById(R.id.item_img_diary_folder);
-		img_folder.setImageResource(R.drawable.folder_list);
+//		ImageView img_folder = (ImageView)convertView.findViewById(R.id.item_img_diary_folder);
+//		img_folder.setImageResource(R.drawable.folder_list);
 		
 		TextView txt_location = (TextView)convertView.findViewById(R.id.item_txt_diary_location);
 		txt_location.setText(arrItem.get(position).getLocation());
-		ImageView img_location = (ImageView)convertView.findViewById(R.id.item_img_diary_location);
-		img_location.setImageResource(R.drawable.location);
+//		ImageView img_location = (ImageView)convertView.findViewById(R.id.item_img_diary_location);
+//		img_location.setImageResource(R.drawable.location);
 		
 		
 		return convertView;

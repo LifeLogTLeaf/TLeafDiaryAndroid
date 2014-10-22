@@ -4,11 +4,14 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.tleaf.tiary.fragment.DiaryEditFragment;
 import com.tleaf.tiary.fragment.DiaryListViewFragement;
 import com.tleaf.tiary.fragment.EmotionFragement;
 import com.tleaf.tiary.fragment.FolderFragement;
@@ -16,7 +19,6 @@ import com.tleaf.tiary.fragment.MyPageFragement;
 import com.tleaf.tiary.fragment.PlaceholderFragment;
 import com.tleaf.tiary.fragment.SettingFragement;
 import com.tleaf.tiary.fragment.TagFragement;
-import com.tleaf.tiary.fragment.WriteFragement;
 
 
 public class MainActivity extends Activity
@@ -48,6 +50,8 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(0, 153, 237)));
+		
 		mNavigationDrawerFragment = (NavigationDrawerFragment)
 				getFragmentManager().findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
@@ -72,7 +76,7 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 			fragment = new MyPageFragement();
 			break;
 		case 2:
-			fragment = new WriteFragement();
+			fragment = new DiaryEditFragment();//WriteFragement();
 			break;
 		case 3:
 			fragment = new FolderFragement();
