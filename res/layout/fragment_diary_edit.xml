@@ -63,9 +63,10 @@
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/layout_edit_menu"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/bg_gray"
+        android:background="@color/bg_gray_light"
         android:orientation="horizontal" >
 
         <ImageView
@@ -130,6 +131,64 @@
             android:layout_marginRight="1dp"
             android:layout_marginTop="5dp"
             android:src="@drawable/theee_set2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_edit_add"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <ListView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@color/bg_gray_light" >
+        </ListView>
+
+        <GridView
+            android:id="@+id/sticker_gridview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:background="@color/bg_gray"
+            android:clipToPadding="false"
+            android:gravity="center"
+            android:numColumns="5"
+            android:paddingBottom="25dp"
+            android:paddingTop="25dp"
+            android:scrollbars="@null"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="5dp" />
+        <!-- <LinearLayout -->
+        <!-- android:layout_width="0dp" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:layout_weight="7" -->
+        <!-- android:background="@color/bg_gray" > -->
+        <!-- </LinearLayout> -->
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_edit_template"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <ExpandableListView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@color/bg_gray_light" >
+        </ExpandableListView>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:background="@color/bg_gray" >
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

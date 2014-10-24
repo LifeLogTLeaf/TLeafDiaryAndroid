@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.fragment.DiaryEditFragment;
@@ -23,6 +24,7 @@ import com.tleaf.tiary.fragment.MyPageFragement;
 import com.tleaf.tiary.fragment.PlaceholderFragment;
 import com.tleaf.tiary.fragment.SettingFragement;
 import com.tleaf.tiary.fragment.TagFragement;
+import com.tleaf.tiary.util.Util;
 
 
 public class MainActivity extends Activity
@@ -152,11 +154,13 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (!mNavigationDrawerFragment.isDrawerOpen()) {
+			Util.tst(this, "mNavigationDrawerFragment.isDrawerOpen()"+mNavigationDrawerFragment.isDrawerOpen());
 			// Only show items in the action bar relevant to this screen
 			// if the drawer is not showing. Otherwise, let the drawer
 			// decide what to show in the action bar.
 			getMenuInflater().inflate(R.menu.main, menu);
-			restoreActionBar();
+			setActionBar();
+//			restoreActionBar();
 			return true;
 		}
 		return super.onCreateOptionsMenu(menu);
@@ -178,10 +182,11 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 	public boolean onNavigationItemSelected(int position, long id) {
 		// When the given dropdown item is selected, show its contents in the
 		// container view.
-		getFragmentManager().beginTransaction()
-		.replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-		.commit();
-		return true;
+//		getFragmentManager().beginTransaction()
+//		.replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+//		.commit();
+//		return true;
+		return false;
 	}
 
 
@@ -211,5 +216,31 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 		.commit();
 	}
 
+	
+	private void setActionBar() {
+		// Set up the action bar to show a dropdown list.
+		final ActionBar actionBar = getActionBar();
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+		
+		// Set up the dropdown list navigation in the action bar.
+		actionBar.setListNavigationCallbacks(
+				// Specify a SpinnerAdapter to populate the dropdown list.
+				new ArrayAdapter<String>(
+						actionBar.getThemedContext(),
+						android.R.layout.simple_list_item_1,
+						android.R.id.text1,
+						new String[] {"search", "home", "month", "listview", "[폴 더]", "폴더명1", "폴더명2", "폴더명3", "tag"
+						}),
+						this);
+
+		
+//		new String[] {
+//				getString(R.string.title_section1),
+//				getString(R.string.title_section2),
+//				getString(R.string.title_section3),
+//			}),
+	}
 }
 
