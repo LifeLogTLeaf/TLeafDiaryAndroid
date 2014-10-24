@@ -1,13 +1,20 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+<ExpandableListView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:choiceMode="singleChoice"
-    android:divider="#E1E1E1"
+    android:divider="@color/bg_gray_light"
+    android:groupIndicator="@null"
     android:dividerHeight="0.5dp"
     tools:context="com.tleaf.tiary.NavigationDrawerFragment" />
 
+
+<!-- <ExpandableListView -->
+<!-- 	android:id="@+id/list"   -->
+<!-- 	android:layout_width="match_parent"  -->
+<!-- 	android:layout_height="match_parent"  -->
+<!-- 	/> -->
     
 <!-- android:divider="@android:color/transparent" -->
 <!--     android:dividerHeight="0dp" -->

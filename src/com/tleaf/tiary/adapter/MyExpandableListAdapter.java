@@ -13,17 +13,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tleaf.tiary.R;
+import com.tleaf.tiary.model.ExpandableItem;
 import com.tleaf.tiary.model.MyMenuItem;
 
-public class MenuListAdapter extends BaseExpandableListAdapter {
+public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;
-	private ArrayList<MyMenuItem> mParent;
-	private HashMap<String, ArrayList<String>> mChild;
+	private ArrayList<String> mParent;
+	private HashMap<String, ArrayList<ExpandableItem>> mChild;
 	private int mParentLayout;
 	private int mChildLayout;
 
-	public MenuListAdapter(Context context, int layoutParent, int layoutChild, ArrayList<MyMenuItem> parent, HashMap<String, ArrayList<String>> child) {
+	public MyExpandableListAdapter(Context context, int layoutParent, int layoutChild, ArrayList<String> parent, HashMap<String, ArrayList<ExpandableItem>> child) {
 		mContext = context;
 		mInflater = (LayoutInflater)context.getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);
@@ -41,19 +42,19 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		if(mChild.get(mParent.get(groupPosition).getMyMenuTitle()) == null) 
+		if(mChild.get(mParent.get(groupPosition)) == null) 
 			return 0;
- 		return mChild.get(mParent.get(groupPosition).getMyMenuTitle()).size();
+ 		return mChild.get(mParent.get(groupPosition)).size();
 	}
 
 	@Override
-	public MyMenuItem getGroup(int groupPosition) {
+	public String getGroup(int groupPosition) {
 		return mParent.get(groupPosition);
 	}
 
 	@Override
-	public String getChild(int groupPosition, int childPosition) {
-		return mChild.get(mParent.get(groupPosition).getMyMenuTitle()).get(childPosition);
+	public ExpandableItem getChild(int groupPosition, int childPosition) {
+		return mChild.get(mParent.get(groupPosition)).get(childPosition);
 	}
 
 	@Override
@@ -75,16 +76,14 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-//		((ExpandableListView) parent).expandGroup(groupPosition);
+		((ExpandableListView) parent).expandGroup(groupPosition);
 		final int pos = groupPosition;
 		if (convertView == null) {
 			convertView = mInflater.inflate(mParentLayout, parent, false);
 		}
-		ImageView img = (ImageView)convertView.findViewById(R.id.img_drawer);
-		img.setImageResource(mParent.get(groupPosition).getMyMenuIcon());
-
-		TextView txt = (TextView)convertView.findViewById(R.id.txt_drawer_title);
-		txt.setText(mParent.get(groupPosition).getMyMenuTitle());
+	
+		TextView txt = (TextView)convertView.findViewById(R.id.txt_expand_title);
+		txt.setText(mParent.get(groupPosition));
 
 		return convertView;
 
@@ -98,8 +97,10 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
 			convertView = mInflater.inflate(mChildLayout, parent, false);
 		}
 
-		TextView txt = (TextView)convertView.findViewById(R.id.txt_drawer_title);
-		txt.setText(mChild.get(mParent.get(groupPosition).getMyMenuTitle()).get(childPosition));
+		TextView txt_title = (TextView)convertView.findViewById(R.id.txt_expand_child_title);
+		txt_title.setText(mChild.get(mParent.get(groupPosition)).get(childPosition).getTitle());
+		TextView txt_content = (TextView)convertView.findViewById(R.id.txt_expand_child_title);
+		txt_content.setText(mChild.get(mParent.get(groupPosition)).get(childPosition).getContent());
 
 		return convertView;
 	}

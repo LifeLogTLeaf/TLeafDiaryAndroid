@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="72dp"
+    android:padding="10dp" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="25dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/txt_expand_child_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="설정"
+            android:textColor="@color/text_gray"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_expand_child_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="설정에 대한 설명이 들어갑니다"
+            android:textColor="@color/text_gray" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="72dp"
+        android:layout_height="match_parent"
+        android:background="@color/bg_gray_light"
+        android:gravity="center_vertical" >
+
+        <CheckBox
+            android:id="@+id/checkBox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+</LinearLayout>

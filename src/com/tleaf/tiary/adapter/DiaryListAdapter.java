@@ -63,7 +63,7 @@ public class DiaryListAdapter extends BaseAdapter {
 		
 		
 		ImageView img = (ImageView)convertView.findViewById(R.id.item_img_diary);
-		img.setImageResource(R.drawable.jazz);
+		img.setImageResource(R.drawable.day);
 
 		TextView txt_title = (TextView)convertView.findViewById(R.id.item_txt_diary_title);
 		txt_title.setText(arrItem.get(position).getTitle());

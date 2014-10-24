@@ -1,5 +1,7 @@
 package com.tleaf.tiary;
 
+import java.util.ArrayList;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
@@ -11,9 +13,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.fragment.DiaryEditFragment;
 import com.tleaf.tiary.fragment.DiaryListViewFragement;
 import com.tleaf.tiary.fragment.EmotionFragement;
+import com.tleaf.tiary.fragment.ExpandableListFragment;
 import com.tleaf.tiary.fragment.FolderFragement;
 import com.tleaf.tiary.fragment.MyPageFragement;
 import com.tleaf.tiary.fragment.PlaceholderFragment;
@@ -31,8 +35,8 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 	 */
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 
-	private String bundelKey;
-	
+	//	private String bundelKey;
+
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
 	 */
@@ -43,15 +47,19 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 	 */
 	private CharSequence mTitle;
 
-	
+	private DataManager dataMgr;
+
+	static public FragmentManager fragmentManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		dataMgr = new DataManager(getApplicationContext());
 
 		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(0, 153, 237)));
-		
+
 		mNavigationDrawerFragment = (NavigationDrawerFragment)
 				getFragmentManager().findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
@@ -63,39 +71,48 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 	}
 
 	@Override
-	public void onNavigationDrawerItemSelected(int position) {
+	public boolean onNavigationDrawerItemSelected(int position, int childPosition) {
 		// update the main content by replacing fragments
-		FragmentManager fragmentManager = getFragmentManager();
-
+		fragmentManager = getFragmentManager();
 		Fragment fragment = null;
-		switch(position) {
-		case 0:
-			fragment = new DiaryListViewFragement();//HomeFragement();
-			break;
-		case 1:
-			fragment = new MyPageFragement();
-			break;
-		case 2:
-			fragment = new DiaryEditFragment();//WriteFragement();
-			break;
-		case 3:
-			fragment = new FolderFragement();
-			break;
-		case 4:
-			fragment = new TagFragement();
-			break;
-		case 5:
-			fragment = new EmotionFragement();
-			break;
-		case 6:
-			fragment = new SettingFragement();
-			break;
+
+		if(childPosition == -1) {
+			switch(position) {
+			case 0:
+				fragment = new DiaryListViewFragement();//HomeFragement();
+				break;
+			case 1:
+				fragment = new ExpandableListFragment();//MyPageFragement();
+				break;
+			case 2:
+				fragment = new DiaryEditFragment();//WriteFragement();
+				break;
+			case 3:
+				return true;
+			case 4:
+				fragment = new TagFragement();
+				break;
+			case 5:
+				fragment = new EmotionFragement();
+				break;
+			case 6:
+				fragment = new SettingFragement();
+				break;
+			case 7:
+				fragment = new ExpandableListFragment(); //SettingFragement();
+				break;
+			} 
+		} else {
+			fragment = new DiaryListViewFragement(dataMgr.getFolders().get(childPosition));
 		}
 
-		fragmentManager.beginTransaction()
-		.replace(R.id.container, fragment)//PlaceholderFragment.newInstance(position + 1))
-		.commit();
+//		fragmentManager.beginTransaction()
+//		.replace(R.id.container, fragment)//PlaceholderFragment.newInstance(position + 1))
+//		.commit();
+		
+		changeFragment(fragment);
 
+		return false;
 	}
 
 	public void onSectionAttached(int number) {
@@ -166,26 +183,33 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 		.commit();
 		return true;
 	}
-	
-	
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        // Restore the previously serialized current dropdown position.
-        if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
-            getActionBar().setSelectedNavigationItem(
-                    savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
-        }
-    }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        // Serialize the current dropdown position.
-        outState.putInt(STATE_SELECTED_NAVIGATION_ITEM,
-                getActionBar().getSelectedNavigationIndex());
-    }
-    
-    private void setBundleKey(String key) {
-    	
-    }
+
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		// Restore the previously serialized current dropdown position.
+		if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
+			getActionBar().setSelectedNavigationItem(
+					savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		// Serialize the current dropdown position.
+		outState.putInt(STATE_SELECTED_NAVIGATION_ITEM,
+				getActionBar().getSelectedNavigationIndex());
+	}
+
+	//	private void setBundleKey(String key) {
+	//
+	//	}
+
+	static public void changeFragment(Fragment fragment) {
+		fragmentManager.beginTransaction()
+		.replace(R.id.container, fragment)//PlaceholderFragment.newInstance(position + 1))
+		.commit();
+	}
+
 }
 
