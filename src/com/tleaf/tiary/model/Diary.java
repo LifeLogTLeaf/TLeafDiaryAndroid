@@ -1,13 +1,13 @@
 package com.tleaf.tiary.model;
 
-import java.util.Date;
+import java.util.ArrayList;
 
 public class Diary {
 	long date;
 	String image;
 	String title;
 	String content;
-	String[] tags;
+	ArrayList<String> tags;
 	String folder;
 	String location;
 	String emotion;
@@ -21,7 +21,7 @@ public class Diary {
 			String image,
 			String title,
 			String content,
-			String[] tags,
+			ArrayList<String> tags,
 			String folder,
 			String location,
 			String emotion) 
@@ -68,11 +68,11 @@ public class Diary {
 		this.content = content;
 	}
 
-	public String[] getTags() {
+	public ArrayList<String> getTags() {
 		return tags;
 	}
 
-	public void setTags(String[] tags) {
+	public void setTags(ArrayList<String> tags) {
 		this.tags = tags;
 	}
 

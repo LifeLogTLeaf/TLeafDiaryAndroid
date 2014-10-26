@@ -7,6 +7,7 @@
     android:orientation="vertical" >
 
     <EditText
+        android:id="@+id/edit_dialog_folder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="폴더를 선택하거나\n새로운 폴더명을 입력해주세요 " />

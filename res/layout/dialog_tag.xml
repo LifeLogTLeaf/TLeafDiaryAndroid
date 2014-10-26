@@ -2,11 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="10dp"
     android:background="#EFEFEF"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="10dp" >
 
     <EditText
+        android:id="@+id/edit_dialog_tag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="태그를 선택하거나\n,로 구분해 입력해주세요 " />
@@ -38,16 +39,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:textSize="16sp"
-            android:text="확인 " />
+            android:text="확인 "
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-             android:textSize="16sp"
-            android:text="취소 " />
+            android:text="취소 "
+            android:textSize="16sp" />
     </LinearLayout>
 
 </LinearLayout>

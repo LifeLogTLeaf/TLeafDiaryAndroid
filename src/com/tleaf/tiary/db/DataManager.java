@@ -303,6 +303,7 @@ public class DataManager {
 		//dm.getFolderList();
 
 		ArrayList<String> arrFolder = new ArrayList<String>();
+		//
 		arrFolder.add("daily");
 		arrFolder.add("다이어");
 		arrFolder.add("가계부");

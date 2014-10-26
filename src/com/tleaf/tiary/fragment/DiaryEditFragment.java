@@ -1,5 +1,8 @@
 package com.tleaf.tiary.fragment;
 
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -19,10 +22,14 @@ import android.widget.TextView;
 
 import com.android.datetimepicker.date.DatePickerDialog;
 import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
+import com.google.android.gms.internal.hn;
+import com.tleaf.tiary.Common;
 import com.tleaf.tiary.MapActivity;
 import com.tleaf.tiary.R;
+import com.tleaf.tiary.dialog.DialogResultListener;
 import com.tleaf.tiary.dialog.FolderDialogFragment;
 import com.tleaf.tiary.dialog.TagDialogFragment;
+import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
@@ -33,12 +40,26 @@ public class DiaryEditFragment extends Fragment {
 	private DialogFragment dFragment;
 
 	private FragmentManager fm;
-	private Time time;
+	private Time mTime;
 
 	private TextView txt_date;
+	private TextView txt_title;
+	private TextView txt_content;
+
+	private TextView txt_tag;
+	private TextView txt_folder;
+	
 	private LinearLayout layout_menu;
 	private LinearLayout layout_add;
 	private LinearLayout layout_template;
+
+	private View rootView;
+
+	private String userTag;
+	private String userFolder;
+
+	private ArrayList<String> handledTags = null;
+	private ArrayList<String> handledFolders = null;
 
 	public DiaryEditFragment() {
 		// TODO Auto-generated constructor stub
@@ -48,23 +69,40 @@ public class DiaryEditFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.fragment_diary_edit,
-				container, false);
+		rootView = inflater.inflate(R.layout.fragment_diary_edit, container,
+				false);
 
 		mContext = getActivity();
 		fm = getFragmentManager();
-		time = MyTime.getCurrentTimeToTime();
+		mTime = MyTime.getCurrentTimeToTime();
 
-		layout_menu = (LinearLayout) rootView.findViewById(R.id.layout_edit_menu);
+		setComponent();
+
+		return rootView;
+	}
+
+	private void setComponent() {
+
+		layout_menu = (LinearLayout) rootView
+				.findViewById(R.id.layout_edit_menu);
 		layout_add = (LinearLayout) rootView.findViewById(R.id.layout_edit_add);
-		layout_template = (LinearLayout) rootView.findViewById(R.id.layout_edit_template);
-		
-		((GridView) rootView.findViewById(R.id.sticker_gridview)).setAdapter(new StickerAdapter());
-		
+		layout_template = (LinearLayout) rootView
+				.findViewById(R.id.layout_edit_template);
+
+		((GridView) rootView.findViewById(R.id.sticker_gridview))
+		.setAdapter(new StickerAdapter());
+
 		txt_date = (TextView) rootView.findViewById(R.id.txt_edit_date);
+		txt_date.setText(MyTime.getTodayToString(mContext,
+				mTime.toMillis(false)));
 		txt_date.setOnClickListener(cl);
-		txt_date.setText(MyTime.getTodayToString(
-				mContext, time.toMillis(false)));
+
+		txt_title = (TextView) rootView.findViewById(R.id.txt_edit_title);
+		txt_content = (TextView) rootView.findViewById(R.id.txt_edit_content);
+		
+		
+		txt_tag = (TextView) rootView.findViewById(R.id.txt_edit_tag);
+		txt_folder = (TextView) rootView.findViewById(R.id.txt_edit_folder);
 
 		ImageView img_photo = (ImageView) rootView
 				.findViewById(R.id.img_edit_gallery);
@@ -94,120 +132,179 @@ public class DiaryEditFragment extends Fragment {
 				.findViewById(R.id.img_edit_setting);
 		img_setting.setOnClickListener(cl);
 
-		
-		
-		return rootView;
+		ImageView img_save = (ImageView) rootView
+				.findViewById(R.id.img_edit_save);
+		img_setting.setOnClickListener(cl);
+
+	}
+
+	private void onClickMenu(int viewId){
+		switch (viewId) {
+		case R.id.txt_edit_date:
+			DatePickerDialog datepicker = DatePickerDialog.newInstance(
+					new OnDateSetListener() {
+
+						@Override
+						public void onDateSet(DatePickerDialog dialog,
+								int year, int monthOfYear, int dayOfMonth) {
+							mTime.year = year;
+							mTime.month = monthOfYear;
+							mTime.monthDay = dayOfMonth;
+							mTime.normalize(false);
+							txt_date.setText(MyTime.getTodayToString(
+									mContext, mTime.toMillis(false)));
+
+						}
+					}, mTime.year, mTime.month, mTime.monthDay);
+			datepicker.show(fm, "dialog");
+			break;
+		case R.id.img_edit_gallery:
+			Util.tst(mContext, "갤러리 호출 ");
+
+			break;
+
+		case R.id.img_edit_tag:
+			Util.tst(mContext, "태그 호출 ");
+			dFragment = TagDialogFragment.newInstace(tagDialogResultListener);
+			dFragment.show(fm, "dialog");
+			break;
+
+		case R.id.img_edit_folder: 
+			Util.tst(mContext, "폴더 호출 ");
+			dFragment = FolderDialogFragment.newInstace(folderDialogResultListener);
+			dFragment.show(fm, "dialog");
+			break;
+
+		case R.id.img_edit_location:
+			Util.tst(mContext, "지도 호출 ");
+			Intent intent = new Intent(mContext, MapActivity.class);
+			// Log.e("arItem.get(pos).isbn",
+			// ""+arItem.get(pos).getDealLocation());
+			// intent.putExtra("location",
+			// arItem.get(pos).getDealLocation());
+			startActivity(intent);
+			break;
+
+		case R.id.img_edit_add:
+			Util.tst(mContext, "add 호출 ");
+			layout_menu.setVisibility(View.GONE);
+			layout_template.setVisibility(View.GONE);
+			layout_add.setVisibility(View.VISIBLE);
+			break;
+
+		case R.id.img_edit_template:
+			Util.tst(mContext, "탬플릿 호출 ");
+			layout_menu.setVisibility(View.GONE);
+			layout_template.setVisibility(View.VISIBLE);
+			layout_add.setVisibility(View.GONE);
+			break;
+
+		case R.id.img_edit_setting:
+			Util.tst(mContext, "갤러리 호출 ");
+
+			break;
+
+		case R.id.img_edit_save:
+			Util.tst(mContext, "갤러리 호출 ");
+			saveDiary();
+		default:
+			break;
+		}
 	}
 
 	private OnClickListener cl = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.txt_edit_date:
-				DatePickerDialog datepicker = DatePickerDialog.newInstance(
-						new OnDateSetListener() {
+			onClickMenu(v.getId());
+		}
+	};
 
-							@Override
-							public void onDateSet(DatePickerDialog dialog,
-									int year, int monthOfYear, int dayOfMonth) {
-								time.year = year;
-								time.month = monthOfYear;
-								time.monthDay = dayOfMonth;
-								time.normalize(false);
-								txt_date.setText(MyTime.getTodayToString(
-										mContext, time.toMillis(false)));
 
-							}
-						}, time.year, time.month, time.monthDay);
-				datepicker.show(fm, "dialog");
+	private DialogResultListener tagDialogResultListener = new DialogResultListener() {
 
-				break;
-			case R.id.img_edit_gallery:
-				Util.tst(mContext, "갤러리 호출 ");
-
-				break;
-
-			case R.id.img_edit_tag:
-				Util.tst(mContext, "태그 호출 ");
-				dFragment = TagDialogFragment.newInstace(
-						tagDialogOkClickListener, dialogCancelClickListener);
-				dFragment.show(fm, "dialog");
-				break;
-
-			case R.id.img_edit_folder:
-				Util.tst(mContext, "폴더 호출 ");
-				dFragment = FolderDialogFragment.newInstace(
-						folderDialogOkClickListener, dialogCancelClickListener);
-				dFragment.show(fm, "dialog");
-				break;
-
-			case R.id.img_edit_location:
-				Util.tst(mContext, "지도 호출 ");
-				Intent intent = new Intent(mContext, MapActivity.class);
-				// Log.e("arItem.get(pos).isbn",
-				// ""+arItem.get(pos).getDealLocation());
-				// intent.putExtra("location",
-				// arItem.get(pos).getDealLocation());
-				startActivity(intent);
-				break;
-
-			case R.id.img_edit_add:
-				Util.tst(mContext, "add 호출 ");
-				layout_menu.setVisibility(View.GONE);
-				layout_template.setVisibility(View.GONE);
-				layout_add.setVisibility(View.VISIBLE);
-				break;
-
-			case R.id.img_edit_template:
-				Util.tst(mContext, "탬플릿 호출 ");
-				layout_menu.setVisibility(View.GONE);
-				layout_template.setVisibility(View.VISIBLE);
-				layout_add.setVisibility(View.GONE);
-				break;
-
-			case R.id.img_edit_setting:
-				Util.tst(mContext, "갤러리 호출 ");
-
-				break;
-			// case R.id.txt_edit_date:
-			// final DateTimeSetListener startListener = new
-			// DateTimeSetListener(DateTimeSetListener.START_TIME);
-			//
-			// DialogFragment newFragment =
-			// DatePickerDialog.newInstance(startListener, time.year,
-			// time.month,
-			// time.monthDay);
-
-			default:
-				break;
+		@Override
+		public void setResult(String result) {
+			if (result == null || result == "") 
+				Util.tst(mContext, "원하는 태그를 입력해주세요");
+			else { 
+				userTag = result;
+				dFragment.dismiss();
+				txt_tag.setText(handleComma(userTag, Common.TAG));
 			}
-
 		}
-	};
 
-	private View.OnClickListener tagDialogOkClickListener = new View.OnClickListener() {
 		@Override
-		public void onClick(View v) {
-			dFragment.dismiss();
+		public void setCancel() {
+			dFragment.dismiss();			
 		}
+
 	};
 
-	private View.OnClickListener folderDialogOkClickListener = new View.OnClickListener() {
+	private DialogResultListener folderDialogResultListener = new DialogResultListener() {
+
 		@Override
-		public void onClick(View v) {
-			dFragment.dismiss();
+		public void setResult(String result) {
+			if (result == null || result == "") 
+				Util.tst(mContext, "원하는 폴더를 입력해주세요");
+			else { 
+				userFolder = result;
+				dFragment.dismiss();			
+				txt_tag.setText(handleComma(userTag, Common.FOLDER));
+			}
 		}
+
+		@Override
+		public void setCancel() {
+			dFragment.dismiss();			
+		}
+
 	};
 
-	private View.OnClickListener dialogCancelClickListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			dFragment.dismiss();
-		}
-	};
 	
-	private class StickerAdapter extends BaseAdapter{
+	private String handleComma(String userData, int dataType) { 
+		
+		ArrayList<String> arr = new ArrayList<String>();
+		
+		String handledDataStr = "";
+		
+		String[] splitStr = userData.split(",");
+		for(int i=0; i<splitStr.length; i++) {
+			splitStr[i] = splitStr[i].trim();
+			if (splitStr[i] == null || splitStr[i] == "")
+				break;
+			arr.add(splitStr[i]);
+			if(dataType == Common.TAG)
+				handledDataStr += "#";
+			handledDataStr += splitStr[i];
+			if (i != splitStr.length-1) 
+				handledDataStr += ", ";
+		}
+		
+		if (dataType == Common.TAG)
+			handledTags = arr;
+		else if (dataType == Common.FOLDER)
+			handledFolders = arr;
+		
+		return handledDataStr;
+	}
+	
+	
+	private void saveDiary() {
+		Diary mDiary = new Diary();
+		mDiary.setDate(mTime.toMillis(false));
+		mDiary.setTitle(txt_title.getText().toString());
+		mDiary.setContent((txt_title.getContext().toString()));
+		//이미지
+		if (handledTags != null || handledTags.size() != 0)
+			mDiary.setTags(handledTags);
+		if (handledFolders != null || handledFolders.size() != 0)
+			mDiary.setTags(handledFolders);
+
+	}
+
+
+	private class StickerAdapter extends BaseAdapter {
 
 		@Override
 		public int getCount() {
@@ -231,14 +328,14 @@ public class DiaryEditFragment extends Fragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			ImageView image = (ImageView) convertView;
-			if(image == null){
+			if (image == null) {
 				image = new ImageView(mContext);
 			}
-			
+
 			image.setImageResource(R.drawable.ic_launcher);
 			return image;
 		}
-		
+
 	}
 
 	// public void mOnClick(View v) {

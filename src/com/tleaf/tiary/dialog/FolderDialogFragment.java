@@ -7,18 +7,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.TextView;
 
 
 public class FolderDialogFragment extends DialogFragment {
 
-	private View.OnClickListener okListner = null;
-	private View.OnClickListener cancelListner = null;
-
-	public static FolderDialogFragment newInstace(View.OnClickListener okListner, View.OnClickListener cancelListner) {
+	private DialogResultListener resultListener;
+	public static FolderDialogFragment newInstace(DialogResultListener resultListener) {
 		FolderDialogFragment fragment = new FolderDialogFragment();
-		fragment.okListner = okListner;
-		fragment.cancelListner = cancelListner;
+		fragment.resultListener = resultListener;
 		return fragment;
 	}
 
@@ -32,11 +31,29 @@ public class FolderDialogFragment extends DialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View mv = inflater.inflate(R.layout.dialog_folder, container, false);
 
-		TextView btn_ok = (TextView) mv.findViewById(R.id.btn_ok);
-		btn_ok.setOnClickListener(okListner);
-		TextView btn_cancel = (TextView) mv.findViewById(R.id.btn_cancel);
-		btn_cancel.setOnClickListener(cancelListner);
 		
+		final EditText edit_folder = (EditText) mv
+				.findViewById(R.id.edit_dialog_tag);
+
+		TextView btn_ok = (TextView) mv.findViewById(R.id.btn_ok);
+		btn_ok.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				resultListener.setResult(edit_folder.getText().toString());
+			}
+		});
+		
+		TextView btn_cancel = (TextView) mv.findViewById(R.id.btn_cancel);
+		btn_cancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				resultListener.setCancel();
+				dismiss();
+			}
+		});
+
 		getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
 
