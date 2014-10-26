@@ -11,7 +11,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.gms.drive.internal.w;
 import com.tleaf.tiary.model.Diary;
+import com.tleaf.tiary.model.Weather;
 import com.tleaf.tiary.util.Util;
 
 public class DataManager {
@@ -23,10 +25,10 @@ public class DataManager {
 	private final String IMAGE = "image";
 	private final String TAG = "tag";
 	private final String FOLDER = "folder";
-	
+
 	private SQLiteDatabase db;
 	private ContentValues row;
-	
+
 	public DataManager(Context context) {
 		mContext = context;
 		dbHelper = new DbHelper(mContext);
@@ -57,17 +59,17 @@ public class DataManager {
 	//			"folder text, " +
 	//			"foreign key(diaryno) references diary(diaryno)";
 
-//	String sql = "insert into Diary values (" +
-//			"null, " +
-//			"'" + diary.getDate() + "', " +
-//			"'" + diary.getTitle() + "', " +
-//			"'" + diary.getContent() + "', " +
-//			"'" + diary.getEmotion() + "', " +
-//			"'" + diary.getLocation() + "', " +
-//			"'" + diary.getWeather().getTodayWeather() + "', " +
-//			"'" + diary.getWeather().getTemperature() + "', " +
-//			"'" + diary.getWeather().getHumidity() + "')";
-	
+	//	String sql = "insert into Diary values (" +
+	//			"null, " +
+	//			"'" + diary.getDate() + "', " +
+	//			"'" + diary.getTitle() + "', " +
+	//			"'" + diary.getContent() + "', " +
+	//			"'" + diary.getEmotion() + "', " +
+	//			"'" + diary.getLocation() + "', " +
+	//			"'" + diary.getWeather().getTodayWeather() + "', " +
+	//			"'" + diary.getWeather().getTemperature() + "', " +
+	//			"'" + diary.getWeather().getHumidity() + "')";
+
 	public boolean insertDiary(Diary diary) {
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
@@ -76,36 +78,46 @@ public class DataManager {
 		row.put("content", diary.getContent());
 		row.put("emotion", diary.getEmotion());
 		row.put("location", diary.getLocation());
-//		row.put("todayWeather", diary.getWeather().getTodayWeather());
-//		row.put("temperature", diary.getWeather().getTemperature());
-//		row.put("humidity", diary.getWeather().getHumidity());
+
+		if(diary.getWeather() != null) {
+			row.put("todayWeather", diary.getWeather().getTodayWeather());
+			row.put("temperature", diary.getWeather().getTemperature());
+			row.put("humidity", diary.getWeather().getHumidity());
+		}
+
 		long diaryno = db.insert(DIARY, null, row);
 
 		row = new ContentValues();
 		if (diary.getImages() != null && diary.getImages().size() != 0) {
 			for(int i=0; i<diary.getImages().size(); i++) {
+				Util.ll("row.put diary.getImages().get" + i, diary.getImages().get(i));
 				row.put("image", diary.getImages().get(i));
 				row.put("diaryno", diaryno);
 			}
 		}
+		db.insert(DIARY, null, row);
+		
 		row = new ContentValues();
 		if (diary.getTags() != null && diary.getTags().size() != 0) {
 			for(int i=0; i<diary.getTags().size(); i++) {
+				Util.ll("row.put diary.getTags().get" + i, diary.getTags().get(i));
 				row.put("tag", diary.getTags().get(i));
 				row.put("diaryno", diaryno);
 			}
 		}
+		db.insert(TAG, null, row);
 		row = new ContentValues();
 		if (diary.getFolders() != null && diary.getFolders().size() != 0) {
 			for(int i=0; i<diary.getFolders().size(); i++) {
+				Util.ll("row.put diary.getFolders().get" + i, diary.getFolders().get(i));
 				row.put("folder", diary.getFolders().get(i));
 				row.put("diaryno", diaryno);
 			}
 		}
-	
+		db.insert(FOLDER, null, row);
 		dbHelper.close();
 		return true;
-		
+
 	}
 
 
@@ -143,59 +155,85 @@ public class DataManager {
 		return true;
 	}
 
-	public ArrayList<Diary> getDiaryList() {
-		Util.ll("getDiaryList", "");
+	//			"images text, " +
+	//			"tags text, " +
+	//			"folders text, " +
 
+	//			"todayWeather text, " +
+	//			"temperature real, " +
+	//			"humidity real)";
+
+	public ArrayList<Diary> getDiaryList() {
+//		Util.tst(mContext, "getDiaryList()");
 		ArrayList<Diary> arItem = new ArrayList<Diary>();
-		SQLiteDatabase db = dbHelper.getReadableDatabase(); 
+		db = dbHelper.getReadableDatabase(); 
 		String sql = "select * from diary";
 
 		Cursor cursor = db.rawQuery(sql, null);
 
 		while(cursor.moveToNext()) {
 			Diary diary = new Diary();
-			//			int diaryno = cursor.getInt(0);
-			//			String isbn = cursor.getString(1);
-			//			String title = cursor.getString(2);
-			//			String author = cursor.getString(3);
-			//			String publisher = cursor.getString(4);
-			//			String rePrice = cursor.getString(5);
-			//			String image = cursor.getString(6);
-			//			String regDate = cursor.getString(7);
-			//			String price = cursor.getString(8);
-			//			String rating = cursor.getString(9);
-			//			String univ = cursor.getString(10);
-			//			String major = cursor.getString(11);
-			//			String lecture = cursor.getString(12);
-			//			String professor = cursor.getString(13);
-			//			String usedYear = cursor.getString(14);
-			//			String usedTerm = cursor.getString(15);
-			//			String dealLocation = cursor.getString(16);
-			//
-			//			Log.e("cursor.getInt(0)", ""+cursor.getInt(0));
-			//			diary.setDiaryNo(diaryno);
-			//			diary.setIsbn(isbn);
-			//			diary.setTitle(title);
-			//			diary.setAuthor(author);
-			//			diary.setPublisher(publisher);
-			//			diary.setRePrice(rePrice);
-			//			diary.setImage(image);
-			//			diary.setRegDate(regDate);
-			//			diary.setPrice(price);
-			//			diary.setRating(rating);
-			//			diary.setUniv(univ);
-			//			diary.setMajor(major);
-			//			diary.setLecture(lecture);
-			//			diary.setProfessor(professor);
-			//			diary.setUsedYear(usedYear);
-			//			diary.setUsedTerm(usedTerm);
-			//			diary.setDealLocation(dealLocation);
-			//			
+			int diaryno = cursor.getInt(0);
+			long date = cursor.getInt(1);
+			String title = cursor.getString(2);
+			String content = cursor.getString(3);
+			String emotion = cursor.getString(4);
+			String location = cursor.getString(5);
+			String todayWeather = cursor.getString(6);
+			float temperature = cursor.getFloat(7);
+			float humidity = cursor.getFloat(8);
+
+			ArrayList<String> images = getArrayList(diaryno, IMAGE);
+			ArrayList<String> tags = getArrayList(diaryno, TAG);
+			ArrayList<String> folders = getArrayList(diaryno, FOLDER);
+
+			Log.e("cursor.getInt(0)", ""+cursor.getInt(0));
+
+			diary.setNo(diaryno);
+			diary.setDate(date);
+			diary.setTitle(title);
+			diary.setContent(content);
+			diary.setEmotion(emotion);
+			diary.setLocation(location);
+			
+			Weather weather = new Weather();
+			weather.setTodayWeather(todayWeather);
+			weather.setTemperature(temperature);
+			weather.setHumidity(humidity);
+			
+			diary.setWeather(weather);
+			diary.setImages(images);
+			diary.setTags(tags);
+			diary.setFolders(folders);
+		
 			arItem.add(diary);
 		}
+		
+//		Util.tst(mContext, "getDiaryList arItem" + arItem.size());
 
 		return arItem;
 	}	
+
+	private ArrayList<String> getArrayList(int diaryno, String table) {
+		ArrayList<String> arr = new ArrayList<String>();
+
+		db = dbHelper.getReadableDatabase(); 
+		String sql;
+
+		if (table.equals(IMAGE)) {
+			sql = "select * from " + table + " where diaryno =" + diaryno;
+		} else {
+			sql = "select distinct * from " + table + " where diaryno =" + diaryno;
+		}
+		Cursor cursor = db.rawQuery(sql, null);
+
+		String item;
+		while(cursor.moveToNext()) {
+			item = cursor.getString(1);
+			arr.add(item);
+		}
+		return arr;
+	}
 
 	//	public ArrayList<Diary> getDiaryListBySearch(String search) {
 	//		Log.e("getDiaryListBySearch", search);

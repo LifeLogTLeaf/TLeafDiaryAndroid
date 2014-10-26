@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.model.MyMenuItem;
+import com.tleaf.tiary.util.MyTime;
 
 public class DiaryListAdapter extends BaseAdapter {
 	private Context mContext;
@@ -40,18 +41,19 @@ public class DiaryListAdapter extends BaseAdapter {
 		return position;
 	}
 	
-//	d.setDate(20141011);
-//	d.setImage("image");
-//	d.setTitle("내생일 "); 
-//	d.setContent("꼭 한번 가보고 싶었던 이태원 All that jazz에 다녀왔다. 공연이 정말 멋졌다.");
-//	d.setTags(tags);
-//	d.setFolder("daily");
-//	d.setLocaton("우리집");
-//	d.setEmotion("기쁨"); -> 그림으로    
-	
-	
-	
-	// 각 항목의 뷰 생성
+//	String table_diary = "create table diary (no integer primary key autoincrement, " +
+//			"date integer, " +
+//			"title text, " +
+//			"content text, " +
+//			"emotion text, " +
+//			"images text, " +
+//			"tags text, " +
+//			"folders text, " +
+//			"location text, " +
+//			"todayWeather text, " +
+//			"temperature real, " +
+//			"humidity real)";
+
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final int pos = position;
 		if (convertView == null) {
@@ -59,8 +61,8 @@ public class DiaryListAdapter extends BaseAdapter {
 		}
 
 		TextView txt_date = (TextView)convertView.findViewById(R.id.item_txt_diary_date);
-		txt_date.setText(""+arrItem.get(position).getDate());
-		
+		String dateStr = MyTime.getLongToString(mContext, arrItem.get(position).getDate());
+		txt_date.setText(dateStr);
 		
 		ImageView img = (ImageView)convertView.findViewById(R.id.item_img_diary);
 		img.setImageResource(R.drawable.day);
@@ -72,22 +74,19 @@ public class DiaryListAdapter extends BaseAdapter {
 		txt_content.setText(arrItem.get(position).getContent());
 		
 		TextView txt_tag = (TextView)convertView.findViewById(R.id.item_txt_diary_tag);
-		
 		ArrayList<String> tags = arrItem.get(position).getTags();
+		if(tags != null && tags.size() != 0)
+			txt_tag.setText(tags.get(0)); 
+				
 		//사용자에게 더 있음을 알려주는 ui
 //		String tag = "";
 //		for(int i=0; i< tags.length; i++) {
 //			tag += tags[i] + ",";
 //		}
-//		txt_tag.setText(tag);
-		
-		if(tags.size() != 0 && tags != null)
-			txt_tag.setText(tags.get(0)); 
-		
 		
 		TextView txt_folder = (TextView)convertView.findViewById(R.id.item_txt_diary_folder);
 		ArrayList<String> folders = arrItem.get(position).getFolders();
-		if(folders.size() != 0 && folders != null)
+		if(folders != null && folders.size() != 0)
 			txt_folder.setText(folders.get(0)); 
 
 		TextView txt_location = (TextView)convertView.findViewById(R.id.item_txt_diary_location);
@@ -95,4 +94,14 @@ public class DiaryListAdapter extends BaseAdapter {
 		
 		return convertView;
 	}
+	
 }
+
+//d.setDate(20141011);
+//d.setImage("image");
+//d.setTitle("내생일 "); 
+//d.setContent("꼭 한번 가보고 싶었던 이태원 All that jazz에 다녀왔다. 공연이 정말 멋졌다.");
+//d.setTags(tags);
+//d.setFolder("daily");
+//d.setLocaton("우리집");
+//d.setEmotion("기쁨"); -> 그림으로    

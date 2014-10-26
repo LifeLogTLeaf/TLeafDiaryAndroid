@@ -52,7 +52,7 @@ public class DbHelper extends SQLiteOpenHelper {
 				"temperature real, " +
 				"humidity real)";
 
-		String table_image = "create table imgae (no integer primary key autoincrement, " +
+		String table_image = "create table image (no integer primary key autoincrement, " +
 				"image text, " +
 				"diaryno integer, " +
 				"foreign key(diaryno) references diary(no))";

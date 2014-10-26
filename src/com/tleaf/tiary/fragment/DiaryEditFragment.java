@@ -24,6 +24,7 @@ import com.android.datetimepicker.date.DatePickerDialog;
 import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 import com.google.android.gms.internal.hn;
 import com.tleaf.tiary.Common;
+import com.tleaf.tiary.MainActivity;
 import com.tleaf.tiary.MapActivity;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
@@ -107,7 +108,7 @@ public class DiaryEditFragment extends Fragment {
 				.setAdapter(new StickerAdapter());
 
 		txt_date = (TextView) rootView.findViewById(R.id.txt_edit_date);
-		txt_date.setText(MyTime.getTodayToString(mContext,
+		txt_date.setText(MyTime.getLongToString(mContext,
 				mTime.toMillis(false)));
 		txt_date.setOnClickListener(cl);
 
@@ -185,7 +186,7 @@ public class DiaryEditFragment extends Fragment {
 							mTime.month = monthOfYear;
 							mTime.monthDay = dayOfMonth;
 							mTime.normalize(false);
-							txt_date.setText(MyTime.getTodayToString(mContext,
+							txt_date.setText(MyTime.getLongToString(mContext,
 									mTime.toMillis(false)));
 
 						}
@@ -280,11 +281,11 @@ public class DiaryEditFragment extends Fragment {
 
 	private String handleComma(String userData, int dataType) {
 
-		ArrayList<String> arr = new ArrayList<String>();
-
 		String handledDataStr = "";
 
+		ArrayList<String> arr = new ArrayList<String>();
 		String[] splitStr = userData.split(",");
+
 		for (int i = 0; i < splitStr.length; i++) {
 			splitStr[i] = splitStr[i].trim();
 			if (splitStr[i] == null && splitStr[i] == "")
@@ -307,17 +308,24 @@ public class DiaryEditFragment extends Fragment {
 		Diary mDiary = new Diary();
 		mDiary.setDate(mTime.toMillis(false));
 		mDiary.setTitle(txt_title.getText().toString());
-		mDiary.setContent((txt_title.getContext().toString()));
+		mDiary.setContent(txt_content.getText().toString());
 		// 감정 이모티콘
 		// 이미지
+		
+		Util.ll("handledTags.size()",  handledTags.size());
+		Util.ll("handledFolders.size()",  handledFolders.size());
+		
 		if (handledTags != null && handledTags.size() != 0)
 			mDiary.setTags(handledTags);
 		if (handledFolders != null && handledFolders.size() != 0)
-			mDiary.setTags(handledFolders);
+			mDiary.setFolders(handledFolders);
 		//위치
 		
 		Boolean result = dataMgr.insertDiary(mDiary); 
-		if(!result) {
+		if(result) {
+			Fragment fragment = new DiaryListViewFragement();
+			MainActivity.changeFragment(fragment);
+		} else {
 			//예외처리
 		}
 	}

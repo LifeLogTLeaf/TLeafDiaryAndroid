@@ -12,6 +12,8 @@ import java.util.ArrayList;
 //"'" + diary.getLocation() +"')";		
 
 public class Diary {
+
+	private int no;
 	private long date;
 	private String title;
 	private String content;
@@ -36,6 +38,7 @@ public class Diary {
 			String location,
 			Weather weather) 
 	{
+		this.no = -1;
 		this.date = date;
 		this.title = title;
 		this.content = content;
@@ -45,6 +48,14 @@ public class Diary {
 		this.folders = folders;
 		this.location = location;
 		this.weather = weather;
+	}
+	
+	public int getNo() {
+		return no;
+	}
+
+	public void setNo(int no) {
+		this.no = no;
 	}
 
 	public long getDate() {
