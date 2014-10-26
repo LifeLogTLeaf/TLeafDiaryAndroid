@@ -48,18 +48,20 @@ public class DiaryEditFragment extends Fragment {
 
 	private TextView txt_tag;
 	private TextView txt_folder;
-	
+	private TextView txt_location;
+
 	private LinearLayout layout_menu;
 	private LinearLayout layout_add;
 	private LinearLayout layout_template;
+	private LinearLayout layout_info;
 
 	private View rootView;
 
-	private String userTag;
-	private String userFolder;
+	private ArrayList<String> handledTags;
+	private ArrayList<String> handledFolders;
 
-	private ArrayList<String> handledTags = null;
-	private ArrayList<String> handledFolders = null;
+	private String previousTags;
+	private String previousFolder;
 
 	public DiaryEditFragment() {
 		// TODO Auto-generated constructor stub
@@ -78,6 +80,12 @@ public class DiaryEditFragment extends Fragment {
 
 		setComponent();
 
+		handledTags = null;
+		handledFolders = null;
+		previousTags = null;
+		previousFolder = null;
+
+
 		return rootView;
 	}
 
@@ -89,8 +97,11 @@ public class DiaryEditFragment extends Fragment {
 		layout_template = (LinearLayout) rootView
 				.findViewById(R.id.layout_edit_template);
 
+		layout_info = (LinearLayout) rootView
+				.findViewById(R.id.layout_edit_user_add_info);
+
 		((GridView) rootView.findViewById(R.id.sticker_gridview))
-		.setAdapter(new StickerAdapter());
+				.setAdapter(new StickerAdapter());
 
 		txt_date = (TextView) rootView.findViewById(R.id.txt_edit_date);
 		txt_date.setText(MyTime.getTodayToString(mContext,
@@ -99,10 +110,22 @@ public class DiaryEditFragment extends Fragment {
 
 		txt_title = (TextView) rootView.findViewById(R.id.txt_edit_title);
 		txt_content = (TextView) rootView.findViewById(R.id.txt_edit_content);
-		
-		
+
 		txt_tag = (TextView) rootView.findViewById(R.id.txt_edit_tag);
 		txt_folder = (TextView) rootView.findViewById(R.id.txt_edit_folder);
+		txt_location = (TextView) rootView.findViewById(R.id.txt_edit_location);
+
+		String tagStr = txt_tag.getText().toString();
+		String tagFolder = txt_folder.getText().toString();
+		String tagLocation = txt_location.getText().toString();
+
+		if ((tagStr != null && !tagStr.isEmpty())
+				|| (tagFolder != null && !tagFolder.isEmpty())
+				|| (tagLocation != null && !tagLocation.isEmpty())) {
+			layout_info.setVisibility(View.VISIBLE);
+		} else {
+			layout_info.setVisibility(View.GONE);
+		}
 
 		ImageView img_photo = (ImageView) rootView
 				.findViewById(R.id.img_edit_gallery);
@@ -138,7 +161,15 @@ public class DiaryEditFragment extends Fragment {
 
 	}
 
-	private void onClickMenu(int viewId){
+	private OnClickListener cl = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			onClickMenu(v.getId());
+		}
+	};
+
+	private void onClickMenu(int viewId) {
 		switch (viewId) {
 		case R.id.txt_edit_date:
 			DatePickerDialog datepicker = DatePickerDialog.newInstance(
@@ -151,8 +182,8 @@ public class DiaryEditFragment extends Fragment {
 							mTime.month = monthOfYear;
 							mTime.monthDay = dayOfMonth;
 							mTime.normalize(false);
-							txt_date.setText(MyTime.getTodayToString(
-									mContext, mTime.toMillis(false)));
+							txt_date.setText(MyTime.getTodayToString(mContext,
+									mTime.toMillis(false)));
 
 						}
 					}, mTime.year, mTime.month, mTime.monthDay);
@@ -165,13 +196,15 @@ public class DiaryEditFragment extends Fragment {
 
 		case R.id.img_edit_tag:
 			Util.tst(mContext, "태그 호출 ");
-			dFragment = TagDialogFragment.newInstace(tagDialogResultListener);
+			dFragment = TagDialogFragment.newInstace(dialogResultListener,
+					Common.TAG, previousTags);
 			dFragment.show(fm, "dialog");
 			break;
 
-		case R.id.img_edit_folder: 
+		case R.id.img_edit_folder:
 			Util.tst(mContext, "폴더 호출 ");
-			dFragment = FolderDialogFragment.newInstace(folderDialogResultListener);
+			dFragment = FolderDialogFragment.newInstace(dialogResultListener,
+					Common.FOLDER, previousFolder);
 			dFragment.show(fm, "dialog");
 			break;
 
@@ -205,104 +238,80 @@ public class DiaryEditFragment extends Fragment {
 			break;
 
 		case R.id.img_edit_save:
-			Util.tst(mContext, "갤러리 호출 ");
+			Util.tst(mContext, "일기 저장");
 			saveDiary();
 		default:
 			break;
 		}
 	}
 
-	private OnClickListener cl = new OnClickListener() {
+	private DialogResultListener dialogResultListener = new DialogResultListener() {
 
 		@Override
-		public void onClick(View v) {
-			onClickMenu(v.getId());
-		}
-	};
-
-
-	private DialogResultListener tagDialogResultListener = new DialogResultListener() {
-
-		@Override
-		public void setResult(String result) {
-			if (result == null || result == "") 
-				Util.tst(mContext, "원하는 태그를 입력해주세요");
-			else { 
-				userTag = result;
+		public void setResult(String result, int type) {
+			String typeName = type < Common.FOLDER ? "태그" : "폴더";
+			String handledData;
+			if (result == null || result == "")
+				Util.tst(mContext, "원하는 " + typeName + "를 입력해주세요");
+			else {
 				dFragment.dismiss();
-				txt_tag.setText(handleComma(userTag, Common.TAG));
+				handledData = handleComma(result, type);
+				layout_info.setVisibility(View.VISIBLE);
+				if (type == Common.TAG) {
+					previousTags = handledData;
+					txt_tag.setText(handledData);
+				}
+				else if (type == Common.FOLDER) {
+					previousFolder = handledData;
+					txt_folder.setText(handledData);
+				}
 			}
 		}
 
 		@Override
 		public void setCancel() {
-			dFragment.dismiss();			
+			dFragment.dismiss();
 		}
 
 	};
 
-	private DialogResultListener folderDialogResultListener = new DialogResultListener() {
+	private String handleComma(String userData, int dataType) {
 
-		@Override
-		public void setResult(String result) {
-			if (result == null || result == "") 
-				Util.tst(mContext, "원하는 폴더를 입력해주세요");
-			else { 
-				userFolder = result;
-				dFragment.dismiss();			
-				txt_tag.setText(handleComma(userTag, Common.FOLDER));
-			}
-		}
-
-		@Override
-		public void setCancel() {
-			dFragment.dismiss();			
-		}
-
-	};
-
-	
-	private String handleComma(String userData, int dataType) { 
-		
 		ArrayList<String> arr = new ArrayList<String>();
-		
+
 		String handledDataStr = "";
-		
+
 		String[] splitStr = userData.split(",");
-		for(int i=0; i<splitStr.length; i++) {
+		for (int i = 0; i < splitStr.length; i++) {
 			splitStr[i] = splitStr[i].trim();
 			if (splitStr[i] == null || splitStr[i] == "")
 				break;
 			arr.add(splitStr[i]);
-			if(dataType == Common.TAG)
-				handledDataStr += "#";
 			handledDataStr += splitStr[i];
-			if (i != splitStr.length-1) 
+			if (i != splitStr.length - 1)
 				handledDataStr += ", ";
 		}
-		
+
 		if (dataType == Common.TAG)
 			handledTags = arr;
 		else if (dataType == Common.FOLDER)
 			handledFolders = arr;
-		
+
 		return handledDataStr;
 	}
-	
-	
+
 	private void saveDiary() {
 		Diary mDiary = new Diary();
 		mDiary.setDate(mTime.toMillis(false));
 		mDiary.setTitle(txt_title.getText().toString());
 		mDiary.setContent((txt_title.getContext().toString()));
-		//이미지
+		// 이미지
 		if (handledTags != null || handledTags.size() != 0)
 			mDiary.setTags(handledTags);
 		if (handledFolders != null || handledFolders.size() != 0)
 			mDiary.setTags(handledFolders);
 
 	}
-
 
 	private class StickerAdapter extends BaseAdapter {
 

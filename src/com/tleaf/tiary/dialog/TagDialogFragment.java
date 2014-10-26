@@ -14,12 +14,16 @@ import com.tleaf.tiary.R;
 public class TagDialogFragment extends DialogFragment {
 
 	private DialogResultListener resultListener;
-
+	private int dateType;
+	private String previousData;
+	
 	public static TagDialogFragment newInstace(
-			DialogResultListener resultListener) {
+			DialogResultListener resultListener, int dataType, String previousData) {
 		TagDialogFragment fragment = new TagDialogFragment();
 		fragment.resultListener = resultListener;
-		return fragment;
+		fragment.dateType = dataType;
+		fragment.previousData = previousData;
+ 		return fragment;
 	}
 
 	@Override
@@ -36,13 +40,16 @@ public class TagDialogFragment extends DialogFragment {
 
 		final EditText edit_tag = (EditText) mv
 				.findViewById(R.id.edit_dialog_tag);
-
+		
+		if (previousData != null && previousData.length() != 0) 
+			edit_tag.setText(previousData);
+		
 		TextView btn_ok = (TextView) mv.findViewById(R.id.btn_ok);
 		btn_ok.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				resultListener.setResult(edit_tag.getText().toString());
+				resultListener.setResult(edit_tag.getText().toString(), dateType);
 			}
 		});
 		

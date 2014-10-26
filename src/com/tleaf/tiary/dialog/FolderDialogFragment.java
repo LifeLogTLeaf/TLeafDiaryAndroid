@@ -15,9 +15,14 @@ import android.widget.TextView;
 public class FolderDialogFragment extends DialogFragment {
 
 	private DialogResultListener resultListener;
-	public static FolderDialogFragment newInstace(DialogResultListener resultListener) {
+	private int dateType;
+	private String previousData;
+	
+	public static FolderDialogFragment newInstace(DialogResultListener resultListener, int dataType, String previousData) {
 		FolderDialogFragment fragment = new FolderDialogFragment();
 		fragment.resultListener = resultListener;
+		fragment.dateType = dataType;
+		fragment.previousData = previousData;
 		return fragment;
 	}
 
@@ -25,6 +30,7 @@ public class FolderDialogFragment extends DialogFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setStyle(STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
+
 	}
 
 	@Override
@@ -33,14 +39,17 @@ public class FolderDialogFragment extends DialogFragment {
 
 		
 		final EditText edit_folder = (EditText) mv
-				.findViewById(R.id.edit_dialog_tag);
+				.findViewById(R.id.edit_dialog_folder);
+		
+		if (previousData != null && previousData.length() != 0) 
+			edit_folder.setText(previousData);
 
 		TextView btn_ok = (TextView) mv.findViewById(R.id.btn_ok);
 		btn_ok.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				resultListener.setResult(edit_folder.getText().toString());
+				resultListener.setResult(edit_folder.getText().toString(), dateType);
 			}
 		});
 		

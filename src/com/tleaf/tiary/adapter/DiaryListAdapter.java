@@ -75,14 +75,16 @@ public class DiaryListAdapter extends BaseAdapter {
 //		ImageView img_tag = (ImageView)convertView.findViewById(R.id.item_img_diary_tag);
 //		img_tag.setImageResource(R.drawable.tag2);
 		
-		String[] tags = arrItem.get(position).getTags();
+		ArrayList<String> tags = arrItem.get(position).getTags();
 		//사용자에게 더 있음을 알려주는 ui
 //		String tag = "";
 //		for(int i=0; i< tags.length; i++) {
 //			tag += tags[i] + ",";
 //		}
 //		txt_tag.setText(tag);
-		txt_tag.setText(tags[0]); 
+		
+		if(tags.size() != 0 && tags != null)
+			txt_tag.setText(tags.get(0)); 
 		
 		
 		TextView txt_folder = (TextView)convertView.findViewById(R.id.item_txt_diary_folder);

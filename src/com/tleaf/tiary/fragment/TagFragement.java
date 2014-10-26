@@ -81,6 +81,11 @@ public class TagFragement extends Fragment {
 	private ArrayList<Diary> getDiaryListByType() {
 		arItem = new ArrayList<Diary>();
 		
+		ArrayList<String> arrData = new ArrayList<String>();
+		arrData.add("생일");
+		arrData.add("생일");
+		arrData.add("생일");
+		
 		type = "all";
 		if(type.equals("all")) {
 			String[] tags = {"생일", "이태원", "홍석천"};
@@ -89,7 +94,7 @@ public class TagFragement extends Fragment {
 			d.setImage("image");
 			d.setTitle("내생일 "); 
 			d.setContent("꼭 한번 가보고 싶었던 이태원 All that jazz에 다녀왔다. 공연이 정말 멋졌다.");
-			d.setTags(tags);
+			d.setTags(arrData);
 			d.setFolder("daily");
 			d.setLocaton("우리집");
 			d.setEmotion("기쁨");
@@ -105,7 +110,7 @@ public class TagFragement extends Fragment {
 			d.setImage("image");
 			d.setTitle("내생일 "); 
 			d.setContent("안드로이드 개발.....템플릿 일기.....너이자식......");
-			d.setTags(tags);
+			d.setTags(arrData);
 			d.setFolder("daily");
 			d.setLocaton("우리집");
 			d.setEmotion("기쁨");

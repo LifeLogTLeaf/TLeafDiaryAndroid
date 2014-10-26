@@ -2,21 +2,15 @@ package com.tleaf.tiary.fragment;
 
 import java.util.ArrayList;
 
-import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.tleaf.tiary.MainActivity;
 import com.tleaf.tiary.R;
@@ -99,15 +93,20 @@ public class DiaryListViewFragement extends Fragment implements OnNavigationList
 
 	private ArrayList<Diary> getDiaryListByType() {
 		arItem = new ArrayList<Diary>();
-
+		ArrayList<String> arrData = new ArrayList<String>();
+		arrData.add("생일");
+		arrData.add("생일");
+		arrData.add("생일");
+		
+		
 		if(type.equals("all")) {
-			String[] tags = {"생일", "이태원", "홍석천"};
+			arrData = new ArrayList<String>();
 			Diary d = new Diary();
 			d.setDate(20141011);
 			d.setImage("image");
 			d.setTitle("내생일 "); 
 			d.setContent("꼭 한번 가보고 싶었던 이태원 All that jazz에 다녀왔다. 공연이 정말 멋졌다.");
-			d.setTags(tags);
+			d.setTags(arrData);
 			d.setFolder("daily");
 			d.setLocaton("우리집");
 			d.setEmotion("기쁨");
@@ -123,7 +122,7 @@ public class DiaryListViewFragement extends Fragment implements OnNavigationList
 			d.setImage("image");
 			d.setTitle("내생일 "); 
 			d.setContent("안드로이드 개발.....템플릿 일기.....너이자식......");
-			d.setTags(tags);
+			d.setTags(arrData);
 			d.setFolder("daily");
 			d.setLocaton("우리집");
 			d.setEmotion("기쁨");
