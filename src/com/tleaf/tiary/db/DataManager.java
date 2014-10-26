@@ -2,10 +2,14 @@ package com.tleaf.tiary.db;
 
 import java.util.ArrayList;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.Util;
@@ -15,35 +19,93 @@ public class DataManager {
 	private Context mContext = null;
 	private DbHelper dbHelper = null;
 
+	private final String DIARY = "diary";
+	private final String IMAGE = "image";
+	private final String TAG = "tag";
+	private final String FOLDER = "folder";
+	
+	private SQLiteDatabase db;
+	private ContentValues row;
+	
 	public DataManager(Context context) {
 		mContext = context;
 		dbHelper = new DbHelper(mContext);
 	}
 
+	//	String table_diary = "create table diary (no integer primary key autoincrement, " +
+	//			"date integer, " +
+	//			"title text, " +
+	//			"content text, " +
+	//			"emotion text, " +
+	//			"images text, " +
+	//			"tags text, " +
+	//			"folders text, " +
+	//			"location text, " +
+	//			"todayWeather text, " +
+	//			"temperature real, " +
+	//			"humidity real)";
+	//
+	//	String table_image = "create table imgae (no integer primary key autoincrement, " +
+	//			"image text, " +
+	//			"foreign key(diaryno) references diary(diaryno)";
+	//	
+	//	String table_tag = "create table tag (no integer primary key autoincrement, " +
+	//			"tag text, " +
+	//			"foreign key(diaryno) references diary(diaryno)";
+	//	
+	//	String table_folder = "create table folder (no integer primary key autoincrement, " +
+	//			"folder text, " +
+	//			"foreign key(diaryno) references diary(diaryno)";
+
+//	String sql = "insert into Diary values (" +
+//			"null, " +
+//			"'" + diary.getDate() + "', " +
+//			"'" + diary.getTitle() + "', " +
+//			"'" + diary.getContent() + "', " +
+//			"'" + diary.getEmotion() + "', " +
+//			"'" + diary.getLocation() + "', " +
+//			"'" + diary.getWeather().getTodayWeather() + "', " +
+//			"'" + diary.getWeather().getTemperature() + "', " +
+//			"'" + diary.getWeather().getHumidity() + "')";
+	
 	public boolean insertDiary(Diary diary) {
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		String sql = "insert into Diary values (" +
-				//				"null, " +
-				//				"'" + diary.getIsbn() + "', " +
-				//				"'" + diary.getTitle() + "', " +
-				//				"'" + diary.getAuthor() + "', " +
-				//				"'" + diary.getPublisher() + "', " +
-				//				"'" + diary.getRePrice() + "', " +
-				//				"'" + diary.getImage() + "', " +
-				//				"'" + diary.getRegDate() + "', " +
-				//				"'" + diary.getPrice() + "', " +
-				//				"'" + diary.getRating() + "', " +
-				//				"'" + diary.getUniv() + "', " +
-				//				"'" + diary.getMajor() + "', " +
-				//				"'" + diary.getLecture() + "', " +
-				//				"'" + diary.getProfessor() + "', " +
-				//				"'" + diary.getUsedYear() + "', " +
-				//				"'" + diary.getUsedTerm() + "', " +
-				//				"'" + diary.getDealLocation() +
-				"')";		
-		db.execSQL(sql);
+		db = dbHelper.getWritableDatabase();
+		row = new ContentValues();
+		row.put("date", diary.getDate());
+		row.put("title", diary.getTitle());
+		row.put("content", diary.getContent());
+		row.put("emotion", diary.getEmotion());
+		row.put("location", diary.getLocation());
+//		row.put("todayWeather", diary.getWeather().getTodayWeather());
+//		row.put("temperature", diary.getWeather().getTemperature());
+//		row.put("humidity", diary.getWeather().getHumidity());
+		long diaryno = db.insert(DIARY, null, row);
+
+		row = new ContentValues();
+		if (diary.getImages() != null && diary.getImages().size() != 0) {
+			for(int i=0; i<diary.getImages().size(); i++) {
+				row.put("image", diary.getImages().get(i));
+				row.put("diaryno", diaryno);
+			}
+		}
+		row = new ContentValues();
+		if (diary.getTags() != null && diary.getTags().size() != 0) {
+			for(int i=0; i<diary.getTags().size(); i++) {
+				row.put("tag", diary.getTags().get(i));
+				row.put("diaryno", diaryno);
+			}
+		}
+		row = new ContentValues();
+		if (diary.getFolders() != null && diary.getFolders().size() != 0) {
+			for(int i=0; i<diary.getFolders().size(); i++) {
+				row.put("folder", diary.getFolders().get(i));
+				row.put("diaryno", diaryno);
+			}
+		}
+	
 		dbHelper.close();
 		return true;
+		
 	}
 
 
@@ -310,8 +372,32 @@ public class DataManager {
 
 		return arrFolder;
 	}
-	
+
 	public ArrayList<Diary> getDiaryListByFolderName(String FolderName) {
 		return null;
 	}
+
+
+
+
+
 }
+
+
+
+//private String convertedStr;
+
+//private String imgStr;
+//private String tagsStr;
+//private String folderStr;
+
+//private String covertArrayToString(ArrayList<String> arr) {
+//	String str = "";
+//	for (int i = 0; i < arr.size(); i++) {
+//		str += arr.get(i);
+//		if (i != arr.size() - 1)
+//			str += ", ";
+//	}
+//	return str; 
+//}
+

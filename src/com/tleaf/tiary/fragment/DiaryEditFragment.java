@@ -26,6 +26,7 @@ import com.google.android.gms.internal.hn;
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.MapActivity;
 import com.tleaf.tiary.R;
+import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.dialog.DialogResultListener;
 import com.tleaf.tiary.dialog.FolderDialogFragment;
 import com.tleaf.tiary.dialog.TagDialogFragment;
@@ -41,6 +42,7 @@ public class DiaryEditFragment extends Fragment {
 
 	private FragmentManager fm;
 	private Time mTime;
+	private DataManager dataMgr;
 
 	private TextView txt_date;
 	private TextView txt_title;
@@ -77,6 +79,7 @@ public class DiaryEditFragment extends Fragment {
 		mContext = getActivity();
 		fm = getFragmentManager();
 		mTime = MyTime.getCurrentTimeToTime();
+		dataMgr = new DataManager(mContext);
 
 		setComponent();
 
@@ -157,7 +160,7 @@ public class DiaryEditFragment extends Fragment {
 
 		ImageView img_save = (ImageView) rootView
 				.findViewById(R.id.img_edit_save);
-		img_setting.setOnClickListener(cl);
+		img_save.setOnClickListener(cl);
 
 	}
 
@@ -284,7 +287,7 @@ public class DiaryEditFragment extends Fragment {
 		String[] splitStr = userData.split(",");
 		for (int i = 0; i < splitStr.length; i++) {
 			splitStr[i] = splitStr[i].trim();
-			if (splitStr[i] == null || splitStr[i] == "")
+			if (splitStr[i] == null && splitStr[i] == "")
 				break;
 			arr.add(splitStr[i]);
 			handledDataStr += splitStr[i];
@@ -305,12 +308,18 @@ public class DiaryEditFragment extends Fragment {
 		mDiary.setDate(mTime.toMillis(false));
 		mDiary.setTitle(txt_title.getText().toString());
 		mDiary.setContent((txt_title.getContext().toString()));
+		// 감정 이모티콘
 		// 이미지
-		if (handledTags != null || handledTags.size() != 0)
+		if (handledTags != null && handledTags.size() != 0)
 			mDiary.setTags(handledTags);
-		if (handledFolders != null || handledFolders.size() != 0)
+		if (handledFolders != null && handledFolders.size() != 0)
 			mDiary.setTags(handledFolders);
-
+		//위치
+		
+		Boolean result = dataMgr.insertDiary(mDiary); 
+		if(!result) {
+			//예외처리
+		}
 	}
 
 	private class StickerAdapter extends BaseAdapter {

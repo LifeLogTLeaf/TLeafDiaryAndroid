@@ -80,7 +80,7 @@ public class TagFragement extends Fragment {
 	
 	private ArrayList<Diary> getDiaryListByType() {
 		arItem = new ArrayList<Diary>();
-		
+		/*
 		ArrayList<String> arrData = new ArrayList<String>();
 		arrData.add("생일");
 		arrData.add("생일");
@@ -120,7 +120,7 @@ public class TagFragement extends Fragment {
 //			dataMgr.getDiaryListByFolderName(type);
 		}
 	
-		
+		*/
 		return arItem;
 	}
 

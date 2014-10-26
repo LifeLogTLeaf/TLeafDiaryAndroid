@@ -2,38 +2,49 @@ package com.tleaf.tiary.model;
 
 import java.util.ArrayList;
 
+//"'" + diary.getDate() + "', " +
+//"'" + diary.getTitle() + "', " +
+//"'" + diary.getContent() + "', " +
+//"'" + diary.getEmotion() + "', " +
+//"'" + diary.getImage() + "', " +
+//"'" + diary.getTags() + "', " +
+//"'" + diary.getFolder() + "', " +
+//"'" + diary.getLocation() +"')";		
+
 public class Diary {
-	long date;
-	String image;
-	String title;
-	String content;
-	ArrayList<String> tags;
-	String folder;
-	String location;
-	String emotion;
+	private long date;
+	private String title;
+	private String content;
+	private String emotion;
+	private ArrayList<String> images;
+	private ArrayList<String> tags;
+	private ArrayList<String> folders;
+	private String location;
+	private Weather weather;
 
 	public Diary() {
-		// TODO Auto-generated constructor stub
 	}
-	
+
 	//날씨
 	public Diary(long date,
-			String image,
 			String title,
 			String content,
+			String emotion,
+			ArrayList<String> images,
 			ArrayList<String> tags,
-			String folder,
+			ArrayList<String> folders,
 			String location,
-			String emotion) 
+			Weather weather) 
 	{
 		this.date = date;
-		this.image = image;
 		this.title = title;
 		this.content = content;
-		this.tags = tags;
-		this.folder = folder;
-		this.location = location;
 		this.emotion = emotion;
+		this.images = images;
+		this.tags = tags;
+		this.folders = folders;
+		this.location = location;
+		this.weather = weather;
 	}
 
 	public long getDate() {
@@ -42,14 +53,6 @@ public class Diary {
 
 	public void setDate(long date) {
 		this.date = date;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
 	}
 
 	public String getTitle() {
@@ -68,30 +71,6 @@ public class Diary {
 		this.content = content;
 	}
 
-	public ArrayList<String> getTags() {
-		return tags;
-	}
-
-	public void setTags(ArrayList<String> tags) {
-		this.tags = tags;
-	}
-
-	public String getFolder() {
-		return folder;
-	}
-
-	public void setFolder(String folder) {
-		this.folder = folder;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocaton(String location) {
-		this.location = location;
-	}
-
 	public String getEmotion() {
 		return emotion;
 	}
@@ -100,6 +79,45 @@ public class Diary {
 		this.emotion = emotion;
 	}
 
+	public ArrayList<String> getImages() {
+		return images;
+	}
+
+	public void setImages(ArrayList<String> images) {
+		this.images = images;
+	}
+
+	public ArrayList<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(ArrayList<String> tags) {
+		this.tags = tags;
+	}
+
+	public ArrayList<String> getFolders() {
+		return folders;
+	}
+
+	public void setFolders(ArrayList<String> folders) {
+		this.folders = folders;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public Weather getWeather() {
+		return weather;
+	}
+
+	public void setWeather(Weather weather) {
+		this.weather = weather;
+	}
 
 
 }

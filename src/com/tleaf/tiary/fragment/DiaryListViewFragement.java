@@ -92,7 +92,10 @@ public class DiaryListViewFragement extends Fragment implements OnNavigationList
 
 
 	private ArrayList<Diary> getDiaryListByType() {
+	
 		arItem = new ArrayList<Diary>();
+		
+		/*
 		ArrayList<String> arrData = new ArrayList<String>();
 		arrData.add("생일");
 		arrData.add("생일");
@@ -132,8 +135,9 @@ public class DiaryListViewFragement extends Fragment implements OnNavigationList
 			//			dataMgr.getDiaryListByFolderName(type);
 		}
 
-
+*/
 		return arItem;
+		
 	}
 
 
