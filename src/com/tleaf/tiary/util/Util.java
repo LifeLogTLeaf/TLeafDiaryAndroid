@@ -2,6 +2,8 @@ package com.tleaf.tiary.util;
 
 import java.util.ArrayList;
 
+import com.tleaf.tiary.Common;
+
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,6 +15,10 @@ public class Util {
 
 	public static void ll(String tag, String msg) {
 		Log.d(tag, msg);
+	}
+	
+	public static void ll(String tag, long msg) {
+		Log.d(tag, ""+msg);
 	}
 
 	public static void ll(String tag, int msg) {
@@ -27,6 +33,20 @@ public class Util {
 				str += ", ";
 		}
 		return str; 
+	}
+	
+	public static ArrayList<String> covertStringToArray(String str) {
+
+		ArrayList<String> arr = new ArrayList<String>();
+		String[] splitStr = str.split(",");
+
+		for (int i = 0; i < splitStr.length; i++) {
+			splitStr[i] = splitStr[i].trim();
+			if (splitStr[i] == null && splitStr[i] == "")
+				break;
+			arr.add(splitStr[i]);
+		}
+		return arr;
 	}
 
 }

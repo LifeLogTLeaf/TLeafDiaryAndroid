@@ -1,5 +1,7 @@
 package com.tleaf.tiary.dialog;
 
+import java.util.ArrayList;
+
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,15 +12,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.tleaf.tiary.R;
+import com.tleaf.tiary.util.Util;
 
 public class TagDialogFragment extends DialogFragment {
 
 	private DialogResultListener resultListener;
 	private int dateType;
-	private String previousData;
+	private ArrayList<String> previousData;
 	
 	public static TagDialogFragment newInstace(
-			DialogResultListener resultListener, int dataType, String previousData) {
+			DialogResultListener resultListener, int dataType, ArrayList<String> previousData) {
 		TagDialogFragment fragment = new TagDialogFragment();
 		fragment.resultListener = resultListener;
 		fragment.dateType = dataType;
@@ -41,8 +44,8 @@ public class TagDialogFragment extends DialogFragment {
 		final EditText edit_tag = (EditText) mv
 				.findViewById(R.id.edit_dialog_tag);
 		
-		if (previousData != null && previousData.length() != 0) 
-			edit_tag.setText(previousData);
+		if (previousData != null && previousData.size() != 0) 
+			edit_tag.setText(Util.covertArrayToString(previousData));
 		
 		TextView btn_ok = (TextView) mv.findViewById(R.id.btn_ok);
 		btn_ok.setOnClickListener(new OnClickListener() {

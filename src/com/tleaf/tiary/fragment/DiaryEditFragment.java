@@ -37,6 +37,8 @@ import com.tleaf.tiary.util.Util;
 
 public class DiaryEditFragment extends Fragment {
 
+	private boolean edit;
+
 	private Context mContext;
 
 	private DialogFragment dFragment;
@@ -60,14 +62,18 @@ public class DiaryEditFragment extends Fragment {
 
 	private View rootView;
 
-	private ArrayList<String> handledTags;
-	private ArrayList<String> handledFolders;
+	private ArrayList<String> handledArrayTags;
+	private ArrayList<String> handledArrayFolders;
 
-	private String previousTags;
-	private String previousFolder;
+	private Diary editedDiary;
 
 	public DiaryEditFragment() {
-		// TODO Auto-generated constructor stub
+		edit = false;
+	}
+
+	public DiaryEditFragment(Diary diary) {
+		editedDiary = diary;
+		edit = true;
 	}
 
 	@Override
@@ -84,11 +90,13 @@ public class DiaryEditFragment extends Fragment {
 
 		setComponent();
 
-		handledTags = null;
-		handledFolders = null;
-		previousTags = null;
-		previousFolder = null;
-
+		if(edit) {
+			setEditedDairy();
+		} else {
+			setCreatedDiary();
+		}
+		
+		setInfoLayout();
 
 		return rootView;
 	}
@@ -104,12 +112,11 @@ public class DiaryEditFragment extends Fragment {
 		layout_info = (LinearLayout) rootView
 				.findViewById(R.id.layout_edit_user_add_info);
 
+		//스티커
 		((GridView) rootView.findViewById(R.id.sticker_gridview))
 		.setAdapter(new StickerAdapter());
 
 		txt_date = (TextView) rootView.findViewById(R.id.txt_edit_date);
-		txt_date.setText(MyTime.getLongToString(mContext,
-				mTime.toMillis(false)));
 		txt_date.setOnClickListener(cl);
 
 		txt_title = (TextView) rootView.findViewById(R.id.txt_edit_title);
@@ -118,18 +125,6 @@ public class DiaryEditFragment extends Fragment {
 		txt_tag = (TextView) rootView.findViewById(R.id.txt_edit_tag);
 		txt_folder = (TextView) rootView.findViewById(R.id.txt_edit_folder);
 		txt_location = (TextView) rootView.findViewById(R.id.txt_edit_location);
-
-		String tagStr = txt_tag.getText().toString();
-		String tagFolder = txt_folder.getText().toString();
-		String tagLocation = txt_location.getText().toString();
-
-		if ((tagStr != null && !tagStr.isEmpty())
-				|| (tagFolder != null && !tagFolder.isEmpty())
-				|| (tagLocation != null && !tagLocation.isEmpty())) {
-			layout_info.setVisibility(View.VISIBLE);
-		} else {
-			layout_info.setVisibility(View.GONE);
-		}
 
 		ImageView img_photo = (ImageView) rootView
 				.findViewById(R.id.img_edit_gallery);
@@ -165,6 +160,57 @@ public class DiaryEditFragment extends Fragment {
 
 	}
 
+	private void setCreatedDiary() {
+		txt_date.setText(MyTime.getLongToString(mContext,
+				mTime.toMillis(false)));
+		handledArrayTags = null;
+		handledArrayFolders = null;
+	}
+	
+	private void setEditedDairy() {
+		txt_tag = (TextView) rootView.findViewById(R.id.txt_edit_tag);
+		txt_folder = (TextView) rootView.findViewById(R.id.txt_edit_folder);
+		txt_location = (TextView) rootView.findViewById(R.id.txt_edit_location);
+
+		
+		String dateStr = MyTime.getLongToString(mContext, editedDiary.getDate());
+		txt_date.setText(dateStr);
+
+		txt_title.setText(editedDiary.getTitle());
+		txt_content.setText(editedDiary.getContent());
+
+		handledArrayTags = editedDiary.getTags();
+		if(handledArrayTags != null && handledArrayTags.size() != 0) {
+			Util.ll("tags.size()", handledArrayTags.size());
+			Util.ll("Util.covertArrayToString(tags)", Util.covertArrayToString(handledArrayTags));
+			txt_tag.setText(Util.covertArrayToString(handledArrayTags)); 
+		}
+
+		handledArrayFolders = editedDiary.getFolders();
+		if(handledArrayFolders != null && handledArrayFolders.size() != 0) {
+			Util.ll("folders.size()", handledArrayFolders.size());
+			Util.ll("Util.covertArrayToString(folders)", Util.covertArrayToString(handledArrayFolders));
+			txt_folder.setText(Util.covertArrayToString(handledArrayFolders)); 
+		}
+
+		txt_location.setText(editedDiary.getLocation());
+	}
+
+	
+	private void setInfoLayout() {
+		String tagStr = txt_tag.getText().toString();
+		String tagFolder = txt_folder.getText().toString();
+		String tagLocation = txt_location.getText().toString();
+
+		if ((tagStr != null && !tagStr.trim().isEmpty())
+				|| (tagFolder != null && !tagFolder.trim().isEmpty())
+				|| (tagLocation != null && !tagLocation.trim().isEmpty())) {
+			layout_info.setVisibility(View.VISIBLE);
+		} else {
+			layout_info.setVisibility(View.GONE);
+		}
+	}
+	
 	private OnClickListener cl = new OnClickListener() {
 
 		@Override
@@ -201,14 +247,14 @@ public class DiaryEditFragment extends Fragment {
 		case R.id.img_edit_tag:
 			Util.tst(mContext, "태그 호출 ");
 			dFragment = TagDialogFragment.newInstace(dialogResultListener,
-					Common.TAG, previousTags);
+					Common.TAG, handledArrayTags);
 			dFragment.show(fm, "dialog");
 			break;
 
 		case R.id.img_edit_folder:
 			Util.tst(mContext, "폴더 호출 ");
 			dFragment = FolderDialogFragment.newInstace(dialogResultListener,
-					Common.FOLDER, previousFolder);
+					Common.FOLDER, handledArrayFolders);
 			dFragment.show(fm, "dialog");
 			break;
 
@@ -242,7 +288,6 @@ public class DiaryEditFragment extends Fragment {
 			break;
 
 		case R.id.img_edit_save:
-			Util.tst(mContext, "일기 저장");
 			saveDiary();
 		default:
 			break;
@@ -254,20 +299,16 @@ public class DiaryEditFragment extends Fragment {
 		@Override
 		public void setResult(String result, int type) {
 			String typeName = type < Common.FOLDER ? "태그" : "폴더";
-			String handledData;
-			if (result == null || result == "")
+			if (result == null || result.trim().isEmpty())
 				Util.tst(mContext, "원하는 " + typeName + "를 입력해주세요");
 			else {
 				dFragment.dismiss();
-				handledData = handleComma(result, type);
-				layout_info.setVisibility(View.VISIBLE);
-				if (type == Common.TAG) {
-					previousTags = handledData;
-					txt_tag.setText(handledData);
-				}
-				else if (type == Common.FOLDER) {
-					previousFolder = handledData;
-					txt_folder.setText(handledData);
+				if(type == Common.TAG) {
+					handledArrayTags = Util.covertStringToArray(result);
+					txt_tag.setText(Util.covertArrayToString(handledArrayTags));
+				} else if (type == Common.FOLDER) { 
+					handledArrayFolders = Util.covertStringToArray(result);
+					txt_folder.setText(Util.covertArrayToString(handledArrayFolders));
 				}
 			}
 		}
@@ -279,33 +320,11 @@ public class DiaryEditFragment extends Fragment {
 
 	};
 
-	private String handleComma(String userData, int dataType) {
-
-		String handledDataStr = "";
-
-		ArrayList<String> arr = new ArrayList<String>();
-		String[] splitStr = userData.split(",");
-
-		for (int i = 0; i < splitStr.length; i++) {
-			splitStr[i] = splitStr[i].trim();
-			if (splitStr[i] == null && splitStr[i] == "")
-				break;
-			arr.add(splitStr[i]);
-			handledDataStr += splitStr[i];
-			if (i != splitStr.length - 1)
-				handledDataStr += ", ";
-		}
-
-		if (dataType == Common.TAG)
-			handledTags = arr;
-		else if (dataType == Common.FOLDER)
-			handledFolders = arr;
-
-		return handledDataStr;
-	}
 
 	private void saveDiary() {
 		Diary mDiary = new Diary();
+		if (edit) 
+			mDiary.setNo(editedDiary.getNo());
 		mDiary.setDate(mTime.toMillis(false));
 		if(txt_title.getText().toString().trim().isEmpty()) {
 			mDiary.setTitle("무제");
@@ -322,19 +341,29 @@ public class DiaryEditFragment extends Fragment {
 		// 감정 이모티콘
 		// 이미지
 
-		if (handledTags != null && handledTags.size() != 0) {
-			
-			Util.ll("handledTags.size()",  handledTags.size());
-			mDiary.setTags(handledTags);
+		if (handledArrayTags != null && handledArrayTags.size() != 0) {
+			Util.ll("handledArrayTags.size()",  handledArrayTags.size());
+			mDiary.setTags(handledArrayTags);
 		}
-		if (handledFolders != null && handledFolders.size() != 0) {
-			Util.ll("handledFolders.size()",  handledFolders.size());
-			mDiary.setFolders(handledFolders); 
+		if (handledArrayFolders != null && handledArrayFolders.size() != 0) {
+			Util.ll("handledArrayFolders.size()",  handledArrayFolders.size());
+			mDiary.setFolders(handledArrayFolders); 
 		}
 		//위치
 
-		Boolean result = dataMgr.insertDiary(mDiary); 
-		if(result) {
+		Boolean result = true;
+		
+		Util.ll("일기 디비에 넣기전 id", mDiary.getNo());
+		if (mDiary.getNo() == -1) {
+			result = dataMgr.insertDiary(mDiary);
+			Util.tst(mContext, "일기 insert");
+		} else { 
+			result = dataMgr.updateDiary(mDiary);
+			Util.tst(mContext, "일기 update");
+		}
+		
+		
+		if (result) {
 			Fragment fragment = new DiaryListViewFragement();
 			MainActivity.changeFragment(fragment);
 		} else {
@@ -375,32 +404,37 @@ public class DiaryEditFragment extends Fragment {
 		}
 
 	}
-
-	// public void mOnClick(View v) {
-	// final LinearLayout linear = (LinearLayout)
-	// View.inflate(this, R.layout.order, null);
-	//
-	// new AlertDialog.Builder(this)
-	// .setTitle("주문 정보를 입력하시오.")
-	// .setIcon(R.drawable.androboy)
-	// .setView(linear)
-	// .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-	// public void onClick(DialogInterface dialog, int whichButton) {
-	// EditText product = (EditText)linear.findViewById(R.id.product);
-	// EditText number = (EditText)linear.findViewById(R.id.number);
-	// CheckBox paymethod = (CheckBox)linear.findViewById(R.id.paymethod);
-	// TextView text = (TextView)findViewById(R.id.text);
-	// text.setText("주문 정보 " + product.getText() + " 상품 " +
-	// number.getText() + "개." +
-	// (paymethod.isChecked() ? "착불결제":""));
-	// }
-	// })
-	// .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-	// public void onClick(DialogInterface dialog, int whichButton) {
-	// TextView text = (TextView)findViewById(R.id.text);
-	// text.setText("주문을 취소했습니다.");
-	// }
-	// })
-	// .show();
-	// }
 }
+
+
+
+
+
+// public void mOnClick(View v) {
+// final LinearLayout linear = (LinearLayout)
+// View.inflate(this, R.layout.order, null);
+//
+// new AlertDialog.Builder(this)
+// .setTitle("주문 정보를 입력하시오.")
+// .setIcon(R.drawable.androboy)
+// .setView(linear)
+// .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+// public void onClick(DialogInterface dialog, int whichButton) {
+// EditText product = (EditText)linear.findViewById(R.id.product);
+// EditText number = (EditText)linear.findViewById(R.id.number);
+// CheckBox paymethod = (CheckBox)linear.findViewById(R.id.paymethod);
+// TextView text = (TextView)findViewById(R.id.text);
+// text.setText("주문 정보 " + product.getText() + " 상품 " +
+// number.getText() + "개." +
+// (paymethod.isChecked() ? "착불결제":""));
+// }
+// })
+// .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+// public void onClick(DialogInterface dialog, int whichButton) {
+// TextView text = (TextView)findViewById(R.id.text);
+// text.setText("주문을 취소했습니다.");
+// }
+// })
+// .show();
+// }
+

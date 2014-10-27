@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class Diary {
 
-	private int no;
+	private long no = -1;
 	private long date;
 	private String title;
 	private String content;
@@ -38,7 +38,6 @@ public class Diary {
 			String location,
 			Weather weather) 
 	{
-		this.no = -1;
 		this.date = date;
 		this.title = title;
 		this.content = content;
@@ -50,11 +49,11 @@ public class Diary {
 		this.weather = weather;
 	}
 	
-	public int getNo() {
+	public long getNo() {
 		return no;
 	}
 
-	public void setNo(int no) {
+	public void setNo(long no) {
 		this.no = no;
 	}
 

@@ -1,24 +1,27 @@
 package com.tleaf.tiary.dialog;
 
-import com.tleaf.tiary.R;
+import java.util.ArrayList;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.tleaf.tiary.R;
+import com.tleaf.tiary.util.Util;
 
 
 public class FolderDialogFragment extends DialogFragment {
 
 	private DialogResultListener resultListener;
 	private int dateType;
-	private String previousData;
+	private ArrayList<String> previousData;
 	
-	public static FolderDialogFragment newInstace(DialogResultListener resultListener, int dataType, String previousData) {
+	public static FolderDialogFragment newInstace(DialogResultListener resultListener, int dataType, ArrayList<String> previousData) {
 		FolderDialogFragment fragment = new FolderDialogFragment();
 		fragment.resultListener = resultListener;
 		fragment.dateType = dataType;
@@ -41,8 +44,8 @@ public class FolderDialogFragment extends DialogFragment {
 		final EditText edit_folder = (EditText) mv
 				.findViewById(R.id.edit_dialog_folder);
 		
-		if (previousData != null && previousData.length() != 0) 
-			edit_folder.setText(previousData);
+		if (previousData != null && previousData.size() != 0) 
+			edit_folder.setText(Util.covertArrayToString(previousData));
 
 		TextView btn_ok = (TextView) mv.findViewById(R.id.btn_ok);
 		btn_ok.setOnClickListener(new OnClickListener() {
