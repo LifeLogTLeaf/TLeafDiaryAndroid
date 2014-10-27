@@ -105,7 +105,7 @@ public class DiaryEditFragment extends Fragment {
 				.findViewById(R.id.layout_edit_user_add_info);
 
 		((GridView) rootView.findViewById(R.id.sticker_gridview))
-				.setAdapter(new StickerAdapter());
+		.setAdapter(new StickerAdapter());
 
 		txt_date = (TextView) rootView.findViewById(R.id.txt_edit_date);
 		txt_date.setText(MyTime.getLongToString(mContext,
@@ -307,20 +307,32 @@ public class DiaryEditFragment extends Fragment {
 	private void saveDiary() {
 		Diary mDiary = new Diary();
 		mDiary.setDate(mTime.toMillis(false));
-		mDiary.setTitle(txt_title.getText().toString());
-		mDiary.setContent(txt_content.getText().toString());
+		if(txt_title.getText().toString().trim().isEmpty()) {
+			mDiary.setTitle("무제");
+		} else {
+			mDiary.setTitle(txt_title.getText().toString());			
+		}
+
+		if(txt_content.getText().toString().trim().isEmpty()) {
+			Util.tst(mContext, "일기 내용을 작성해주세요");
+			return;
+		} else {
+			mDiary.setContent(txt_content.getText().toString());
+		}
 		// 감정 이모티콘
 		// 이미지
-		
-		Util.ll("handledTags.size()",  handledTags.size());
-		Util.ll("handledFolders.size()",  handledFolders.size());
-		
-		if (handledTags != null && handledTags.size() != 0)
+
+		if (handledTags != null && handledTags.size() != 0) {
+			
+			Util.ll("handledTags.size()",  handledTags.size());
 			mDiary.setTags(handledTags);
-		if (handledFolders != null && handledFolders.size() != 0)
-			mDiary.setFolders(handledFolders);
+		}
+		if (handledFolders != null && handledFolders.size() != 0) {
+			Util.ll("handledFolders.size()",  handledFolders.size());
+			mDiary.setFolders(handledFolders); 
+		}
 		//위치
-		
+
 		Boolean result = dataMgr.insertDiary(mDiary); 
 		if(result) {
 			Fragment fragment = new DiaryListViewFragement();
