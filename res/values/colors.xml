@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="bg_white">#FFFFFF</color>
     <color name="bg_gray_light">#F2F2F2</color>
     <color name="bg_gray">#E9E9E9</color>
@@ -9,6 +10,7 @@
     <color name="text_gray_light_bg_gray_light">#F2F2F2</color>
     <color name="android_hint_gray">#757575</color>
     <color name="android_darker_gray">#A7A7A7</color>
+    <color name="text_gray_custom">#979797</color>
+    <color name="point">#0099ED</color>
     
-   
 </resources>

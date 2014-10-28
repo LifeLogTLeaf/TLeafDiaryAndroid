@@ -245,14 +245,12 @@ public class DiaryEditFragment extends Fragment {
 			break;
 
 		case R.id.img_edit_tag:
-			Util.tst(mContext, "태그 호출 ");
 			dFragment = TagDialogFragment.newInstace(dialogResultListener,
 					Common.TAG, handledArrayTags);
 			dFragment.show(fm, "dialog");
 			break;
 
 		case R.id.img_edit_folder:
-			Util.tst(mContext, "폴더 호출 ");
 			dFragment = FolderDialogFragment.newInstace(dialogResultListener,
 					Common.FOLDER, handledArrayFolders);
 			dFragment.show(fm, "dialog");

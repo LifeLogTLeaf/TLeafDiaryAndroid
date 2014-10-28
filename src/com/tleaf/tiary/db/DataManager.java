@@ -341,6 +341,22 @@ public class DataManager {
 		return arr;
 	}
 
+	public ArrayList<String> getFolders() {
+		ArrayList<String> arr = new ArrayList<String>();
+
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select distinct * from " + FOLDER;
+		Cursor cursor = db.rawQuery(sql, null);
+
+		String item;
+		while(cursor.moveToNext()) {
+			item = cursor.getString(1);
+			arr.add(item);
+		}
+		return arr;
+	}
+
+	
 	//	public ArrayList<Diary> getDiaryListBySearch(String search) {
 	//		Log.e("getDiaryListBySearch", search);
 	//
@@ -503,19 +519,6 @@ public class DataManager {
 	//	}	
 
 
-	public ArrayList<String> getFolders() {
-
-		//DataManager dm = new DataManager(mContext); 
-		//dm.getFolderList();
-
-		ArrayList<String> arrFolder = new ArrayList<String>();
-		//
-		arrFolder.add("daily");
-		arrFolder.add("다이어");
-		arrFolder.add("가계부");
-
-		return arrFolder;
-	}
 
 	public ArrayList<Diary> getDiaryListByFolderName(String FolderName) {
 		return null;
