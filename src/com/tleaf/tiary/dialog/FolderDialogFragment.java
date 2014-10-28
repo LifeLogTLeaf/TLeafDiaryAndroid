@@ -59,6 +59,8 @@ public class FolderDialogFragment extends DialogFragment {
 
 		if (previousData != null && previousData.size() != 0) 
 			edit_folder.setText(Util.covertArrayToString(previousData));
+//		else 
+//			previousData = new ArrayList<String>();
 
 		LinearLayout ll = (LinearLayout) mv.findViewById(R.id.layout_folderDialog_txt);
 
@@ -85,7 +87,12 @@ public class FolderDialogFragment extends DialogFragment {
 			txt_userfolder[i] = new TextView(mContext);
 			txt_userfolder[i].setText(userFolders.get(i));
 			txt_userfolder[i].setLayoutParams(llp);
-			txt_userfolder[i].setTextColor(getResources().getColor(R.color.text_gray_custom));
+
+			if(previousData != null && previousData.contains(userFolders.get(i))) {
+				txt_userfolder[i].setTextColor(getResources().getColor(R.color.point));			
+			} else {
+				txt_userfolder[i].setTextColor(getResources().getColor(R.color.text_gray_custom));
+			}
 			txt_userfolder[i].setTextSize(20);
 			txt_userfolder[i].setOnClickListener(cl);
 			ll.addView(txt_userfolder[i]);
@@ -120,16 +127,22 @@ public class FolderDialogFragment extends DialogFragment {
 		@Override
 		public void onClick(View v) {
 			TextView tv = (TextView) v;
-			if (!select) {
+			if (!select) { //셀렉트
 				tv.setTextColor(getResources().getColor(R.color.point));
-				edit_folder.setText(tv.getText());//append시키기
-				select = true;
-			} else {
+				if (!previousData.contains(tv.getText().toString())) {
+					if (previousData == null && previousData.size() == 0)  
+						previousData = new ArrayList<String>();
+					previousData.add(tv.getText().toString());
+					select = true;
+				}
+			} else { //셀렉트해제
 				tv.setTextColor(getResources().getColor(R.color.text_gray_custom));
-//				edit_folder.setText(tv.getText());//제거시키기
+				previousData.remove(tv.getText());
 				select = false;
 			}
+			edit_folder.setText(Util.covertArrayToString(previousData));
 		}
 
 	};
+
 }

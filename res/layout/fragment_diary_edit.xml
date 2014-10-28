@@ -22,8 +22,9 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_marginBottom="10dp"
+                    android:gravity="center_vertical"
                     android:padding="2dp" >
 
                     <TextView
@@ -33,6 +34,13 @@
                         android:text="2014.10.11.목"
                         android:textColor="#0099ED"
                         android:textSize="20sp" />
+
+                    <ImageView
+                        android:id="@+id/img_edit_emotion"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/emotion" />
                 </LinearLayout>
 
                 <EditText
@@ -68,20 +76,20 @@
                     android:id="@+id/txt_edit_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-					android:minHeight="350dp"
                     android:background="@null"
-                    android:hint="Today is..."
                     android:gravity="top"
+                    android:hint="Today is..."
+                    android:minHeight="350dp"
                     android:textColor="@color/text_gray" />
             </ScrollView>
 
             <LinearLayout
                 android:id="@+id/layout_edit_user_add_info"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:visibility="gone" >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -224,16 +232,17 @@
             android:layout_marginTop="5dp"
             android:src="@drawable/theee_set2" />
 
-<!--          저장 버튼 사라지면 셋팅 이미지뷰 복구할것  -->
-<!--         <ImageView -->
-<!--             android:id="@+id/img_edit_setting" -->
-<!--             android:layout_width="40dp" -->
-<!--             android:layout_height="40dp" -->
-<!--             android:layout_marginBottom="5dp" -->
-<!--             android:layout_marginLeft="1dp" -->
-<!--             android:layout_marginRight="1dp" -->
-<!--             android:layout_marginTop="5dp" -->
-<!--             android:src="@drawable/theee_set2" /> -->
+        <!-- 저장 버튼 사라지면 셋팅 이미지뷰 복구할것 -->
+        <!-- <ImageView -->
+        <!-- android:id="@+id/img_edit_setting" -->
+        <!-- android:layout_width="40dp" -->
+        <!-- android:layout_height="40dp" -->
+        <!-- android:layout_marginBottom="5dp" -->
+        <!-- android:layout_marginLeft="1dp" -->
+        <!-- android:layout_marginRight="1dp" -->
+        <!-- android:layout_marginTop="5dp" -->
+        <!-- android:src="@drawable/theee_set2" /> -->
+
         <ImageView
             android:id="@+id/img_edit_save"
             android:layout_width="40dp"

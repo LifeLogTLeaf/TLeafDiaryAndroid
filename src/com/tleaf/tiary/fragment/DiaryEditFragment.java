@@ -1,6 +1,8 @@
 package com.tleaf.tiary.fragment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import android.app.DialogFragment;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 
 import com.android.datetimepicker.date.DatePickerDialog;
 import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
+import com.google.android.gms.drive.internal.m;
 import com.google.android.gms.internal.hn;
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.MainActivity;
@@ -29,6 +32,7 @@ import com.tleaf.tiary.MapActivity;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.dialog.DialogResultListener;
+import com.tleaf.tiary.dialog.EmotionDialogFragment;
 import com.tleaf.tiary.dialog.FolderDialogFragment;
 import com.tleaf.tiary.dialog.TagDialogFragment;
 import com.tleaf.tiary.model.Diary;
@@ -38,7 +42,8 @@ import com.tleaf.tiary.util.Util;
 public class DiaryEditFragment extends Fragment {
 
 	private boolean edit;
-
+	private int selectedEmoIndex;
+	
 	private Context mContext;
 
 	private DialogFragment dFragment;
@@ -47,6 +52,7 @@ public class DiaryEditFragment extends Fragment {
 	private Time mTime;
 	private DataManager dataMgr;
 
+	private ImageView img_emo;
 	private TextView txt_date;
 	private TextView txt_title;
 	private TextView txt_content;
@@ -97,6 +103,8 @@ public class DiaryEditFragment extends Fragment {
 		}
 		
 		setInfoLayout();
+		
+		selectedEmoIndex = -1;
 
 		return rootView;
 	}
@@ -119,12 +127,18 @@ public class DiaryEditFragment extends Fragment {
 		txt_date = (TextView) rootView.findViewById(R.id.txt_edit_date);
 		txt_date.setOnClickListener(cl);
 
+		img_emo = (ImageView) rootView.findViewById(R.id.img_edit_emotion);
+
 		txt_title = (TextView) rootView.findViewById(R.id.txt_edit_title);
 		txt_content = (TextView) rootView.findViewById(R.id.txt_edit_content);
 
 		txt_tag = (TextView) rootView.findViewById(R.id.txt_edit_tag);
 		txt_folder = (TextView) rootView.findViewById(R.id.txt_edit_folder);
 		txt_location = (TextView) rootView.findViewById(R.id.txt_edit_location);
+
+		ImageView img_emotion = (ImageView) rootView
+				.findViewById(R.id.img_edit_emotion);
+		img_emotion.setOnClickListener(cl);
 
 		ImageView img_photo = (ImageView) rootView
 				.findViewById(R.id.img_edit_gallery);
@@ -168,14 +182,13 @@ public class DiaryEditFragment extends Fragment {
 	}
 	
 	private void setEditedDairy() {
-		txt_tag = (TextView) rootView.findViewById(R.id.txt_edit_tag);
-		txt_folder = (TextView) rootView.findViewById(R.id.txt_edit_folder);
-		txt_location = (TextView) rootView.findViewById(R.id.txt_edit_location);
-
-		
 		String dateStr = MyTime.getLongToString(mContext, editedDiary.getDate());
 		txt_date.setText(dateStr);
-
+		int index = Util.getIndexByEmomtionName(editedDiary.getEmotion());
+		img_emo.setImageResource(getResources().getIdentifier(
+				"emo" + (index + 1), "drawable",
+				mContext.getPackageName()));
+		
 		txt_title.setText(editedDiary.getTitle());
 		txt_content.setText(editedDiary.getContent());
 
@@ -239,6 +252,11 @@ public class DiaryEditFragment extends Fragment {
 					}, mTime.year, mTime.month, mTime.monthDay);
 			datepicker.show(fm, "dialog");
 			break;
+		case R.id.img_edit_emotion: 
+			dFragment = EmotionDialogFragment.newInstace(dialogResultListener, selectedEmoIndex);
+			dFragment.show(fm, "dialog");
+			break;
+			
 		case R.id.img_edit_gallery:
 			Util.tst(mContext, "갤러리 호출 ");
 
@@ -296,6 +314,7 @@ public class DiaryEditFragment extends Fragment {
 
 		@Override
 		public void setResult(String result, int type) {
+			HashSet<String> distinctArr = new HashSet<String>();
 			String typeName = type < Common.FOLDER ? "태그" : "폴더";
 			if (result == null || result.trim().isEmpty())
 				Util.tst(mContext, "원하는 " + typeName + "를 입력해주세요");
@@ -303,6 +322,15 @@ public class DiaryEditFragment extends Fragment {
 				dFragment.dismiss();
 				if(type == Common.TAG) {
 					handledArrayTags = Util.covertStringToArray(result);
+					for (int i=0; i<handledArrayTags.size(); i++) {
+						distinctArr.add(handledArrayTags.get(i));
+					}
+					handledArrayTags.clear();
+					for (Iterator<String> key = distinctArr.iterator(); key.hasNext();) {
+						handledArrayTags.add(key.next());
+					}
+					distinctArr.clear();
+					
 					txt_tag.setText(Util.covertArrayToString(handledArrayTags));
 				} else if (type == Common.FOLDER) { 
 					handledArrayFolders = Util.covertStringToArray(result);
@@ -315,6 +343,16 @@ public class DiaryEditFragment extends Fragment {
 		@Override
 		public void setCancel() {
 			dFragment.dismiss();
+		}
+
+		@Override
+		public void setResult(int selectedIndex) {
+			dFragment.dismiss();
+			Util.tst(mContext, "스티커id " + selectedIndex);
+			selectedEmoIndex = selectedIndex;
+			img_emo.setImageResource(getResources().getIdentifier(
+					"emo" + (selectedEmoIndex + 1), "drawable",
+					mContext.getPackageName()));
 		}
 
 	};
@@ -337,7 +375,8 @@ public class DiaryEditFragment extends Fragment {
 		} else {
 			mDiary.setContent(txt_content.getText().toString());
 		}
-		// 감정 이모티콘
+		mDiary.setEmotion(Util.getEmomtionNameByIndex(selectedEmoIndex));
+		
 		// 이미지
 
 		if (handledArrayTags != null && handledArrayTags.size() != 0) {
@@ -403,6 +442,8 @@ public class DiaryEditFragment extends Fragment {
 		}
 
 	}
+	
+	
 }
 
 

@@ -28,10 +28,10 @@ public class DiaryFragment extends Fragment {
 	private Diary diary;
 	private Context mContext;
 	private DataManager dataMgr;
-	
+
 	private Fragment fragment;
-	
-	
+
+
 	public DiaryFragment(Diary diary) {
 		this.diary = diary;
 	}
@@ -50,6 +50,11 @@ public class DiaryFragment extends Fragment {
 		String dateStr = MyTime.getLongToString(mContext, diary.getDate());
 		txt_date.setText(dateStr);
 
+		ImageView img_emo = (ImageView) rootView.findViewById(R.id.img_edit_emotion);
+		int index = Util.getIndexByEmomtionName(diary.getEmotion());
+		img_emo.setImageResource(getResources().getIdentifier(
+				"emo" + (index + 1), "drawable",
+				mContext.getPackageName()));
 		TextView txt_title = (TextView) rootView.findViewById(R.id.txt_diary_title);
 		txt_title.setText(diary.getTitle());
 
@@ -128,7 +133,7 @@ public class DiaryFragment extends Fragment {
 			break;
 		case R.id.img_diary_delete:
 			new AlertDialog.Builder(mContext)
-//			.setTitle("일기 삭제")
+			//			.setTitle("일기 삭제")
 			.setMessage("이 일기를 삭제하시겠습니까?")
 			.setPositiveButton("확인", new DialogInterface.OnClickListener() {
 				@Override
@@ -144,8 +149,8 @@ public class DiaryFragment extends Fragment {
 			})
 			.setNegativeButton("취소", null)
 			.show();
-			
-		
+
+
 			break;
 		case R.id.img_diary_share:
 			Util.tst(mContext, "공유하기");
