@@ -308,6 +308,7 @@ public class DiaryEditFragment extends Fragment {
 					handledArrayFolders = Util.covertStringToArray(result);
 					txt_folder.setText(Util.covertArrayToString(handledArrayFolders));
 				}
+				 setInfoLayout();
 			}
 		}
 
