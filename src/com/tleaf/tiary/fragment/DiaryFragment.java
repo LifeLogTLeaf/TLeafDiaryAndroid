@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,14 +48,22 @@ public class DiaryFragment extends Fragment {
 
 
 		TextView txt_date = (TextView)rootView.findViewById(R.id.txt_diary_date);
+//		Time time = new Time();
+//		time.set(diary.getDate());
+//		time.format2445();
+//		String dateStr = MyTime.getLongToString(mContext, time.toMillis(false));
 		String dateStr = MyTime.getLongToString(mContext, diary.getDate());
 		txt_date.setText(dateStr);
+//		txt_date.setText(time.format2445());
 
 		ImageView img_emo = (ImageView) rootView.findViewById(R.id.img_edit_emotion);
-		int index = Util.getIndexByEmomtionName(diary.getEmotion());
-		img_emo.setImageResource(getResources().getIdentifier(
+		
+		if(diary.getEmotion() != null) {
+			int index = Util.getIndexByEmomtionName(diary.getEmotion());
+			img_emo.setImageResource(getResources().getIdentifier(
 				"emo" + (index + 1), "drawable",
 				mContext.getPackageName()));
+		}
 		TextView txt_title = (TextView) rootView.findViewById(R.id.txt_diary_title);
 		txt_title.setText(diary.getTitle());
 

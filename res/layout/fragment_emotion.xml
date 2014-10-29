@@ -4,6 +4,25 @@
     android:background="@color/bg_gray_light"
     android:orientation="vertical" >
 
+    <!-- <ImageView -->
+    <!-- android:id="@+id/img_emotion1" -->
+    <!-- android:layout_width="150dp" -->
+    <!-- android:layout_height="150dp" -->
+    <!-- android:layout_margin="5dp" -->
+    <!-- android:background="@color/bg_white" -->
+    <!-- android:padding="5dp" -->
+    <!-- android:src="@drawable/person" /> -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/img_emotion6" -->
+    <!-- android:layout_width="150dp" -->
+    <!-- android:layout_height="150dp" -->
+    <!-- android:layout_margin="5dp" -->
+    <!-- android:background="@color/bg_white" -->
+    <!-- android:padding="5dp" -->
+    <!-- android:src="@drawable/three_set" /> -->
+
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
@@ -15,80 +34,13 @@
             android:layout_height="fill_parent"
             android:orientation="vertical" >
 
-            <LinearLayout
+            <GridLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal" >
-
-                <ImageView
-                    android:id="@+id/img_emotion1"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/bg_white"
-                    android:padding="5dp"
-                    android:src="@drawable/person" />
-
-                <ImageView
-                    android:id="@+id/img_emotion2"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/bg_white"
-                    android:padding="5dp"
-                    android:src="@drawable/person" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal" >
-
-                <ImageView
-                    android:id="@+id/img_emotion3"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/bg_white"
-                    android:padding="5dp"
-                    android:src="@drawable/person" />
-
-                <ImageView
-                    android:id="@+id/img_emotion4"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/bg_white"
-                    android:padding="5dp"
-                    android:src="@drawable/person" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal" >
-
-                <ImageView
-                    android:id="@+id/img_emotion5"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/bg_white"
-                    android:padding="5dp"
-                    android:src="@drawable/person" />
-
-                <ImageView
-                    android:id="@+id/img_emotion6"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/bg_white"
-                    android:padding="5dp"
-                    android:src="@drawable/three_set" />
-            </LinearLayout>
+                android:columnCount="2"
+                android:orientation="horizontal"
+                android:rowCount="3" >
+            </GridLayout>
 
             <LinearLayout
                 android:id="@+id/layout_emotion_hided"
@@ -97,105 +49,13 @@
                 android:orientation="vertical"
                 android:visibility="gone" >
 
-                <LinearLayout
+                <GridLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal" >
-
-                    <ImageView
-                        android:id="@+id/img_emotion7"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_margin="5dp"
-                        android:background="@color/bg_white"
-                        android:padding="5dp"
-                        android:src="@drawable/person" />
-
-                    <ImageView
-                        android:id="@+id/img_emotion8"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_margin="5dp"
-                        android:background="@color/bg_white"
-                        android:padding="5dp"
-                        android:src="@drawable/person" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal" >
-
-                    <ImageView
-                        android:id="@+id/img_emotion9"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_margin="5dp"
-                        android:background="@color/bg_white"
-                        android:padding="5dp"
-                        android:src="@drawable/person" />
-
-                    <ImageView
-                        android:id="@+id/img_emotion10"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_margin="5dp"
-                        android:background="@color/bg_white"
-                        android:padding="5dp"
-                        android:src="@drawable/person" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal" >
-
-                    <ImageView
-                        android:id="@+id/img_emotion11"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_margin="5dp"
-                        android:background="@color/bg_white"
-                        android:padding="5dp"
-                        android:src="@drawable/person" />
-
-                    <ImageView
-                        android:id="@+id/img_emotion12"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_margin="5dp"
-                        android:background="@color/bg_white"
-                        android:padding="5dp"
-                        android:src="@drawable/person" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal" >
-
-                    <ImageView
-                        android:id="@+id/img_emotion13"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_margin="5dp"
-                        android:background="@color/bg_white"
-                        android:padding="5dp"
-                        android:src="@drawable/person" />
-
-                    <ImageView
-                        android:id="@+id/img_emotion14"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_margin="5dp"
-                        android:background="@color/bg_white"
-                        android:padding="5dp"
-                        android:src="@drawable/person" />
-                </LinearLayout>
+                    android:columnCount="2"
+                    android:orientation="horizontal"
+                    android:rowCount="10" >
+                </GridLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

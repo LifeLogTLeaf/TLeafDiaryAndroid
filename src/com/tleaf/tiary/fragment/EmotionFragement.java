@@ -33,7 +33,7 @@ public class EmotionFragement extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_emotion, container,
+		View rootView = inflater.inflate(R.layout.fragment_emotion_, container,
 				false);
 
 		// ImageView img_emo1 = (ImageView)

@@ -356,6 +356,19 @@ public class DataManager {
 		return arr;
 	}
 
+	public int getEmotionCount(String emotion) {
+
+//		DB = DBHELPER.GETREADABLEDATABASE(); 
+//		STRING SQL = "SELECT * FROM " + FOLDER;
+//		CURSOR CURSOR = DB.RAWQUERY(SQL, NULL);
+//
+//		STRING ITEM;
+//		WHILE(CURSOR.MOVETONEXT()) {
+//			ITEM = CURSOR.GETSTRING(1);
+//			ARR.ADD(ITEM);
+//		}
+		return 0;
+	}
 	
 	//	public ArrayList<Diary> getDiaryListBySearch(String search) {
 	//		Log.e("getDiaryListBySearch", search);

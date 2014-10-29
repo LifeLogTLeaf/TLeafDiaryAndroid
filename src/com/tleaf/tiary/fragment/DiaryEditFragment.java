@@ -316,12 +316,15 @@ public class DiaryEditFragment extends Fragment {
 		public void setResult(String result, int type) {
 			HashSet<String> distinctArr = new HashSet<String>();
 			String typeName = type < Common.FOLDER ? "태그" : "폴더";
+			
 			if (result == null || result.trim().isEmpty())
 				Util.tst(mContext, "원하는 " + typeName + "를 입력해주세요");
 			else {
 				dFragment.dismiss();
 				if(type == Common.TAG) {
 					handledArrayTags = Util.covertStringToArray(result);
+					
+					
 					for (int i=0; i<handledArrayTags.size(); i++) {
 						distinctArr.add(handledArrayTags.get(i));
 					}
@@ -334,6 +337,17 @@ public class DiaryEditFragment extends Fragment {
 					txt_tag.setText(Util.covertArrayToString(handledArrayTags));
 				} else if (type == Common.FOLDER) { 
 					handledArrayFolders = Util.covertStringToArray(result);
+					
+					
+					for (int i=0; i<handledArrayFolders.size(); i++) {
+						distinctArr.add(handledArrayFolders.get(i));
+					}
+					handledArrayFolders.clear();
+					for (Iterator<String> key = distinctArr.iterator(); key.hasNext();) {
+						handledArrayFolders.add(key.next());
+					}
+					distinctArr.clear();
+					
 					txt_folder.setText(Util.covertArrayToString(handledArrayFolders));
 				}
 				 setInfoLayout();
@@ -375,10 +389,12 @@ public class DiaryEditFragment extends Fragment {
 		} else {
 			mDiary.setContent(txt_content.getText().toString());
 		}
-		mDiary.setEmotion(Util.getEmomtionNameByIndex(selectedEmoIndex));
+		
+		//이모티콘 선택안하고 저장 눌렀을 시
+		if(selectedEmoIndex != -1)
+			mDiary.setEmotion(Util.getEmomtionNameByIndex(selectedEmoIndex));
 		
 		// 이미지
-
 		if (handledArrayTags != null && handledArrayTags.size() != 0) {
 			Util.ll("handledArrayTags.size()",  handledArrayTags.size());
 			mDiary.setTags(handledArrayTags);
