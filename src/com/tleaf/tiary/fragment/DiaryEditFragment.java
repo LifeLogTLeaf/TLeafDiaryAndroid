@@ -43,7 +43,7 @@ public class DiaryEditFragment extends Fragment {
 
 	private boolean edit;
 	private int selectedEmoIndex;
-	
+
 	private Context mContext;
 
 	private DialogFragment dFragment;
@@ -93,18 +93,15 @@ public class DiaryEditFragment extends Fragment {
 		fm = getFragmentManager();
 		mTime = MyTime.getCurrentTimeToTime();
 		dataMgr = new DataManager(mContext);
-
+		selectedEmoIndex = -1;
+		
 		setComponent();
-
 		if(edit) {
 			setEditedDairy();
 		} else {
 			setCreatedDiary();
 		}
-		
 		setInfoLayout();
-		
-		selectedEmoIndex = -1;
 
 		return rootView;
 	}
@@ -180,15 +177,19 @@ public class DiaryEditFragment extends Fragment {
 		handledArrayTags = null;
 		handledArrayFolders = null;
 	}
-	
+
 	private void setEditedDairy() {
 		String dateStr = MyTime.getLongToString(mContext, editedDiary.getDate());
 		txt_date.setText(dateStr);
-		int index = Util.getIndexByEmomtionName(editedDiary.getEmotion());
-		img_emo.setImageResource(getResources().getIdentifier(
-				"emo" + (index + 1), "drawable",
-				mContext.getPackageName()));
-		
+
+		if(editedDiary.getEmotion() != null) {
+			int index = Util.getIndexByEmomtionName(editedDiary.getEmotion());
+			img_emo.setImageResource(getResources().getIdentifier(
+					"emo" + (index + 1), "drawable",
+					mContext.getPackageName()));
+			selectedEmoIndex = index; //이전에 선택했던 이모티콘을 얼럿에서 포인터 색깔로 표시해줌
+		}
+
 		txt_title.setText(editedDiary.getTitle());
 		txt_content.setText(editedDiary.getContent());
 
@@ -209,7 +210,7 @@ public class DiaryEditFragment extends Fragment {
 		txt_location.setText(editedDiary.getLocation());
 	}
 
-	
+
 	private void setInfoLayout() {
 		String tagStr = txt_tag.getText().toString();
 		String tagFolder = txt_folder.getText().toString();
@@ -223,7 +224,7 @@ public class DiaryEditFragment extends Fragment {
 			layout_info.setVisibility(View.GONE);
 		}
 	}
-	
+
 	private OnClickListener cl = new OnClickListener() {
 
 		@Override
@@ -256,7 +257,7 @@ public class DiaryEditFragment extends Fragment {
 			dFragment = EmotionDialogFragment.newInstace(dialogResultListener, selectedEmoIndex);
 			dFragment.show(fm, "dialog");
 			break;
-			
+
 		case R.id.img_edit_gallery:
 			Util.tst(mContext, "갤러리 호출 ");
 
@@ -316,15 +317,15 @@ public class DiaryEditFragment extends Fragment {
 		public void setResult(String result, int type) {
 			HashSet<String> distinctArr = new HashSet<String>();
 			String typeName = type < Common.FOLDER ? "태그" : "폴더";
-			
+
 			if (result == null || result.trim().isEmpty())
 				Util.tst(mContext, "원하는 " + typeName + "를 입력해주세요");
 			else {
 				dFragment.dismiss();
 				if(type == Common.TAG) {
 					handledArrayTags = Util.covertStringToArray(result);
-					
-					
+
+
 					for (int i=0; i<handledArrayTags.size(); i++) {
 						distinctArr.add(handledArrayTags.get(i));
 					}
@@ -333,12 +334,12 @@ public class DiaryEditFragment extends Fragment {
 						handledArrayTags.add(key.next());
 					}
 					distinctArr.clear();
-					
+
 					txt_tag.setText(Util.covertArrayToString(handledArrayTags));
 				} else if (type == Common.FOLDER) { 
 					handledArrayFolders = Util.covertStringToArray(result);
-					
-					
+
+
 					for (int i=0; i<handledArrayFolders.size(); i++) {
 						distinctArr.add(handledArrayFolders.get(i));
 					}
@@ -347,10 +348,10 @@ public class DiaryEditFragment extends Fragment {
 						handledArrayFolders.add(key.next());
 					}
 					distinctArr.clear();
-					
+
 					txt_folder.setText(Util.covertArrayToString(handledArrayFolders));
 				}
-				 setInfoLayout();
+				setInfoLayout();
 			}
 		}
 
@@ -376,11 +377,11 @@ public class DiaryEditFragment extends Fragment {
 		Diary mDiary = new Diary();
 		if (edit) 
 			mDiary.setNo(editedDiary.getNo());
-	
+
 		mDiary.setDate(mTime.toMillis(false));
 		Util.ll("saveDiary setDate", mTime.toMillis(false));
-		
-		
+
+
 		if(txt_title.getText().toString().trim().isEmpty()) {
 			mDiary.setTitle("무제");
 		} else {
@@ -393,11 +394,11 @@ public class DiaryEditFragment extends Fragment {
 		} else {
 			mDiary.setContent(txt_content.getText().toString());
 		}
-		
+
 		//이모티콘 선택안하고 저장 눌렀을 시
 		if(selectedEmoIndex != -1)
 			mDiary.setEmotion(Util.getEmomtionNameByIndex(selectedEmoIndex));
-		
+
 		// 이미지
 		if (handledArrayTags != null && handledArrayTags.size() != 0) {
 			Util.ll("handledArrayTags.size()",  handledArrayTags.size());
@@ -410,7 +411,7 @@ public class DiaryEditFragment extends Fragment {
 		//위치
 
 		Boolean result = true;
-		
+
 		Util.ll("일기 디비에 넣기전 id", mDiary.getNo());
 		if (mDiary.getNo() == -1) {
 			result = dataMgr.insertDiary(mDiary);
@@ -419,8 +420,8 @@ public class DiaryEditFragment extends Fragment {
 			result = dataMgr.updateDiary(mDiary);
 			Util.tst(mContext, "일기 update");
 		}
-		
-		
+
+
 		if (result) {
 			Fragment fragment = new DiaryListViewFragement();
 			MainActivity.changeFragment(fragment);
@@ -462,8 +463,8 @@ public class DiaryEditFragment extends Fragment {
 		}
 
 	}
-	
-	
+
+
 }
 
 

@@ -276,8 +276,7 @@ public class DataManager {
 		//		Util.tst(mContext, "getDiaryList()");
 		ArrayList<Diary> arItem = new ArrayList<Diary>();
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select * from diary";
-
+		String sql = "select * from diary order by date desc";
 		Cursor cursor = db.rawQuery(sql, null);
 
 		while(cursor.moveToNext()) {
