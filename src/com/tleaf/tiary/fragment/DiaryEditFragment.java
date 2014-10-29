@@ -33,7 +33,7 @@ import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.dialog.DialogResultListener;
 import com.tleaf.tiary.dialog.EmotionDialogFragment;
-import com.tleaf.tiary.dialog.FolderDialogFragment;
+import com.tleaf.tiary.dialog.FolderDialogFragment_pre;
 import com.tleaf.tiary.dialog.TagDialogFragment;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.MyTime;
@@ -270,7 +270,7 @@ public class DiaryEditFragment extends Fragment {
 			break;
 
 		case R.id.img_edit_folder:
-			dFragment = FolderDialogFragment.newInstace(dialogResultListener,
+			dFragment = FolderDialogFragment_pre.newInstace(dialogResultListener,
 					Common.FOLDER, handledArrayFolders);
 			dFragment.show(fm, "dialog");
 			break;
@@ -318,41 +318,41 @@ public class DiaryEditFragment extends Fragment {
 			HashSet<String> distinctArr = new HashSet<String>();
 			String typeName = type < Common.FOLDER ? "태그" : "폴더";
 
-			if (result == null || result.trim().isEmpty())
-				Util.tst(mContext, "원하는 " + typeName + "를 입력해주세요");
-			else {
-				dFragment.dismiss();
-				if(type == Common.TAG) {
-					handledArrayTags = Util.covertStringToArray(result);
-
-
-					for (int i=0; i<handledArrayTags.size(); i++) {
-						distinctArr.add(handledArrayTags.get(i));
-					}
-					handledArrayTags.clear();
-					for (Iterator<String> key = distinctArr.iterator(); key.hasNext();) {
-						handledArrayTags.add(key.next());
-					}
-					distinctArr.clear();
-
-					txt_tag.setText(Util.covertArrayToString(handledArrayTags));
-				} else if (type == Common.FOLDER) { 
-					handledArrayFolders = Util.covertStringToArray(result);
-
-
-					for (int i=0; i<handledArrayFolders.size(); i++) {
-						distinctArr.add(handledArrayFolders.get(i));
-					}
-					handledArrayFolders.clear();
-					for (Iterator<String> key = distinctArr.iterator(); key.hasNext();) {
-						handledArrayFolders.add(key.next());
-					}
-					distinctArr.clear();
-
-					txt_folder.setText(Util.covertArrayToString(handledArrayFolders));
-				}
+//			if (result == null || result.trim().isEmpty())
+//				Util.tst(mContext, "원하는 " + typeName + "를 입력해주세요");
+//			else {
+//				dFragment.dismiss();
+//				if(type == Common.TAG) {
+//					handledArrayTags = Util.covertStringToArray(result);
+//
+//
+//					for (int i=0; i<handledArrayTags.size(); i++) {
+//						distinctArr.add(handledArrayTags.get(i));
+//					}
+//					handledArrayTags.clear();
+//					for (Iterator<String> key = distinctArr.iterator(); key.hasNext();) {
+//						handledArrayTags.add(key.next());
+//					}
+//					distinctArr.clear();
+//
+//					txt_tag.setText(Util.covertArrayToString(handledArrayTags));
+//				} else if (type == Common.FOLDER) { 
+//					handledArrayFolders = Util.covertStringToArray(result);
+//
+//
+//					for (int i=0; i<handledArrayFolders.size(); i++) {
+//						distinctArr.add(handledArrayFolders.get(i));
+//					}
+//					handledArrayFolders.clear();
+//					for (Iterator<String> key = distinctArr.iterator(); key.hasNext();) {
+//						handledArrayFolders.add(key.next());
+//					}
+//					distinctArr.clear();
+//
+//					txt_folder.setText(Util.covertArrayToString(handledArrayFolders));
+//				}
 				setInfoLayout();
-			}
+//			}
 		}
 
 		@Override
@@ -368,6 +368,11 @@ public class DiaryEditFragment extends Fragment {
 			img_emo.setImageResource(getResources().getIdentifier(
 					"emo" + (selectedEmoIndex + 1), "drawable",
 					mContext.getPackageName()));
+		}
+
+		@Override
+		public void setFolderAddResult(String folder) {
+//			txt_folder.setText(folder);
 		}
 
 	};

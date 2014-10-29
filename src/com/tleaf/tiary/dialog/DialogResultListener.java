@@ -5,4 +5,7 @@ public interface DialogResultListener {
 	public void setResult(int result);
 	public void setResult(String result, int dataType);
 	public void setCancel();
+	
+	public void setFolderAddResult(String folder);
+	
 }

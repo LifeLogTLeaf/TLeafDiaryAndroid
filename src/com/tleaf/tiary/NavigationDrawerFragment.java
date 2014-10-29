@@ -155,7 +155,7 @@ public class NavigationDrawerFragment extends Fragment {
 		HashMap<String, ArrayList<String>> mChild = new HashMap<String, ArrayList<String>>();
 
 		//get user's folder list		
-		mChild.put(getString(R.string.folder), dataMgr.getFolders());
+		mChild.put(getString(R.string.folder), dataMgr.getDistinctFolderList());
 
 		MenuListAdapter mAdapter = new MenuListAdapter(this.getActivity(), R.layout.item_drawer, R.layout.item_sub_drawer, mParent, mChild); // this.getActivity()
 		mDrawerListView.setAdapter(mAdapter);

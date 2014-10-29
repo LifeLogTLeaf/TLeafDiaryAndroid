@@ -105,7 +105,7 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 				break;
 			} 
 		} else {
-			fragment = new DiaryListViewFragement(dataMgr.getFolders().get(childPosition));
+			fragment = new DiaryListViewFragement(dataMgr.getDistinctFolderList().get(childPosition));
 		}
 
 //		fragmentManager.beginTransaction()

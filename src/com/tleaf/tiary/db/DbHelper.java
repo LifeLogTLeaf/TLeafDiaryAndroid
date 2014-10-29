@@ -21,22 +21,22 @@ public class DbHelper extends SQLiteOpenHelper {
 	public DbHelper(Context context) {
 		super(context, "DiaryDb.db", null, 1);
 	}
-	
-//	private long date;
-//	private String title;
-//	private String content;
-//	private String emotion;
-//	private ArrayList<String> images;
-//	private ArrayList<String> tags;
-//	private ArrayList<String> folders;
-//	private String location;
-//	private Weather weather;
-//	
-//	private String todayWeather;
-//	private float temperature;
-//	private float humidity;
 
-	
+	//	private long date;
+	//	private String title;
+	//	private String content;
+	//	private String emotion;
+	//	private ArrayList<String> images;
+	//	private ArrayList<String> tags;
+	//	private ArrayList<String> folders;
+	//	private String location;
+	//	private Weather weather;
+	//	
+	//	private String todayWeather;
+	//	private float temperature;
+	//	private float humidity;
+
+
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		String table_diary = "create table diary (no integer primary key autoincrement, " +
@@ -44,9 +44,6 @@ public class DbHelper extends SQLiteOpenHelper {
 				"title text, " +
 				"content text, " +
 				"emotion text, " +
-				"images text, " +
-				"tags text, " +
-				"folders text, " +
 				"location text, " +
 				"todayWeather text, " +
 				"temperature real, " +
@@ -56,21 +53,44 @@ public class DbHelper extends SQLiteOpenHelper {
 				"image text, " +
 				"diaryno integer, " +
 				"foreign key(diaryno) references diary(no))";
-		
-		String table_tag = "create table tag (no integer primary key autoincrement, " +
-				"tag text, " +
-				"diaryno integer, " +
-				"foreign key(diaryno) references diary(no))";
-		
-		String table_folder = "create table folder (no integer primary key autoincrement, " +
-				"folder text, " +
-				"diaryno integer, " +
-				"foreign key(diaryno) references diary(no))";
 
+		//		String table_tag = "create table tag (no integer primary key autoincrement, " +
+		//				"tag text, " +
+		//				"diaryno integer, " +
+		//				"foreign key(diaryno) references diary(no))";
+
+		String table_tag = "create table tag (no integer primary key autoincrement, " +
+				"tag text)";
+
+		//		String table_folder = "create table folder (no integer primary key autoincrement, " +
+		//				"folder text, " +
+		//				"diaryno integer, " +
+		//				"foreign key(diaryno) references diary(no))";
+
+		String table_folder = "create table folder (no integer primary key autoincrement, " +
+				"folder text)";
+
+		String table_diaryTag = 
+				"create table diary_tag (no integer primary key autoincrement, " +
+						"diaryno integer, " +
+						"tagno integer, " +
+						"foreign key(diaryno) references diary(no)), " +
+						"foreign key(tagno) references tag(no))";
+
+		String table_diaryFolder = 
+				"create table diary_folder (no integer primary key autoincrement, " +
+						"diaryno integer, " +
+						"folderno integer, " +
+						"foreign key(diaryno) references diary(no)), " +
+						"foreign key(folderno) references folder(no))";
+		
 		db.execSQL(table_diary);
 		db.execSQL(table_image);
 		db.execSQL(table_tag);
 		db.execSQL(table_folder);
+		db.execSQL(table_diaryTag);
+		db.execSQL(table_diaryFolder);
+		
 	}
 
 	@Override
@@ -78,49 +98,49 @@ public class DbHelper extends SQLiteOpenHelper {
 		// TODO Auto-generated method stub
 	}
 
-	
-	
-	
-//	db.execSQL(insertSql1);
-//	db.execSQL(insertSql2);
-	
-	
-//	String insertSql1 = "insert into salebook values (" +
-//	"null, " +
-//	"'123456789', " +
-//	"'이산수학', " +
-//	"'김승현', " +
-//	"'프리렉', " +
-//	"'30000', " +
-//	"null, " +
-//	"2013/12/5, " +
-//	"'3000', " +
-//	"'중', " +
-//	"'동덕여대', " +
-//	"'컴퓨터학과', " +
-//	"'이산수학', " +
-//	"'진혜진', " +
-//	"'2011', " +
-//	"'1', " +
-//	"'잠실')";
-//
-//String insertSql2 = "insert into salebook values (" +
-//	"null, " +
-//	"'123456789101112', " +
-//	"'안드로이드 정복하기', " +
-//	"'김승현', " +
-//	"'프리렉', " +
-//	"'30000', " +
-//	"null, " +
-//	"2013/12/5, " +
-//	"'3000', " +
-//	"'중', " +
-//	"'동덕여대', " +
-//	"'컴퓨터학과', " +
-//	"'이산수학', " +
-//	"'진혜진', " +
-//	"'2011', " +
-//	"'1', " +
-//	"'잠실')";
-//
+
+
+
+	//	db.execSQL(insertSql1);
+	//	db.execSQL(insertSql2);
+
+
+	//	String insertSql1 = "insert into salebook values (" +
+	//	"null, " +
+	//	"'123456789', " +
+	//	"'이산수학', " +
+	//	"'김승현', " +
+	//	"'프리렉', " +
+	//	"'30000', " +
+	//	"null, " +
+	//	"2013/12/5, " +
+	//	"'3000', " +
+	//	"'중', " +
+	//	"'동덕여대', " +
+	//	"'컴퓨터학과', " +
+	//	"'이산수학', " +
+	//	"'진혜진', " +
+	//	"'2011', " +
+	//	"'1', " +
+	//	"'잠실')";
+	//
+	//String insertSql2 = "insert into salebook values (" +
+	//	"null, " +
+	//	"'123456789101112', " +
+	//	"'안드로이드 정복하기', " +
+	//	"'김승현', " +
+	//	"'프리렉', " +
+	//	"'30000', " +
+	//	"null, " +
+	//	"2013/12/5, " +
+	//	"'3000', " +
+	//	"'중', " +
+	//	"'동덕여대', " +
+	//	"'컴퓨터학과', " +
+	//	"'이산수학', " +
+	//	"'진혜진', " +
+	//	"'2011', " +
+	//	"'1', " +
+	//	"'잠실')";
+	//
 }

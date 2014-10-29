@@ -76,7 +76,7 @@ public class FolderDialogFragment extends DialogFragment {
 
 
 		ArrayList<String> userFolders = new ArrayList<String>();
-		userFolders = dataMgr.getFolders();
+		userFolders = dataMgr.getDistinctFolderList();
 
 		TextView txt_userfolder[] = new TextView[userFolders.size()];
 

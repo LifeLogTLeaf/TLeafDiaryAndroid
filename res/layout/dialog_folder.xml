@@ -12,24 +12,23 @@
         android:orientation="vertical"
         android:padding="10dp" >
 
-        <EditText
-            android:id="@+id/edit_dialog_folder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="폴더를 선택하거나\n새로운 폴더명을 입력해주세요 " />
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="300dp" >
 
             <LinearLayout
-                android:id="@+id/layout_folderDialog_txt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:padding="5dp" >
 
+                <LinearLayout
+                    android:id="@+id/layout_folderDialog_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+                </LinearLayout>
                 <!-- //        <TextView -->
                 <!-- //            android:id="@+id/textView1" -->
                 <!-- //            android:layout_width="wrap_content" -->
@@ -39,6 +38,24 @@
                 <!-- //            android:textColor="@android:color/darker_gray" -->
                 <!-- //            android:textSize="16sp" /> -->
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <EditText
+                        android:id="@+id/edit_dialog_folder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="8"
+                        android:hint="새로운 폴더" />
+
+                    <ImageView
+                        android:id="@+id/img_dialog_folder_add"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/add2" />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
