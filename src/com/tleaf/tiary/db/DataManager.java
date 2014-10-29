@@ -106,6 +106,9 @@ public class DataManager {
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
 		row.put("date", diary.getDate());
+		
+		Util.ll("insertDiary getDate", diary.getDate());
+
 		row.put("title", diary.getTitle());
 		row.put("content", diary.getContent());
 		row.put("emotion", diary.getEmotion());
@@ -280,7 +283,7 @@ public class DataManager {
 		while(cursor.moveToNext()) {
 			Diary diary = new Diary();
 			long diaryno = cursor.getInt(0);
-			long date = cursor.getInt(1);
+			long date = cursor.getLong(1);
 			String title = cursor.getString(2);
 			String content = cursor.getString(3);
 			String emotion = cursor.getString(4);

@@ -376,7 +376,11 @@ public class DiaryEditFragment extends Fragment {
 		Diary mDiary = new Diary();
 		if (edit) 
 			mDiary.setNo(editedDiary.getNo());
+	
 		mDiary.setDate(mTime.toMillis(false));
+		Util.ll("saveDiary setDate", mTime.toMillis(false));
+		
+		
 		if(txt_title.getText().toString().trim().isEmpty()) {
 			mDiary.setTitle("무제");
 		} else {

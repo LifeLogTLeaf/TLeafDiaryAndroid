@@ -46,15 +46,13 @@ public class DiaryFragment extends Fragment {
 		mContext = getActivity();
 		dataMgr = new DataManager(mContext);
 
+		Util.ll("DiaryFragment setDate", diary.getDate());
 
+		
 		TextView txt_date = (TextView)rootView.findViewById(R.id.txt_diary_date);
-//		Time time = new Time();
-//		time.set(diary.getDate());
-//		time.format2445();
-//		String dateStr = MyTime.getLongToString(mContext, time.toMillis(false));
+		
 		String dateStr = MyTime.getLongToString(mContext, diary.getDate());
 		txt_date.setText(dateStr);
-//		txt_date.setText(time.format2445());
 
 		ImageView img_emo = (ImageView) rootView.findViewById(R.id.img_edit_emotion);
 		
