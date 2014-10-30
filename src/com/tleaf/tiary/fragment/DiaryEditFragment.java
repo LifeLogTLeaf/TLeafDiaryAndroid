@@ -33,7 +33,7 @@ import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.dialog.DialogResultListener;
 import com.tleaf.tiary.dialog.EmotionDialogFragment;
-import com.tleaf.tiary.dialog.FolderDialogFragment_pre;
+import com.tleaf.tiary.dialog.FolderDialogFragment;
 import com.tleaf.tiary.dialog.TagDialogFragment;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.MyTime;
@@ -69,8 +69,10 @@ public class DiaryEditFragment extends Fragment {
 	private View rootView;
 
 	private ArrayList<String> handledArrayTags;
-	private ArrayList<String> handledArrayFolders;
+//	private ArrayList<String> handledArrayFolders;
 
+//	private ArrayList<String> handledArrayTags;
+	private ArrayList<String> selectFolders;
 	private Diary editedDiary;
 
 	public DiaryEditFragment() {
@@ -93,6 +95,7 @@ public class DiaryEditFragment extends Fragment {
 		fm = getFragmentManager();
 		mTime = MyTime.getCurrentTimeToTime();
 		dataMgr = new DataManager(mContext);
+		selectFolders = new ArrayList<String>();
 		selectedEmoIndex = -1;
 		
 		setComponent();
@@ -175,7 +178,7 @@ public class DiaryEditFragment extends Fragment {
 		txt_date.setText(MyTime.getLongToString(mContext,
 				mTime.toMillis(false)));
 		handledArrayTags = null;
-		handledArrayFolders = null;
+		selectFolders = null;
 	}
 
 	private void setEditedDairy() {
@@ -200,11 +203,11 @@ public class DiaryEditFragment extends Fragment {
 			txt_tag.setText(Util.covertArrayToString(handledArrayTags)); 
 		}
 
-		handledArrayFolders = editedDiary.getFolders();
-		if(handledArrayFolders != null && handledArrayFolders.size() != 0) {
-			Util.ll("folders.size()", handledArrayFolders.size());
-			Util.ll("Util.covertArrayToString(folders)", Util.covertArrayToString(handledArrayFolders));
-			txt_folder.setText(Util.covertArrayToString(handledArrayFolders)); 
+		selectFolders = editedDiary.getFolders();
+		if(selectFolders != null && selectFolders.size() != 0) {
+			Util.ll("folders.size()", selectFolders.size());
+			Util.ll("Util.covertArrayToString(folders)", Util.covertArrayToString(selectFolders));
+			txt_folder.setText(Util.covertArrayToString(selectFolders)); 
 		}
 
 		txt_location.setText(editedDiary.getLocation());
@@ -270,8 +273,10 @@ public class DiaryEditFragment extends Fragment {
 			break;
 
 		case R.id.img_edit_folder:
-			dFragment = FolderDialogFragment_pre.newInstace(dialogResultListener,
-					Common.FOLDER, handledArrayFolders);
+			if(selectFolders != null && selectFolders.size() != 0)
+				Util.ll("FolderDialogFragment newInstace", Util.covertArrayToString(selectFolders));
+			dFragment = FolderDialogFragment.newInstace(dialogResultListener,
+					Common.FOLDER, selectFolders);
 			dFragment.show(fm, "dialog");
 			break;
 
@@ -314,10 +319,27 @@ public class DiaryEditFragment extends Fragment {
 	private DialogResultListener dialogResultListener = new DialogResultListener() {
 
 		@Override
-		public void setResult(String result, int type) {
-			HashSet<String> distinctArr = new HashSet<String>();
+		public void setResult(ArrayList<String> result, int type) {
+			dFragment.dismiss();
 			String typeName = type < Common.FOLDER ? "태그" : "폴더";
-
+			
+			if(type == Common.TAG) {
+			} else if (type == Common.FOLDER) {
+				if(selectFolders != null && !selectFolders.isEmpty()) {
+					Util.ll("setResult clear 전", Util.covertArrayToString(selectFolders));
+					selectFolders.clear();
+					Util.ll("setResult clear 후", Util.covertArrayToString(selectFolders));
+				}
+				selectFolders = result;
+				Util.ll("setResult 대입 후", Util.covertArrayToString(selectFolders));
+//				for(int i=0; i<result.size(); i++) {
+//					if(!selectFolders.contains(result.get(i))) {
+//						selectFolders.add(result.get(i));
+//					}
+//				}
+				txt_folder.setText(Util.covertArrayToString(result));
+			}
+			
 //			if (result == null || result.trim().isEmpty())
 //				Util.tst(mContext, "원하는 " + typeName + "를 입력해주세요");
 //			else {
@@ -351,6 +373,7 @@ public class DiaryEditFragment extends Fragment {
 //
 //					txt_folder.setText(Util.covertArrayToString(handledArrayFolders));
 //				}
+			
 				setInfoLayout();
 //			}
 		}
@@ -409,9 +432,11 @@ public class DiaryEditFragment extends Fragment {
 			Util.ll("handledArrayTags.size()",  handledArrayTags.size());
 			mDiary.setTags(handledArrayTags);
 		}
-		if (handledArrayFolders != null && handledArrayFolders.size() != 0) {
-			Util.ll("handledArrayFolders.size()",  handledArrayFolders.size());
-			mDiary.setFolders(handledArrayFolders); 
+		
+		
+		if (selectFolders != null && selectFolders.size() != 0) {
+			Util.ll("save호출", Util.covertArrayToString(selectFolders));
+			mDiary.setFolders(selectFolders); 
 		}
 		//위치
 

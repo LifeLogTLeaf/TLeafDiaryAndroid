@@ -74,14 +74,14 @@ public class DbHelper extends SQLiteOpenHelper {
 				"create table diary_tag (no integer primary key autoincrement, " +
 						"diaryno integer, " +
 						"tagno integer, " +
-						"foreign key(diaryno) references diary(no)), " +
+						"foreign key(diaryno) references diary(no), " +
 						"foreign key(tagno) references tag(no))";
 
 		String table_diaryFolder = 
 				"create table diary_folder (no integer primary key autoincrement, " +
 						"diaryno integer, " +
 						"folderno integer, " +
-						"foreign key(diaryno) references diary(no)), " +
+						"foreign key(diaryno) references diary(no), " +
 						"foreign key(folderno) references folder(no))";
 		
 		db.execSQL(table_diary);

@@ -52,15 +52,15 @@ public class DataManager {
 	//
 	//	String table_image = "create table imgae (no integer primary key autoincrement, " +
 	//			"image text, " +
-	//			"foreign key(diaryno) references diary(diaryno)";
+	//			"foreign key(diaryNo) references diary(diaryNo)";
 	//	
 	//	String table_tag = "create table tag (no integer primary key autoincrement, " +
 	//			"tag text, " +
-	//			"foreign key(diaryno) references diary(diaryno)";
+	//			"foreign key(diaryNo) references diary(diaryNo)";
 	//	
 	//	String table_folder = "create table folder (no integer primary key autoincrement, " +
 	//			"folder text, " +
-	//			"foreign key(diaryno) references diary(diaryno)";
+	//			"foreign key(diaryNo) references diary(diaryNo)";
 
 	//	String sql = "insert into Diary values (" +
 	//			"null, " +
@@ -79,7 +79,7 @@ public class DataManager {
 	//		for(int i=0; i<diary.getImages().size(); i++) {
 	//			Util.ll("row.put diary.getImages().get" + i, diary.getImages().get(i));
 	//			row.put("image", diary.getImages().get(i));
-	//			row.put("diaryno", diaryno);
+	//			row.put("diaryNo", diaryNo);
 	//		}
 	//	}
 	//	db.insert(IMAGE, null, row);
@@ -89,7 +89,7 @@ public class DataManager {
 	//		for(int i=0; i<diary.getTags().size(); i++) {
 	//			Util.ll("row.put diary.getTags().get" + i, diary.getTags().get(i));
 	//			row.put("tag", diary.getTags().get(i));
-	//			row.put("diaryno", diaryno);
+	//			row.put("diaryNo", diaryNo);
 	//		}
 	//	}
 	//	db.insert(TAG, null, row);
@@ -98,7 +98,7 @@ public class DataManager {
 	//		for(int i=0; i<diary.getFolders().size(); i++) {
 	//			Util.ll("row.put diary.getFolders().get" + i, diary.getFolders().get(i));
 	//			row.put("folder", diary.getFolders().get(i));
-	//			row.put("diaryno", diaryno);
+	//			row.put("diaryNo", diaryNo);
 	//		}
 	//	}
 	//	db.insert(FOLDER, null, row);
@@ -123,8 +123,8 @@ public class DataManager {
 		}
 
 
-		long diaryno = db.insert(DIARY, null, row);	
-		diary.setNo(diaryno);
+		long diaryNo = db.insert(DIARY, null, row);	
+		diary.setNo(diaryNo);
 
 		boolean result_image = insertImageByDiary(diary);
 		boolean result_tag = insertTagByDiary(diary);
@@ -217,7 +217,7 @@ public class DataManager {
 				row = new ContentValues();
 				Util.ll("row.put diary.getImages().get" + i, diary.getImages().get(i));
 				row.put("image", diary.getImages().get(i));
-				row.put("diaryno", diary.getNo());
+				row.put("diaryNo", diary.getNo());
 				db.insert(IMAGE, null, row);
 			}
 			dbHelper.close();
@@ -235,8 +235,8 @@ public class DataManager {
 				row = new ContentValues();
 				Util.ll("row.put diary.getTags().get" + i, diary.getTags().get(i));
 				row.put("tag", diary.getTags().get(i));
-				long tagno = db.insert(TAG, null, row);
-				setDiaryTagRelation(diary.getNo(), tagno); //관계디비 데이터 삽입
+				long tagNo = db.insert(TAG, null, row);
+				setDiaryTagRelation(diary.getNo(), tagNo); //관계디비 데이터 삽입
 			}
 			dbHelper.close();
 		}
@@ -245,11 +245,11 @@ public class DataManager {
 
 
 
-	public boolean setDiaryTagRelation(long diaryno, long tagno){ //완료
+	public boolean setDiaryTagRelation(long diaryNo, long tagNo){ //완료
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
-		row.put("diaryno", diaryno);
-		row.put("tagno", tagno);
+		row.put("diaryNo", diaryNo);
+		row.put("tagNo", tagNo);
 		db.insert(DIARY_TAG, null, row);
 		dbHelper.close();
 		return true;
@@ -262,11 +262,16 @@ public class DataManager {
 		if (diary.getFolders() != null && diary.getFolders().size() != 0) {
 			db = dbHelper.getWritableDatabase();
 			for(int i=0; i<diary.getFolders().size(); i++) {
-				row = new ContentValues();
-				Util.ll("row.put diary.getFolders().get" + i, diary.getFolders().get(i));
-				row.put("folder", diary.getFolders().get(i));
-				long folderno = db.insert(FOLDER, null, row);
-				setDiaryFolderRelation(diary.getNo(), folderno); //관계디비 데이터 삽입
+				long folderNo;
+				if(!isContainedFolder(diary.getFolders().get(i))) {
+					row = new ContentValues();
+					Util.ll("row.put diary.getFolders().get" + i, diary.getFolders().get(i));
+					row.put("folder", diary.getFolders().get(i));
+					folderNo = db.insert(FOLDER, null, row);
+				} else {
+					folderNo = getFolderNo(diary.getFolders().get(i));
+				}
+				setDiaryFolderRelation(diary.getNo(), folderNo); //관계디비 데이터 삽입
 			}
 			dbHelper.close();
 		}
@@ -275,6 +280,8 @@ public class DataManager {
 
 	//빈 폴더 생성의 경우
 	public boolean insertFolder(String folder) {  //완료
+		if(isContainedFolder(folder)) 
+			return false;
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
 		row.put("folder", folder);
@@ -283,11 +290,37 @@ public class DataManager {
 		return true;
 	}
 
-	public boolean setDiaryFolderRelation(long diaryno, long folderno){ //완료
+	private boolean isContainedFolder(String folder) {
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + FOLDER + " where folder = '" + folder + "'";
+		Cursor cursor = db.rawQuery(sql, null);
+
+		boolean result = (cursor.getCount() != 0) ? true : false;
+		cursor.close();
+		dbHelper.close();
+		
+		return result;
+		
+	}
+
+	private long getFolderNo(String folder) {
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select no from " + FOLDER + " where folder = '" + folder + "'";
+		Cursor cursor = db.rawQuery(sql, null);
+
+		cursor.moveToFirst();
+		Long folderNo = cursor.getLong(0);
+		
+		cursor.close();
+		dbHelper.close();
+		return folderNo;
+	}
+
+	public boolean setDiaryFolderRelation(long diaryNo, long folderNo){ //완료
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
-		row.put("diaryno", diaryno);
-		row.put("folderno", folderno);
+		row.put("diaryNo", diaryNo);
+		row.put("folderNo", folderNo);
 		db.insert(DIARY_FOLDER, null, row);
 		dbHelper.close();
 		return true;
@@ -295,46 +328,46 @@ public class DataManager {
 	}
 
 
-	public boolean deleteImageByDiary(long diaryno) { //완료
-		Util.ll("no", diaryno);
+	public boolean deleteImageByDiary(long diaryNo) { //완료
+		Util.ll("no", diaryNo);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		String sql = "delete from " + IMAGE + " where diaryNo ='" + diaryno + "'";
+		String sql = "delete from " + IMAGE + " where diaryNo ='" + diaryNo + "'";
 
 		db.execSQL(sql);
 		dbHelper.close();
 		return true;
 	}
 
-	public boolean deleteDiaryTag(long diaryno) { //완료
-		Util.ll("no", diaryno);
+	public boolean deleteDiaryTag(long diaryNo) { //완료
+		Util.ll("no", diaryNo);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		String sql = "delete from " + DIARY_TAG + "where diaryno='" + diaryno + "'";
+		String sql = "delete from " + DIARY_TAG + " where diaryNo='" + diaryNo + "'";
 
 		db.execSQL(sql);
 		dbHelper.close();
 		return true;
 	}
 
-	public boolean deleteDiaryFolder(long diaryno) { //완료
-		Util.ll("no", diaryno);
+	public boolean deleteDiaryFolder(long diaryNo) { //완료
+		Util.ll("no", diaryNo);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		String sql = "delete from " + DIARY_FOLDER + "where diaryno='" + diaryno + "'";
+		String sql = "delete from " + DIARY_FOLDER + " where diaryNo='" + diaryNo + "'";
 
 		db.execSQL(sql);
 		dbHelper.close();
 		return true;
 	}
 
-	public boolean deleteDiary(long diaryno) { //완료
-		Util.ll("no", diaryno);
+	public boolean deleteDiary(long diaryNo) { //완료
+		Util.ll("no", diaryNo);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		String delete_diary = "delete from " + DIARY + "where no='" + diaryno + "'";
+		String delete_diary = "delete from " + DIARY + " where no='" + diaryNo + "'";
 
 		db.execSQL(delete_diary);
 
-		deleteImageByDiary(diaryno);
-		deleteDiaryTag(diaryno);
-		deleteDiaryFolder(diaryno);
+		deleteImageByDiary(diaryNo);
+		deleteDiaryTag(diaryNo);
+		deleteDiaryFolder(diaryNo);
 		dbHelper.close();
 		return true;
 	}
@@ -348,7 +381,7 @@ public class DataManager {
 
 		while(cursor.moveToNext()) {
 			Diary diary = new Diary();
-			long diaryno = cursor.getInt(0);
+			long diaryNo = cursor.getInt(0);
 			long date = cursor.getLong(1);
 			String title = cursor.getString(2);
 			String content = cursor.getString(3);
@@ -358,13 +391,13 @@ public class DataManager {
 			float temperature = cursor.getFloat(7);
 			float humidity = cursor.getFloat(8);
 
-			ArrayList<String> images = getImages(diaryno);
-			ArrayList<String> tags = getTagsByDiaryNo(diaryno);
-			ArrayList<String> folders = getFoldersByDiaryNo(diaryno);
+			ArrayList<String> images = getImages(diaryNo);
+			ArrayList<String> tags = getTagsByDiaryNo(diaryNo);
+			ArrayList<String> folders = getFoldersByDiaryNo(diaryNo);
 
 			Log.e("cursor.getInt(0)", ""+cursor.getInt(0));
 
-			diary.setNo(diaryno);
+			diary.setNo(diaryNo);
 			diary.setDate(date);
 			diary.setTitle(title);
 			diary.setContent(content);
@@ -385,16 +418,17 @@ public class DataManager {
 		}
 
 		//		Util.tst(mContext, "getDiaryList arItem" + arItem.size());
-
+		cursor.close();
+		dbHelper.close();
 		return arItem;
 	}	
 
 
-	public ArrayList<String> getImages(long diaryno) { //완료
+	public ArrayList<String> getImages(long diaryNo) { //완료
 		ArrayList<String> arr = new ArrayList<String>();
 
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select * from " + IMAGE + " where diaryno =" + diaryno;
+		String sql = "select * from " + IMAGE + " where diaryNo = '" + diaryNo + "'";
 		Cursor cursor = db.rawQuery(sql, null);
 
 		String item;
@@ -402,37 +436,42 @@ public class DataManager {
 			item = cursor.getString(1);
 			arr.add(item);
 		}
+		
+		cursor.close();
+		dbHelper.close();
 		return arr;
 	}
 
 
-	public ArrayList<String> getTagsByDiaryNo(long diaryno) { //완료
+	public ArrayList<String> getTagsByDiaryNo(long diaryNo) { //완료
 		ArrayList<String> arr = new ArrayList<String>();
 
 		db = dbHelper.getReadableDatabase(); 
 
-		ArrayList<Long> tagno = new ArrayList<Long>();
-		tagno = getTagNoByDiaryNo(diaryno);
+		ArrayList<Long> tagNo = new ArrayList<Long>();
+		tagNo = getTagNoByDiaryNo(diaryNo);
 		String sql;
-		Cursor cursor;
+		Cursor cursor = null;
 		String item;
 
-		for (int i=0; i<tagno.size(); i++) {
-			sql = "select * from " + TAG + " where tagno =" + tagno.get(i);
+		for (int i=0; i<tagNo.size(); i++) {
+			sql = "select * from " + TAG + " where no = '" + tagNo.get(i) + "'";
 			cursor = db.rawQuery(sql, null);
 			while(cursor.moveToNext()) {
 				item = cursor.getString(1);
 				arr.add(item);
 			}
+			cursor.close();
 		}
+		dbHelper.close();
 		return arr;
 	}
 
-	public ArrayList<Long> getTagNoByDiaryNo(long diaryno) { //완료
+	public ArrayList<Long> getTagNoByDiaryNo(long diaryNo) { //완료
 		ArrayList<Long> arr = new ArrayList<Long>();
 
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select * from " + DIARY_TAG + " where diaryno =" + diaryno;
+		String sql = "select * from " + DIARY_TAG + " where diaryNo = '" + diaryNo + "'";
 		Cursor cursor = db.rawQuery(sql, null);
 
 		Long item;
@@ -440,58 +479,66 @@ public class DataManager {
 			item = cursor.getLong(2);
 			arr.add(item);
 		}
+		cursor.close();
+		dbHelper.close();
 		return arr;
 	}
 
 
-	public ArrayList<String> getFoldersByDiaryNo(long diaryno) { //완료
+	//해당 다이어리가 담긴 폴더들을 다이어리번호로 가져온다
+	public ArrayList<String> getFoldersByDiaryNo(long diaryNo) { //완료
 		ArrayList<String> arr = new ArrayList<String>();
+		Util.ll("db.isOpen()", ""+db.isOpen());
+		ArrayList<Long> folderNo = new ArrayList<Long>();
+		folderNo = getFolderNoByDiaryNo(diaryNo);
 
-		db = dbHelper.getReadableDatabase(); 
-
-		ArrayList<Long> tagno = new ArrayList<Long>();
-		tagno = getFolderNoByDiaryNo(diaryno);
 		String sql;
-		Cursor cursor;
 		String item;
-
-		for (int i=0; i<tagno.size(); i++) {
-			sql = "select * from " + FOLDER + " where tagno =" + tagno.get(i);
-			cursor = db.rawQuery(sql, null);
+		
+		db = dbHelper.getReadableDatabase(); 
+		for (int i=0; i<folderNo.size(); i++) {
+			sql = "select * from " + FOLDER +" where no = '" + folderNo.get(i) + "'";
+			Util.ll("sql", sql + ", " + db.isOpen());
+			Cursor cursor = db.rawQuery(sql, null);
 			while(cursor.moveToNext()) {
 				item = cursor.getString(1);
 				arr.add(item);
 			}
+			cursor.close();
 		}
+		dbHelper.close();
 		return arr;
 	}
 
-	public ArrayList<Long> getFolderNoByDiaryNo(long diaryno) { //완료
+	//다이어리와 폴더의 다대다 관계를 정의해주는 테이블에서 다이어리번호에 해당하는 폴더번호를 가져온다
+	public ArrayList<Long> getFolderNoByDiaryNo(long diaryNo) { //완료
 		ArrayList<Long> arr = new ArrayList<Long>();
 
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select * from " + DIARY_FOLDER + " where diaryno =" + diaryno;
+		String sql = "select * from " + DIARY_FOLDER + " where diaryNo = '" + diaryNo + "'";
 		Cursor cursor = db.rawQuery(sql, null);
 
 		Long item;
 		while(cursor.moveToNext()) {
 			item = cursor.getLong(2);
 			arr.add(item);
-		}
+		}		
+		cursor.close();
+		dbHelper.close();
 		return arr;
 	}
 
 	//미
-	//	private ArrayList<String> getArrayList(long diaryno, String table) {
+	//	private ArrayList<String> getArrayList(long diaryNo, String table) {
 	//		ArrayList<String> arr = new ArrayList<String>();
 	//
 	//		db = dbHelper.getReadableDatabase(); 
 	//		String sql;
 	//
 	//		if (table.equals(IMAGE)) {
-	//			sql = "select * from " + table + " where diaryno =" + diaryno;
+	//			sql = "select * from " + table + " where diaryNo =" + diaryNo;
 	//		} else {
-	//			sql = "select distinct * from " + table + " where diaryno =" + diaryno;
+	//			sql = "select distinct * from " + table + " where diaryNo =" + diaryNo;
 	//		}
 	//		Cursor cursor = db.rawQuery(sql, null);
 	//
@@ -515,6 +562,8 @@ public class DataManager {
 			item = cursor.getString(1);
 			arr.add(item);
 		}
+		cursor.close();
+		dbHelper.close();
 		return arr;
 	}
 
@@ -530,6 +579,8 @@ public class DataManager {
 			item = cursor.getString(1);
 			arr.add(item);
 		}
+		cursor.close();
+		dbHelper.close();
 		return arr;
 	}
 
@@ -571,7 +622,7 @@ public class DataManager {
 	//
 	//		 while(cursor.moveToNext()) {
 	//			 Diary diary = new Diary();
-	//			 int diaryno = cursor.getInt(0);
+	//			 int diaryNo = cursor.getInt(0);
 	//			 String isbn = cursor.getString(1);
 	//			 String title = cursor.getString(2);
 	//			 String author = cursor.getString(3);
@@ -590,7 +641,7 @@ public class DataManager {
 	//			 String dealLocation = cursor.getString(16);
 	//
 	//			 Log.e("cursor.getInt(0)", ""+cursor.getInt(0));
-	//			 diary.setDiaryNo(diaryno);
+	//			 diary.setdiaryNo(diaryNo);
 	//			 diary.setIsbn(isbn);
 	//			 diary.setTitle(title);
 	//			 diary.setAuthor(author);
@@ -623,7 +674,7 @@ public class DataManager {
 		Cursor cursor = db.rawQuery(sql, null);
 		Log.e("cursor null", ""+cursor);
 		while(cursor.moveToNext()) {
-			//			int diaryno = cursor.getInt(0);
+			//			int diaryNo = cursor.getInt(0);
 			//			String isbn = cursor.getString(1);
 			//			String title = cursor.getString(2);
 			//			String author = cursor.getString(3);
@@ -641,7 +692,7 @@ public class DataManager {
 			//			String usedTerm = cursor.getString(15);
 			//			String dealLocation = cursor.getString(16);
 			//
-			//			diary.setDiaryNo(diaryno);
+			//			diary.setdiaryNo(diaryNo);
 			//			diary.setIsbn(isbn);
 			//			diary.setTitle(title);
 			//			diary.setAuthor(author);
@@ -667,12 +718,12 @@ public class DataManager {
 	//		Diary diary = new Diary();
 	//
 	//		SQLiteDatabase db = dbHelper.getReadableDatabase(); 
-	//		String sql = "select * from diary where diaryno=" + diaryNo;
+	//		String sql = "select * from diary where diaryNo=" + diaryNo;
 	//
 	//		Cursor cursor = db.rawQuery(sql, null);
 	//		Log.e("cursor null", ""+cursor);
 	//		while(cursor.moveToNext()) {
-	//			int diaryno = cursor.getInt(0);
+	//			int diaryNo = cursor.getInt(0);
 	//			String isbn = cursor.getString(1);
 	//			String title = cursor.getString(2);
 	//			String author = cursor.getString(3);
@@ -690,7 +741,7 @@ public class DataManager {
 	//			String usedTerm = cursor.getString(15);
 	//			String dealLocation = cursor.getString(16);
 	//
-	//			diary.setDiaryNo(diaryno);
+	//			diary.setdiaryNo(diaryNo);
 	//			diary.setIsbn(isbn);
 	//			diary.setTitle(title);
 	//			diary.setAuthor(author);

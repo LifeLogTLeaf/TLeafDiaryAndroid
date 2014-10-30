@@ -52,7 +52,7 @@ public class TagDialogFragment extends DialogFragment {
 
 			@Override
 			public void onClick(View v) {
-				resultListener.setResult(edit_tag.getText().toString(), dateType);
+//				resultListener.setResult(edit_tag.getText().toString(), dateType);
 			}
 		});
 		

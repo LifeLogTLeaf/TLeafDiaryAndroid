@@ -1,21 +1,25 @@
 package com.tleaf.tiary.dialog;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
+import com.tleaf.tiary.Common;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.util.Util;
@@ -23,6 +27,9 @@ import com.tleaf.tiary.util.Util;
 
 public class FolderDialogFragment extends DialogFragment {
 
+	private final boolean initialize = true;
+	private final boolean refresh = false;
+	
 	private DialogResultListener resultListener;
 	private int dateType;
 	private ArrayList<String> previousData;
@@ -32,13 +39,29 @@ public class FolderDialogFragment extends DialogFragment {
 
 	private EditText edit_folder;
 
-	private boolean select = false;
+	private ImageView img_add;
+
+	//	private boolean select = false;
+
+	//	private int selectedIndex = -1;
+	private TextView[] txt_userfolder;
+
+	//	private Map<String, Boolean> selectMap;
+
+	private boolean hasData = false;
+	private ArrayList<String> selectFolders = new ArrayList<String>();
+
+	private LinearLayout ll;
+	private LinearLayout.LayoutParams llp;
 
 	public static FolderDialogFragment newInstace(DialogResultListener resultListener, int dataType, ArrayList<String> previousData) {
 		FolderDialogFragment fragment = new FolderDialogFragment();
 		fragment.resultListener = resultListener;
 		fragment.dateType = dataType;
 		fragment.previousData = previousData;
+		
+//		if(previousData != null && previousData.size() != 0)
+//			fragment.hasData = true;
 		return fragment;
 	}
 
@@ -46,7 +69,6 @@ public class FolderDialogFragment extends DialogFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setStyle(STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
-
 	}
 
 	@Override
@@ -55,55 +77,39 @@ public class FolderDialogFragment extends DialogFragment {
 		mContext = getActivity();
 		dataMgr = new DataManager(mContext);
 
-		edit_folder = (EditText) mv.findViewById(R.id.edit_dialog_folder);
-
-		if (previousData != null && previousData.size() != 0) 
-			edit_folder.setText(Util.covertArrayToString(previousData));
-//		else 
-//			previousData = new ArrayList<String>();
-
-		LinearLayout ll = (LinearLayout) mv.findViewById(R.id.layout_folderDialog_txt);
-
-
-		//        <TextView
-		//            android:id="@+id/textView1"
-		//            android:layout_width="wrap_content"
-		//            android:layout_height="wrap_content"
-		//            android:layout_margin="5dp"
-		//            android:text="매일일기 "
-		//            android:textColor="@android:color/darker_gray"
-		//            android:textSize="16sp" />
-
-
-		ArrayList<String> userFolders = new ArrayList<String>();
-		userFolders = dataMgr.getDistinctFolderList();
-
-		TextView txt_userfolder[] = new TextView[userFolders.size()];
-
-		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		ll = (LinearLayout) mv.findViewById(R.id.layout_folderDialog_txt);
+		llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		llp.setMargins(5, 5, 5, 5);
 
-		for(int i=0; i<userFolders.size() ;i++) {
-			txt_userfolder[i] = new TextView(mContext);
-			txt_userfolder[i].setText(userFolders.get(i));
-			txt_userfolder[i].setLayoutParams(llp);
 
-			if(previousData != null && previousData.contains(userFolders.get(i))) {
-				txt_userfolder[i].setTextColor(getResources().getColor(R.color.point));			
-			} else {
-				txt_userfolder[i].setTextColor(getResources().getColor(R.color.text_gray_custom));
+		edit_folder = (EditText) mv.findViewById(R.id.edit_dialog_folder);
+		img_add = (ImageView) mv.findViewById(R.id.img_dialog_folder_add);
+		img_add.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String folder = edit_folder.getText().toString().trim();
+				if(TextUtils.isEmpty(folder))
+					Util.tst(mContext, "새로운 폴더를 입력해주세요");
+				else {
+					boolean result = dataMgr.insertFolder(folder);
+					if(!result)
+						Util.tst(mContext, "이미 있는 폴더입니다");
+					edit_folder.setText("");
+					setFolderList(refresh);
+				}
 			}
-			txt_userfolder[i].setTextSize(20);
-			txt_userfolder[i].setOnClickListener(cl);
-			ll.addView(txt_userfolder[i]);
-		}
+		});
+
+		setFolderList(initialize);
 
 		TextView btn_ok = (TextView) mv.findViewById(R.id.btn_ok);
 		btn_ok.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				resultListener.setResult(edit_folder.getText().toString(), dateType);
+				Util.ll("확인 버튼 클릭", Util.covertArrayToString(selectFolders));
+				resultListener.setResult(selectFolders, Common.FOLDER);
 			}
 		});
 
@@ -113,36 +119,81 @@ public class FolderDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				resultListener.setCancel();
-				dismiss();
 			}
 		});
-
 		getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
 		return mv;
 	}
+
+	private void setFolderList(boolean type) {
+		ll.removeAllViews();
+		ArrayList<String> userFolders = new ArrayList<String>();
+		userFolders = dataMgr.getDistinctFolderList();
+
+		txt_userfolder = new TextView[userFolders.size()];
+
+		for(int i=0; i<userFolders.size() ;i++) {
+			txt_userfolder[i] = new TextView(mContext);
+			txt_userfolder[i].setText(userFolders.get(i));
+			txt_userfolder[i].setLayoutParams(llp);
+			txt_userfolder[i].setTag(i);
+
+			if(previousData != null && previousData.contains(userFolders.get(i)) || selectFolders != null && selectFolders.contains(userFolders.get(i))) { //이전에 선택한 태그
+				txt_userfolder[i].setTextColor(getResources().getColor(R.color.point));		
+				if (type)
+					selectFolders.add(userFolders.get(i));
+			} else {
+				txt_userfolder[i].setTextColor(getResources().getColor(R.color.text_gray_custom));
+			}
+			txt_userfolder[i].setTextSize(20);
+			txt_userfolder[i].setOnClickListener(cl);
+			ll.addView(txt_userfolder[i]);
+		}
+
+	}
+	
 
 	private OnClickListener cl = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			TextView tv = (TextView) v;
-			if (!select) { //셀렉트
-				tv.setTextColor(getResources().getColor(R.color.point));
-				if (!previousData.contains(tv.getText().toString())) {
-					if (previousData == null && previousData.size() == 0)  
-						previousData = new ArrayList<String>();
-					previousData.add(tv.getText().toString());
-					select = true;
-				}
-			} else { //셀렉트해제
-				tv.setTextColor(getResources().getColor(R.color.text_gray_custom));
-				previousData.remove(tv.getText());
-				select = false;
-			}
-			edit_folder.setText(Util.covertArrayToString(previousData));
-		}
+			String str = tv.getText().toString();
 
+			if(selectFolders != null && selectFolders.size() != 0) { //배열에 선택된 것이 들어가 있는 경우
+				if (selectFolders.contains(str)) { //이미 선택된 경우
+					tv.setTextColor(getResources().getColor(R.color.text_gray_custom));
+					selectFolders.remove(str);
+				} else { //처음 선택인 경우
+					tv.setTextColor(getResources().getColor(R.color.point));
+					selectFolders.add(str);
+				}
+			} else { //아무것도 선택된 것이 없는 경우
+				tv.setTextColor(getResources().getColor(R.color.point));
+				selectFolders.add(str);
+			}
+
+		}
 	};
 
+	//	private void addSelctFolderArray() {
+	//		
+	//	}
 }
+
+
+//if (!select) { //셀렉트
+//tv.setTextColor(getResources().getColor(R.color.point));
+//if (!previousData.contains(tv.getText().toString())) {
+//	if (previousData == null && previousData.size() == 0)  
+//		previousData = new ArrayList<String>();
+//	previousData.add(tv.getText().toString());
+//	select = true;
+//}
+//			} else { //셀렉트해제
+//				tv.setTextColor(getResources().getColor(R.color.text_gray_custom));
+//				previousData.remove(tv.getText());
+//				select = false;
+//			}
+//			edit_folder.setText(Util.covertArrayToString(previousData));
