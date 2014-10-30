@@ -23,6 +23,7 @@ import com.tleaf.tiary.fragment.FolderFragement;
 import com.tleaf.tiary.fragment.MyPageFragement;
 import com.tleaf.tiary.fragment.PlaceholderFragment;
 import com.tleaf.tiary.fragment.SettingFragement;
+import com.tleaf.tiary.fragment.ShackFragment;
 import com.tleaf.tiary.fragment.TagFragement;
 import com.tleaf.tiary.util.Util;
 
@@ -98,7 +99,7 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 				fragment = new EmotionFragement();
 				break;
 			case 6:
-				fragment = new SettingFragement();
+				fragment = new ShackFragment();
 				break;
 			case 7:
 				fragment = new ExpandableListFragment(); //SettingFragement();
@@ -159,8 +160,8 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 			// if the drawer is not showing. Otherwise, let the drawer
 			// decide what to show in the action bar.
 			getMenuInflater().inflate(R.menu.main, menu);
-			setActionBar();
-//			restoreActionBar();
+//			setActionBar();
+			restoreActionBar();
 			return true;
 		}
 		return super.onCreateOptionsMenu(menu);

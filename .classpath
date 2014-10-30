@@ -7,5 +7,6 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/google-play-services_lib"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/opt_datetimepicker"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/simple-crop-image-lib"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

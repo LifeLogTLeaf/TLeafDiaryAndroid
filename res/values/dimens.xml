@@ -10,4 +10,6 @@
     -->
     <dimen name="navigation_drawer_width">280dp</dimen>
 
+    <dimen name="photo_width">100dp</dimen>
+    <dimen name="photo_height">130dp</dimen>
 </resources>
