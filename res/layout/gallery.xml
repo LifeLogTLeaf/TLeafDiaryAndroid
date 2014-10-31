@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/bg_gray_light"
+    android:background="@color/background_grey"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -17,10 +17,10 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:background="@color/bg_gray"
+            android:background="@color/bottom_menu"
             android:gravity="center"
             android:text="앨범"
-            android:textColor="@color/text_gray"
+            android:textColor="@color/diary_title"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -34,10 +34,10 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:background="@color/bg_gray"
+            android:background="@color/bottom_menu"
             android:gravity="center"
             android:text="사진"
-            android:textColor="@color/text_gray"
+            android:textColor="@color/diary_title"
             android:textSize="20sp" />
     </LinearLayout>
 

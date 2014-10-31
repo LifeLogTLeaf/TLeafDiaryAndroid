@@ -144,9 +144,9 @@ public class FolderDialogFragment extends DialogFragment {
 				if (type)
 					selectFolders.add(userFolders.get(i));
 			} else {
-				txt_userfolder[i].setTextColor(getResources().getColor(R.color.text_gray_custom));
+				txt_userfolder[i].setTextColor(getResources().getColor(R.color.diary_content));
 			}
-			txt_userfolder[i].setTextSize(20);
+			txt_userfolder[i].setTextSize(25);
 			txt_userfolder[i].setOnClickListener(cl);
 			ll.addView(txt_userfolder[i]);
 		}
@@ -163,7 +163,7 @@ public class FolderDialogFragment extends DialogFragment {
 
 			if(selectFolders != null && selectFolders.size() != 0) { //배열에 선택된 것이 들어가 있는 경우
 				if (selectFolders.contains(str)) { //이미 선택된 경우
-					tv.setTextColor(getResources().getColor(R.color.text_gray_custom));
+					tv.setTextColor(getResources().getColor(R.color.diary_content));
 					selectFolders.remove(str);
 				} else { //처음 선택인 경우
 					tv.setTextColor(getResources().getColor(R.color.point));

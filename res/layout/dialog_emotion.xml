@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/bg_gray_light"
+    android:background="@color/background_grey"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -22,175 +22,175 @@
                 android:id="@+id/img_dialog_emo1"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo1" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo2"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo2" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo3"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo3" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo4"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo4" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo5"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo5" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo6"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo6" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo7"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo7" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo8"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo8" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo9"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo9" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo10"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo10" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo11"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo11" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo12"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo12" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo13"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo13" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo14"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo14" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo15"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo15" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo16"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo16" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo17"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo17" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo18"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo18" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo19"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo19" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo20"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo20" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo21"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo21" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo22"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo22" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo23"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo23" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo24"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo24" />
 
             <ImageView
                 android:id="@+id/img_dialog_emo25"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="5dp"
+                android:padding="5dp" android:textColor="@color/diary_title"
                 android:src="@drawable/emo25" />
         </GridLayout>
     </LinearLayout>
@@ -205,10 +205,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/bg_gray"
+            android:background="@color/bottom_menu"
             android:gravity="center_horizontal"
             android:padding="10dp"
             android:text="확인 "
+            android:textColor="@color/diary_title"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -221,10 +222,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/bg_gray"
+            android:background="@color/bottom_menu"
             android:gravity="center_horizontal"
             android:padding="10dp"
             android:text="취소 "
+            android:textColor="@color/diary_title"
             android:textSize="16sp" />
     </LinearLayout>
 

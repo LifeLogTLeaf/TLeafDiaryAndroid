@@ -420,6 +420,7 @@ public class DiaryEditFragment extends Fragment {
 			Util.tst(mContext, "일기 내용을 작성해주세요");
 			return;
 		} else {
+			Util.ll("일기 내용", txt_content.getText().toString());
 			mDiary.setContent(txt_content.getText().toString());
 		}
 

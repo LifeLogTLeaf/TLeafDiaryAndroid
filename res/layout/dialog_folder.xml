@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#EFEFEF"
+    android:background="@color/background_grey"
     android:minWidth="150dp"
     android:orientation="vertical" >
 
@@ -14,9 +14,9 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="300dp" >
+            android:layout_height="200dp" >
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -39,6 +39,7 @@
                 <!-- //            android:textSize="16sp" /> -->
 
                 <LinearLayout
+                    android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal" >
@@ -54,9 +55,10 @@
                         android:id="@+id/img_dialog_folder_add"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/add2" />
+                        android:src="@drawable/add2"
+                        android:tint="@color/diary_title" />
                 </LinearLayout>
-            </LinearLayout>
+            </RelativeLayout>
         </ScrollView>
     </LinearLayout>
 
@@ -70,10 +72,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/bg_gray"
+            android:background="@color/bottom_menu"
             android:gravity="center_horizontal"
             android:padding="10dp"
             android:text="확인 "
+            android:textColor="@color/diary_title"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -86,10 +89,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/bg_gray"
+            android:background="@color/bottom_menu"
             android:gravity="center_horizontal"
             android:padding="10dp"
             android:text="취소 "
+            android:textColor="@color/diary_title"
             android:textSize="16sp" />
     </LinearLayout>
 

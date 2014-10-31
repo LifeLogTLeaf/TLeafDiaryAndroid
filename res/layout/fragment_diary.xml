@@ -30,7 +30,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginLeft="8dp"
-                android:src="@drawable/emotion" />
+                android:tint="@color/point" />
         </LinearLayout>
 
         <TextView
@@ -38,17 +38,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:textColor="@color/text_gray"
+            android:textColor="@color/diary_title"
             android:textStyle="bold" />
 
-<!--         <LinearLayout -->
-<!--             android:layout_width="match_parent" -->
-<!--             android:layout_height="1dp" -->
-<!--             android:layout_marginTop="5dp" -->
-<!--             android:background="@android:color/darker_gray" -->
-<!--             android:paddingLeft="5dp" -->
-<!--             android:paddingRight="5dp" > -->
-<!--         </LinearLayout> -->
+        <!-- <LinearLayout -->
+        <!-- android:layout_width="match_parent" -->
+        <!-- android:layout_height="1dp" -->
+        <!-- android:layout_marginTop="5dp" -->
+        <!-- android:background="@android:color/darker_gray" -->
+        <!-- android:paddingLeft="5dp" -->
+        <!-- android:paddingRight="5dp" > -->
+        <!-- </LinearLayout> -->
     </LinearLayout>
 
     <ScrollView
@@ -69,7 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:textColor="@color/text_gray" />
+                android:textColor="@color/diary_content" />
         </LinearLayout>
     </ScrollView>
 
@@ -154,7 +154,7 @@
         android:id="@+id/layout_diary_menu"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/bg_gray_light"
+        android:background="@color/bottom_menu"
         android:orientation="horizontal" >
 
         <ImageView

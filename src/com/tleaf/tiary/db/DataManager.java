@@ -177,7 +177,6 @@ public class DataManager {
 	}
 
 
-
 	public boolean setDiaryTagRelation(long diaryNo, long tagNo){ //완료
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
@@ -356,7 +355,6 @@ public class DataManager {
 		return arItem;
 	}	
 
-
 	public ArrayList<String> getImages(long diaryNo) { //완료
 		ArrayList<String> arr = new ArrayList<String>();
 
@@ -374,7 +372,6 @@ public class DataManager {
 		dbHelper.close();
 		return arr;
 	}
-
 
 	public ArrayList<String> getTagsByDiaryNo(long diaryNo) { //완료
 		ArrayList<String> arr = new ArrayList<String>();
@@ -461,27 +458,6 @@ public class DataManager {
 		return arr;
 	}
 
-	//임
-	//	private ArrayList<String> getArrayList(long diaryNo, String table) {
-	//		ArrayList<String> arr = new ArrayList<String>();
-	//
-	//		db = dbHelper.getReadableDatabase(); 
-	//		String sql;
-	//
-	//		if (table.equals(IMAGE)) {
-	//			sql = "select * from " + table + " where diaryNo =" + diaryNo;
-	//		} else {
-	//			sql = "select distinct * from " + table + " where diaryNo =" + diaryNo;
-	//		}
-	//		Cursor cursor = db.rawQuery(sql, null);
-	//
-	//		String item;
-	//		while(cursor.moveToNext()) {
-	//			item = cursor.getString(1);
-	//			arr.add(item);
-	//		}
-	//		return arr;
-	//	}
 
 	public ArrayList<String> getDistinctTagList() { //완료
 		ArrayList<String> arr = new ArrayList<String>();
@@ -518,7 +494,106 @@ public class DataManager {
 	}
 
 
+	public Diary getDiaryByNo(Long diaryNo) {
+		Util.ll("diaryNo", diaryNo);
+		SQLiteDatabase db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from diary where no='" + diaryNo + "'";
 
+		Diary diary = null;
+		Cursor cursor = db.rawQuery(sql, null);
+//		Log.e("cursor null", ""+cursor);
+		while(cursor.moveToNext()) {
+			diary = new Diary();
+			long date = cursor.getLong(1);
+			String title = cursor.getString(2);
+			String content = cursor.getString(3);
+			String emotion = cursor.getString(4);
+			String location = cursor.getString(5);
+			String todayWeather = cursor.getString(6);
+			float temperature = cursor.getFloat(7);
+			float humidity = cursor.getFloat(8);
+
+			ArrayList<String> images = getImages(diaryNo);
+			ArrayList<String> tags = getTagsByDiaryNo(diaryNo);
+			ArrayList<String> folders = getFoldersByDiaryNo(diaryNo);
+
+			Log.e("cursor.getInt(0)", ""+cursor.getInt(0));
+
+			diary.setNo(diaryNo);
+			diary.setDate(date);
+			diary.setTitle(title);
+			diary.setContent(content);
+			diary.setEmotion(emotion);
+			diary.setLocation(location);
+
+			Weather weather = new Weather();
+			weather.setTodayWeather(todayWeather);
+			weather.setTemperature(temperature);
+			weather.setHumidity(humidity);
+
+			diary.setWeather(weather);
+			diary.setImages(images);
+			diary.setTags(tags);
+			diary.setFolders(folders);
+
+		}
+		cursor.close();
+		dbHelper.close();
+		return diary;
+	}	
+	
+	private long getFolderNoByFolderName(String folderName) {
+		
+		ArrayList<Long> arr = new ArrayList<Long>();
+
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select no from " + FOLDER + "where folder = '" + folderName + "'";
+		Cursor cursor = db.rawQuery(sql, null);
+
+		long item;
+		while(cursor.moveToNext()) {
+			item = cursor.getLong(0);
+			arr.add(item);
+		}
+		cursor.close();
+		dbHelper.close();
+
+		long folderNo = arr.get(0);
+		return folderNo;
+	}
+
+	private ArrayList<Long> getDiaryNoByFolderNo(long folderNo) {
+		ArrayList<Long> arrDiaryNo = new ArrayList<Long>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select diaryno from " + DIARY_FOLDER + "where folderno = '" + folderNo + "'"; //순서지정 order by date desc
+		
+		Cursor cursor = db.rawQuery(sql, null);
+		Long diaryNo;
+		while(cursor.moveToNext()) {
+			diaryNo = cursor.getLong(1);
+			arrDiaryNo.add(diaryNo);
+		}
+		cursor.close();
+		dbHelper.close();
+		return arrDiaryNo;
+	}
+
+
+	public ArrayList<Diary> getDiaryListByFolderName(String folderName) {
+		db = dbHelper.getReadableDatabase(); 
+	
+		long folderNo = getFolderNoByFolderName(folderName);
+		ArrayList<Long> arrDiaryNo = getDiaryNoByFolderNo(folderNo);
+		
+		ArrayList<Diary> arItem = new ArrayList<Diary>();
+		for(int i=0; i<arrDiaryNo.size(); i++) {
+			Diary diary = getDiaryByNo(arrDiaryNo.get(i));
+			arItem.add(diary);
+		}
+		return arItem;
+
+	}
+	
 
 	public int getEmotionCount(String emotion) {
 
@@ -534,6 +609,29 @@ public class DataManager {
 		return 0;
 	}
 
+
+	//임
+		//	private ArrayList<String> getArrayList(long diaryNo, String table) {
+		//		ArrayList<String> arr = new ArrayList<String>();
+		//
+		//		db = dbHelper.getReadableDatabase(); 
+		//		String sql;
+		//
+		//		if (table.equals(IMAGE)) {
+		//			sql = "select * from " + table + " where diaryNo =" + diaryNo;
+		//		} else {
+		//			sql = "select distinct * from " + table + " where diaryNo =" + diaryNo;
+		//		}
+		//		Cursor cursor = db.rawQuery(sql, null);
+		//
+		//		String item;
+		//		while(cursor.moveToNext()) {
+		//			item = cursor.getString(1);
+		//			arr.add(item);
+		//		}
+		//		return arr;
+		//	}
+	
 	//	public ArrayList<Diary> getDiaryListBySearch(String search) {
 	//		Log.e("getDiaryListBySearch", search);
 	//
@@ -597,56 +695,8 @@ public class DataManager {
 	//		 return arItem;
 	//	}	
 
-	public Diary getDiary(int diaryNo) {
-		Util.ll("diaryNo", diaryNo);
-		Diary diary = new Diary();
 
-		SQLiteDatabase db = dbHelper.getReadableDatabase(); 
-		String sql = "select * from diary where isbn='" + diaryNo + "'";
-
-		Cursor cursor = db.rawQuery(sql, null);
-		Log.e("cursor null", ""+cursor);
-		while(cursor.moveToNext()) {
-			//			int diaryNo = cursor.getInt(0);
-			//			String isbn = cursor.getString(1);
-			//			String title = cursor.getString(2);
-			//			String author = cursor.getString(3);
-			//			String publisher = cursor.getString(4);
-			//			String rePrice = cursor.getString(5);
-			//			String image = cursor.getString(6);
-			//			String regDate = cursor.getString(7);
-			//			String price = cursor.getString(8);
-			//			String rating = cursor.getString(9);
-			//			String univ = cursor.getString(10);
-			//			String major = cursor.getString(11);
-			//			String lecture = cursor.getString(12);
-			//			String professor = cursor.getString(13);
-			//			String usedYear = cursor.getString(14);
-			//			String usedTerm = cursor.getString(15);
-			//			String dealLocation = cursor.getString(16);
-			//
-			//			diary.setdiaryNo(diaryNo);
-			//			diary.setIsbn(isbn);
-			//			diary.setTitle(title);
-			//			diary.setAuthor(author);
-			//			diary.setPublisher(publisher);
-			//			diary.setRePrice(rePrice);
-			//			diary.setImage(image);
-			//			diary.setRegDate(regDate);
-			//			diary.setPrice(price);
-			//			diary.setRating(rating);
-			//			diary.setUniv(univ);
-			//			diary.setMajor(major);
-			//			diary.setLecture(lecture);
-			//			diary.setProfessor(professor);
-			//			diary.setUsedYear(usedYear);
-			//			diary.setUsedTerm(usedTerm);
-			//			diary.setDealLocation(dealLocation);
-		}
-		return diary;
-	}	
-
-	//	public Diary getDiaryByNo(int diaryNo) {
+//		public Diary getDiaryByNo(long diaryNo) {
 	//		Log.e("diaryNo", ""+diaryNo);
 	//		Diary diary = new Diary();
 	//
@@ -656,54 +706,9 @@ public class DataManager {
 	//		Cursor cursor = db.rawQuery(sql, null);
 	//		Log.e("cursor null", ""+cursor);
 	//		while(cursor.moveToNext()) {
-	//			int diaryNo = cursor.getInt(0);
-	//			String isbn = cursor.getString(1);
-	//			String title = cursor.getString(2);
-	//			String author = cursor.getString(3);
-	//			String publisher = cursor.getString(4);
-	//			String rePrice = cursor.getString(5);
-	//			String image = cursor.getString(6);
-	//			String regDate = cursor.getString(7);
-	//			String price = cursor.getString(8);
-	//			String rating = cursor.getString(9);
-	//			String univ = cursor.getString(10);
-	//			String major = cursor.getString(11);
-	//			String lecture = cursor.getString(12);
-	//			String professor = cursor.getString(13);
-	//			String usedYear = cursor.getString(14);
-	//			String usedTerm = cursor.getString(15);
-	//			String dealLocation = cursor.getString(16);
-	//
-	//			diary.setdiaryNo(diaryNo);
-	//			diary.setIsbn(isbn);
-	//			diary.setTitle(title);
-	//			diary.setAuthor(author);
-	//			diary.setPublisher(publisher);
-	//			diary.setRePrice(rePrice);
-	//			diary.setImage(image);
-	//			diary.setRegDate(regDate);
-	//			diary.setPrice(price);
-	//			diary.setRating(rating);
-	//			diary.setUniv(univ);
-	//			diary.setMajor(major);
-	//			diary.setLecture(lecture);
-	//			diary.setProfessor(professor);
-	//			diary.setUsedYear(usedYear);
-	//			diary.setUsedTerm(usedTerm);
-	//			diary.setDealLocation(dealLocation);
-	//		}
-	//		return diary;
-	//	}	
 
-
-
-	public ArrayList<Diary> getDiaryListByFolderName(String FolderName) {
-		return null;
-	}
-
-
-
-
+//			return diary;
+//		}	
 
 }
 
