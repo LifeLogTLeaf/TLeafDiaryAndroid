@@ -1,12 +1,10 @@
 package com.tleaf.tiary.db;
 
-import java.util.ArrayList;
-
-import com.tleaf.tiary.model.Weather;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.tleaf.tiary.R;
 
 /*
  * 작성자: 최슬기
@@ -18,8 +16,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
 
+	private Context mContext;
 	public DbHelper(Context context) {
 		super(context, "DiaryDb.db", null, 1);
+		mContext = context;
 	}
 
 	//	private long date;
@@ -83,14 +83,18 @@ public class DbHelper extends SQLiteOpenHelper {
 						"folderno integer, " +
 						"foreign key(diaryno) references diary(no), " +
 						"foreign key(folderno) references folder(no))";
-		
+		String insert_myfolder = "insert into folder values (0, '" + mContext.getResources().getString(R.string.mydiary) + "')";
+
+
 		db.execSQL(table_diary);
 		db.execSQL(table_image);
 		db.execSQL(table_tag);
 		db.execSQL(table_folder);
 		db.execSQL(table_diaryTag);
+
 		db.execSQL(table_diaryFolder);
-		
+		db.execSQL(insert_myfolder);
+
 	}
 
 	@Override
@@ -98,49 +102,4 @@ public class DbHelper extends SQLiteOpenHelper {
 		// TODO Auto-generated method stub
 	}
 
-
-
-
-	//	db.execSQL(insertSql1);
-	//	db.execSQL(insertSql2);
-
-
-	//	String insertSql1 = "insert into salebook values (" +
-	//	"null, " +
-	//	"'123456789', " +
-	//	"'이산수학', " +
-	//	"'김승현', " +
-	//	"'프리렉', " +
-	//	"'30000', " +
-	//	"null, " +
-	//	"2013/12/5, " +
-	//	"'3000', " +
-	//	"'중', " +
-	//	"'동덕여대', " +
-	//	"'컴퓨터학과', " +
-	//	"'이산수학', " +
-	//	"'진혜진', " +
-	//	"'2011', " +
-	//	"'1', " +
-	//	"'잠실')";
-	//
-	//String insertSql2 = "insert into salebook values (" +
-	//	"null, " +
-	//	"'123456789101112', " +
-	//	"'안드로이드 정복하기', " +
-	//	"'김승현', " +
-	//	"'프리렉', " +
-	//	"'30000', " +
-	//	"null, " +
-	//	"2013/12/5, " +
-	//	"'3000', " +
-	//	"'중', " +
-	//	"'동덕여대', " +
-	//	"'컴퓨터학과', " +
-	//	"'이산수학', " +
-	//	"'진혜진', " +
-	//	"'2011', " +
-	//	"'1', " +
-	//	"'잠실')";
-	//
 }

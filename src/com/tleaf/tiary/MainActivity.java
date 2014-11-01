@@ -53,12 +53,12 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 	private DataManager dataMgr;
 
 	static public FragmentManager fragmentManager;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		dataMgr = new DataManager(getApplicationContext());
 
 		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(0, 153, 237)));
@@ -81,40 +81,42 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 
 		if(childPosition == -1) {
 			switch(position) {
-			case 0:
+			case Common.HOME:
 				fragment = new DiaryListViewFragement();//HomeFragement();
 				break;
-			case 1:
-				fragment = new ExpandableListFragment();//MyPageFragement();
+			case Common.MYPAGE:
+				fragment = new ExpandableListFragment();//MyPageFragement(); //ExpandableListFragment
 				break;
-			case 2:
+			case Common.WRITE:
 				fragment = new DiaryEditFragment();//WriteFragement();
 				break;
-			case 3:
+			case Common.FOLDER:
 				return true;
-			case 4:
+			case Common.TAG:
 				fragment = new TagFragement();
 				break;
-			case 5:
+			case Common.EMOTION:
 				fragment = new EmotionFragement();
 				break;
-			case 6:
+			case Common.SHACK:
 				fragment = new ShackFragment();
 				break;
-			case 7:
+			case Common.SETIING:
 				fragment = new ExpandableListFragment(); //SettingFragement();
 				break;
 			} 
 		} else {
+			Util.tst(this, "childPosition " + childPosition);
 			fragment = new DiaryListViewFragement(dataMgr.getDistinctFolderList().get(childPosition));
 		}
 
-//		fragmentManager.beginTransaction()
-//		.replace(R.id.container, fragment)//PlaceholderFragment.newInstance(position + 1))
-//		.commit();
-		
+		//		fragmentManager.beginTransaction()
+		//		.replace(R.id.container, fragment)//PlaceholderFragment.newInstance(position + 1))
+		//		.commit();
+
 		changeFragment(fragment);
 
+		getApplication();
 		return false;
 	}
 
@@ -160,7 +162,7 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 			// if the drawer is not showing. Otherwise, let the drawer
 			// decide what to show in the action bar.
 			getMenuInflater().inflate(R.menu.main, menu);
-//			setActionBar();
+			//			setActionBar();
 			restoreActionBar();
 			return true;
 		}
@@ -183,10 +185,10 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 	public boolean onNavigationItemSelected(int position, long id) {
 		// When the given dropdown item is selected, show its contents in the
 		// container view.
-//		getFragmentManager().beginTransaction()
-//		.replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-//		.commit();
-//		return true;
+		//		getFragmentManager().beginTransaction()
+		//		.replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+		//		.commit();
+		//		return true;
 		return false;
 	}
 
@@ -195,8 +197,11 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		// Restore the previously serialized current dropdown position.
 		if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
-			getActionBar().setSelectedNavigationItem(
-					savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
+			Util.ll("getActionBar().getNavigationItemCount()", getActionBar().getNavigationItemCount());
+			if (getActionBar().getNavigationItemCount() != 0) {
+				getActionBar().setSelectedNavigationItem(
+						savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
+			}
 		}
 	}
 
@@ -217,14 +222,14 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 		.commit();
 	}
 
-	
+
 	private void setActionBar() {
 		// Set up the action bar to show a dropdown list.
 		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
-		
+
 		// Set up the dropdown list navigation in the action bar.
 		actionBar.setListNavigationCallbacks(
 				// Specify a SpinnerAdapter to populate the dropdown list.
@@ -236,12 +241,17 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 						}),
 						this);
 
-		
-//		new String[] {
-//				getString(R.string.title_section1),
-//				getString(R.string.title_section2),
-//				getString(R.string.title_section3),
-//			}),
+
+		//		new String[] {
+		//				getString(R.string.title_section1),
+		//				getString(R.string.title_section2),
+		//				getString(R.string.title_section3),
+		//			}),
+	}
+
+	public void refreshDrawer() {
+		// TODO Auto-generated method stub
+		mNavigationDrawerFragment.refreshDrawer();
 	}
 }
 

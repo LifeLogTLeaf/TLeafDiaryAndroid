@@ -359,12 +359,12 @@ public class DataManager {
 		ArrayList<String> arr = new ArrayList<String>();
 
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select * from " + IMAGE + " where diaryNo = '" + diaryNo + "'";
+		String sql = "select image from " + IMAGE + " where diaryNo = '" + diaryNo + "'";
 		Cursor cursor = db.rawQuery(sql, null);
 
 		String item;
 		while(cursor.moveToNext()) {
-			item = cursor.getString(1);
+			item = cursor.getString(0);
 			arr.add(item);
 		}
 		
@@ -374,7 +374,7 @@ public class DataManager {
 	}
 
 	public ArrayList<String> getTagsByDiaryNo(long diaryNo) { //완료
-		ArrayList<String> arr = new ArrayList<String>();
+		ArrayList<String> tagArr = new ArrayList<String>();
 
 		db = dbHelper.getReadableDatabase(); 
 
@@ -385,39 +385,39 @@ public class DataManager {
 		String item;
 
 		for (int i=0; i<tagNo.size(); i++) {
-			sql = "select * from " + TAG + " where no = '" + tagNo.get(i) + "'";
+			sql = "select tag from " + TAG + " where no = '" + tagNo.get(i) + "'";
 			cursor = db.rawQuery(sql, null);
 			while(cursor.moveToNext()) {
-				item = cursor.getString(1);
-				arr.add(item);
+				item = cursor.getString(0);
+				tagArr.add(item);
 			}
 			cursor.close();
 		}
 		dbHelper.close();
-		return arr;
+		return tagArr;
 	}
 
 	public ArrayList<Long> getTagNoByDiaryNo(long diaryNo) { //완료
-		ArrayList<Long> arr = new ArrayList<Long>();
+		ArrayList<Long> tagNoArr = new ArrayList<Long>();
 
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select * from " + DIARY_TAG + " where diaryNo = '" + diaryNo + "'";
+		String sql = "select tagno from " + DIARY_TAG + " where diaryNo = '" + diaryNo + "'";
 		Cursor cursor = db.rawQuery(sql, null);
 
 		Long item;
 		while(cursor.moveToNext()) {
-			item = cursor.getLong(2);
-			arr.add(item);
+			item = cursor.getLong(0);
+			tagNoArr.add(item);
 		}
 		cursor.close();
 		dbHelper.close();
-		return arr;
+		return tagNoArr;
 	}
 
 
 	//해당 다이어리가 담긴 폴더들을 다이어리번호로 가져온다
 	public ArrayList<String> getFoldersByDiaryNo(long diaryNo) { //완료
-		ArrayList<String> arr = new ArrayList<String>();
+		ArrayList<String> folderArr = new ArrayList<String>();
 		Util.ll("db.isOpen()", ""+db.isOpen());
 		ArrayList<Long> folderNo = new ArrayList<Long>();
 		folderNo = getFolderNoByDiaryNo(diaryNo);
@@ -427,35 +427,35 @@ public class DataManager {
 		
 		db = dbHelper.getReadableDatabase(); 
 		for (int i=0; i<folderNo.size(); i++) {
-			sql = "select * from " + FOLDER +" where no = '" + folderNo.get(i) + "'";
+			sql = "select folder from " + FOLDER +" where no = '" + folderNo.get(i) + "'";
 			Util.ll("sql", sql + ", " + db.isOpen());
 			Cursor cursor = db.rawQuery(sql, null);
 			while(cursor.moveToNext()) {
-				item = cursor.getString(1);
-				arr.add(item);
+				item = cursor.getString(0);
+				folderArr.add(item);
 			}
 			cursor.close();
 		}
 		dbHelper.close();
-		return arr;
+		return folderArr;
 	}
 
 	//다이어리와 폴더의 다대다 관계를 정의해주는 테이블에서 다이어리번호에 해당하는 폴더번호를 가져온다
 	public ArrayList<Long> getFolderNoByDiaryNo(long diaryNo) { //완료
-		ArrayList<Long> arr = new ArrayList<Long>();
+		ArrayList<Long> folderNoArr = new ArrayList<Long>();
 
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select * from " + DIARY_FOLDER + " where diaryNo = '" + diaryNo + "'";
+		String sql = "select folderno from " + DIARY_FOLDER + " where diaryNo = '" + diaryNo + "'";
 		Cursor cursor = db.rawQuery(sql, null);
 
 		Long item;
 		while(cursor.moveToNext()) {
-			item = cursor.getLong(2);
-			arr.add(item);
+			item = cursor.getLong(0);
+			folderNoArr.add(item);
 		}		
 		cursor.close();
 		dbHelper.close();
-		return arr;
+		return folderNoArr;
 	}
 
 
@@ -463,12 +463,12 @@ public class DataManager {
 		ArrayList<String> arr = new ArrayList<String>();
 
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select distinct * from " + TAG;
+		String sql = "select distinct tag from " + TAG;
 		Cursor cursor = db.rawQuery(sql, null);
 
 		String item;
 		while(cursor.moveToNext()) {
-			item = cursor.getString(1);
+			item = cursor.getString(0);
 			arr.add(item);
 		}
 		cursor.close();
@@ -480,12 +480,12 @@ public class DataManager {
 		ArrayList<String> arr = new ArrayList<String>();
 
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select distinct * from " + FOLDER;
+		String sql = "select distinct folder from " + FOLDER;
 		Cursor cursor = db.rawQuery(sql, null);
 
 		String item;
 		while(cursor.moveToNext()) {
-			item = cursor.getString(1);
+			item = cursor.getString(0);
 			arr.add(item);
 		}
 		cursor.close();
@@ -494,10 +494,29 @@ public class DataManager {
 	}
 
 
+	public ArrayList<String> getDistinctLocationList() { //완료
+		ArrayList<String> locationArr = new ArrayList<String>();
+
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select distinct location from " + DIARY;
+		Cursor cursor = db.rawQuery(sql, null);
+
+		String item;
+		while(cursor.moveToNext()) {
+			item = cursor.getString(0);
+			if(item != null && !item.equals("null"))
+				locationArr.add(item);
+		}
+		cursor.close();
+		dbHelper.close();
+		return locationArr;
+	}
+
+
 	public Diary getDiaryByNo(Long diaryNo) {
 		Util.ll("diaryNo", diaryNo);
 		SQLiteDatabase db = dbHelper.getReadableDatabase(); 
-		String sql = "select * from diary where no='" + diaryNo + "'";
+		String sql = "select * from diary where no = '" + diaryNo + "'";
 
 		Diary diary = null;
 		Cursor cursor = db.rawQuery(sql, null);
@@ -517,7 +536,7 @@ public class DataManager {
 			ArrayList<String> tags = getTagsByDiaryNo(diaryNo);
 			ArrayList<String> folders = getFoldersByDiaryNo(diaryNo);
 
-			Log.e("cursor.getInt(0)", ""+cursor.getInt(0));
+//			Log.e("cursor.getInt(0)", ""+cursor.getInt(0));
 
 			diary.setNo(diaryNo);
 			diary.setDate(date);
@@ -547,7 +566,7 @@ public class DataManager {
 		ArrayList<Long> arr = new ArrayList<Long>();
 
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select no from " + FOLDER + "where folder = '" + folderName + "'";
+		String sql = "select no from " + FOLDER + " where folder = '" + folderName + "'";
 		Cursor cursor = db.rawQuery(sql, null);
 
 		long item;
@@ -562,15 +581,17 @@ public class DataManager {
 		return folderNo;
 	}
 
+	//리스트뷰의 0번지가 가장 최신 
+	//no 내림차순으로 가져와서 0번지부터 저장시
 	private ArrayList<Long> getDiaryNoByFolderNo(long folderNo) {
 		ArrayList<Long> arrDiaryNo = new ArrayList<Long>();
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select diaryno from " + DIARY_FOLDER + "where folderno = '" + folderNo + "'"; //순서지정 order by date desc
+		String sql = "select diaryno from " + DIARY_FOLDER + " where folderno = '" + folderNo + "' order by no desc";
 		
 		Cursor cursor = db.rawQuery(sql, null);
 		Long diaryNo;
 		while(cursor.moveToNext()) {
-			diaryNo = cursor.getLong(1);
+			diaryNo = cursor.getLong(0);
 			arrDiaryNo.add(diaryNo);
 		}
 		cursor.close();

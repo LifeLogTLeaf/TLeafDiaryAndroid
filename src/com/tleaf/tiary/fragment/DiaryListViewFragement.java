@@ -95,9 +95,8 @@ public class DiaryListViewFragement extends Fragment implements OnNavigationList
 		arItem = new ArrayList<Diary>(); //확인
 		if(type.equals("all")) {
 			arItem = dataMgr.getDiaryList();
-//			Util.tst(mContext, "arItem "+arItem);
-		} else {
-			//			dataMgr.getDiaryListByFolderName(type);
+		} else { //folderName이 넘어오는 경우
+			arItem = dataMgr.getDiaryListByFolderName(type);
 		}
 		return arItem;
 

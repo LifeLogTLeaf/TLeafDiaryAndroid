@@ -2,17 +2,14 @@ package com.tleaf.tiary.util;
 
 import java.util.ArrayList;
 
-import com.google.android.gms.internal.em;
-import com.tleaf.tiary.Common;
-
 import android.content.Context;
+import android.os.IBinder;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 public class Util {
 	
-	private static ArrayList<String> arr;
-	private static boolean initArray = false;
 	
 	public static void tst(Context context, String msg) {
 		Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
@@ -54,58 +51,13 @@ public class Util {
 		return arr;
 	}
 
-	public static String getEmomtionNameByIndex(int index) {
-		if(!initArray) {
-			initArray();
-			initArray = true;
-		}
-		
-		return arr.get(index);
-		
+	
+	public static void hideKeyboard(Context context, IBinder windowToken)
+	{
+		InputMethodManager imm = (InputMethodManager) context
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(windowToken, 0);
 	}
 	
-	public static int getIndexByEmomtionName(String emotionName) {
-		if(!initArray) {
-			initArray();
-			initArray = true;
-		}
-		
-		return arr.indexOf(emotionName);
-		
-	}
-	
-	private static void initArray() {
-		arr = new ArrayList<String>();
-		
-		arr.add("활짝");
-		arr.add("그저그런");
-		arr.add("스마일");
-		arr.add("호호");
-		arr.add("힛");
-		
-		arr.add("실망");
-		arr.add("울상");
-		arr.add("궁금");
-		arr.add("심통");
-		arr.add("하트");
-		
-		arr.add("놀람");
-		arr.add("심술");
-		arr.add("노코멘트");
-		arr.add("메롱");
-		arr.add("화남");
-		
-		arr.add("윙크");
-		arr.add("베트맨");
-		arr.add("웃음");
-		arr.add("사랑");
-		arr.add("행복");
-		
-		arr.add("잉");
-		arr.add("버블버블");
-		arr.add("칫");
-		arr.add("흠");
-		arr.add("센스쟁이");
-		
-	}
+
 }

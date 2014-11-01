@@ -78,6 +78,7 @@ public class NavigationDrawerFragment extends Fragment {
 	private View SettingView;
 	
 	private DataManager dataMgr;
+	private MenuListAdapter mAdapter;
 
 	public NavigationDrawerFragment() {
 	}
@@ -157,7 +158,7 @@ public class NavigationDrawerFragment extends Fragment {
 		//get user's folder list		
 		mChild.put(getString(R.string.folder), dataMgr.getDistinctFolderList());
 
-		MenuListAdapter mAdapter = new MenuListAdapter(this.getActivity(), R.layout.item_drawer, R.layout.item_sub_drawer, mParent, mChild); // this.getActivity()
+		mAdapter = new MenuListAdapter(this.getActivity(), R.layout.item_drawer, R.layout.item_sub_drawer, mParent, mChild); // this.getActivity()
 		mDrawerListView.setAdapter(mAdapter);
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 		return mDrawerListView;
@@ -359,5 +360,9 @@ public class NavigationDrawerFragment extends Fragment {
 		 * Called when an item in the navigation drawer is selected.
 		 */
 		boolean onNavigationDrawerItemSelected(int position,int childPosition);
+	}
+
+	public void refreshDrawer() {
+		mAdapter.refreshData();
 	}
 }

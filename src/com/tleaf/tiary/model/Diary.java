@@ -15,13 +15,13 @@ public class Diary {
 
 	private long no = -1;
 	private long date;
-	private String title;
-	private String content;
-	private String emotion;
+	private String title ="무제";
+	private String content = "";
+	private String emotion = "";
 	private ArrayList<String> images;
 	private ArrayList<String> tags;
 	private ArrayList<String> folders;
-	private String location;
+	private String location = "";
 	private Weather weather;
 
 	public Diary() {

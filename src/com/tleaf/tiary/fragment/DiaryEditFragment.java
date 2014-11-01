@@ -1,10 +1,8 @@
 package com.tleaf.tiary.fragment;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.StringTokenizer;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -17,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,8 +23,6 @@ import android.widget.TextView;
 
 import com.android.datetimepicker.date.DatePickerDialog;
 import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
-import com.google.android.gms.drive.internal.m;
-import com.google.android.gms.internal.hn;
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.MainActivity;
 import com.tleaf.tiary.MapActivity;
@@ -34,6 +31,7 @@ import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.dialog.DialogResultListener;
 import com.tleaf.tiary.dialog.EmotionDialogFragment;
 import com.tleaf.tiary.dialog.FolderDialogFragment;
+import com.tleaf.tiary.dialog.LocationDialogFragment;
 import com.tleaf.tiary.dialog.TagDialogFragment;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.MyTime;
@@ -43,6 +41,7 @@ public class DiaryEditFragment extends Fragment {
 
 	private boolean edit;
 	private int selectedEmoIndex;
+	private String selectedLocation;
 
 	private Context mContext;
 
@@ -54,8 +53,8 @@ public class DiaryEditFragment extends Fragment {
 
 	private ImageView img_emo;
 	private TextView txt_date;
-	private TextView txt_title;
-	private TextView txt_content;
+	private EditText txt_title;
+	private EditText txt_content;
 
 	private TextView txt_tag;
 	private TextView txt_folder;
@@ -128,18 +127,16 @@ public class DiaryEditFragment extends Fragment {
 		txt_date.setOnClickListener(cl);
 
 		img_emo = (ImageView) rootView.findViewById(R.id.img_edit_emotion);
+		img_emo.setOnClickListener(cl);
 
-		txt_title = (TextView) rootView.findViewById(R.id.txt_edit_title);
-		txt_content = (TextView) rootView.findViewById(R.id.txt_edit_content);
+		txt_title = (EditText) rootView.findViewById(R.id.txt_edit_title);
+		txt_content = (EditText) rootView.findViewById(R.id.txt_edit_content);
 
 		txt_tag = (TextView) rootView.findViewById(R.id.txt_edit_tag);
 		txt_folder = (TextView) rootView.findViewById(R.id.txt_edit_folder);
 		txt_location = (TextView) rootView.findViewById(R.id.txt_edit_location);
 
-		ImageView img_emotion = (ImageView) rootView
-				.findViewById(R.id.img_edit_emotion);
-		img_emotion.setOnClickListener(cl);
-
+		
 		ImageView img_photo = (ImageView) rootView
 				.findViewById(R.id.img_edit_gallery);
 		img_photo.setOnClickListener(cl);
@@ -175,18 +172,18 @@ public class DiaryEditFragment extends Fragment {
 	}
 
 	private void setCreatedDiary() {
-		txt_date.setText(MyTime.getLongToString(mContext,
+		txt_date.setText(MyTime.getLongToStringWithTime(mContext,
 				mTime.toMillis(false)));
 		handledArrayTags = null;
 		selectFolders = null;
 	}
 
 	private void setEditedDairy() {
-		String dateStr = MyTime.getLongToString(mContext, editedDiary.getDate());
+		String dateStr = MyTime.getLongToStringWithTime(mContext, editedDiary.getDate());
 		txt_date.setText(dateStr);
 
 		if(editedDiary.getEmotion() != null) {
-			int index = Util.getIndexByEmomtionName(editedDiary.getEmotion());
+			int index = Common.getIndexByEmomtionName(editedDiary.getEmotion());
 			img_emo.setImageResource(getResources().getIdentifier(
 					"emo" + (index + 1), "drawable",
 					mContext.getPackageName()));
@@ -210,7 +207,9 @@ public class DiaryEditFragment extends Fragment {
 			txt_folder.setText(Util.covertArrayToString(selectFolders)); 
 		}
 
-		txt_location.setText(editedDiary.getLocation());
+		selectedLocation = editedDiary.getLocation();
+		if(selectedLocation != null && !selectedLocation.equals("null") && !selectedLocation.equals(""))
+			txt_location.setText(selectedLocation);
 	}
 
 
@@ -249,7 +248,7 @@ public class DiaryEditFragment extends Fragment {
 							mTime.month = monthOfYear;
 							mTime.monthDay = dayOfMonth;
 							mTime.normalize(false);
-							txt_date.setText(MyTime.getLongToString(mContext,
+							txt_date.setText(MyTime.getLongToStringWithTime(mContext,
 									mTime.toMillis(false)));
 
 						}
@@ -281,13 +280,19 @@ public class DiaryEditFragment extends Fragment {
 			break;
 
 		case R.id.img_edit_location:
-			Util.tst(mContext, "지도 호출 ");
-			Intent intent = new Intent(mContext, MapActivity.class);
+			if(selectedLocation != null && !selectedLocation.equals(""))
+				Util.ll("지도 아이콘 선택", selectedLocation);
+			dFragment = LocationDialogFragment.newInstace(dialogResultListener,
+					Common.FOLDER, selectedLocation);
+			dFragment.show(fm, "dialog");
+			
+//			Util.tst(mContext, "지도 호출 ");
+//			Intent intent = new Intent(mContext, MapActivity.class);
 			// Log.e("arItem.get(pos).isbn",
 			// ""+arItem.get(pos).getDealLocation());
 			// intent.putExtra("location",
 			// arItem.get(pos).getDealLocation());
-			startActivity(intent);
+//			startActivity(intent);
 			break;
 
 		case R.id.img_edit_add:
@@ -321,7 +326,11 @@ public class DiaryEditFragment extends Fragment {
 		@Override
 		public void setResult(ArrayList<String> result, int type) {
 			dFragment.dismiss();
-			String typeName = type < Common.FOLDER ? "태그" : "폴더";
+			String typeName;
+			if(type == Common.TAG) 
+				typeName = "태그";
+			else if(type == Common.FOLDER)
+				typeName = "폴더";
 			
 			if(type == Common.TAG) {
 			} else if (type == Common.FOLDER) {
@@ -393,15 +402,21 @@ public class DiaryEditFragment extends Fragment {
 					mContext.getPackageName()));
 		}
 
+
 		@Override
-		public void setFolderAddResult(String folder) {
-//			txt_folder.setText(folder);
+		public void setResult(String result) {
+			dFragment.dismiss();
+			Util.tst(mContext, "사용자가 입력한 장소 result " + result);
+			selectedLocation = result;
+			txt_location.setText(selectedLocation);
+			setInfoLayout();
 		}
 
 	};
 
 
 	private void saveDiary() {
+		Util.hideKeyboard(mContext, txt_content.getApplicationWindowToken());
 		Diary mDiary = new Diary();
 		if (edit) 
 			mDiary.setNo(editedDiary.getNo());
@@ -426,7 +441,7 @@ public class DiaryEditFragment extends Fragment {
 
 		//이모티콘 선택안하고 저장 눌렀을 시
 		if(selectedEmoIndex != -1)
-			mDiary.setEmotion(Util.getEmomtionNameByIndex(selectedEmoIndex));
+			mDiary.setEmotion(Common.getEmomtionNameByIndex(selectedEmoIndex));
 
 		// 이미지
 		if (handledArrayTags != null && handledArrayTags.size() != 0) {
@@ -435,11 +450,17 @@ public class DiaryEditFragment extends Fragment {
 		}
 		
 		
-		if (selectFolders != null && selectFolders.size() != 0) {
-			Util.ll("save호출", Util.covertArrayToString(selectFolders));
-			mDiary.setFolders(selectFolders); 
+		if (selectFolders == null || selectFolders.size() == 0) {
+			selectFolders = new ArrayList<String>();
+			selectFolders.add(getResources().getString(R.string.mydiary));
 		}
-		//위치
+		
+		Util.ll("save호출", Util.covertArrayToString(selectFolders));
+		mDiary.setFolders(selectFolders);
+		
+		if (selectedLocation != null && !selectedLocation.equals("")) {
+			mDiary.setLocation(selectedLocation);
+		}
 
 		Boolean result = true;
 
@@ -459,6 +480,13 @@ public class DiaryEditFragment extends Fragment {
 		} else {
 			//예외처리
 		}
+		
+		Activity activity = getActivity();
+		if(activity instanceof MainActivity){
+			MainActivity mainActivity = (MainActivity) activity;
+			mainActivity.refreshDrawer();
+		}
+		
 	}
 
 	private class StickerAdapter extends BaseAdapter {
@@ -498,35 +526,4 @@ public class DiaryEditFragment extends Fragment {
 
 }
 
-
-
-
-
-// public void mOnClick(View v) {
-// final LinearLayout linear = (LinearLayout)
-// View.inflate(this, R.layout.order, null);
-//
-// new AlertDialog.Builder(this)
-// .setTitle("주문 정보를 입력하시오.")
-// .setIcon(R.drawable.androboy)
-// .setView(linear)
-// .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-// public void onClick(DialogInterface dialog, int whichButton) {
-// EditText product = (EditText)linear.findViewById(R.id.product);
-// EditText number = (EditText)linear.findViewById(R.id.number);
-// CheckBox paymethod = (CheckBox)linear.findViewById(R.id.paymethod);
-// TextView text = (TextView)findViewById(R.id.text);
-// text.setText("주문 정보 " + product.getText() + " 상품 " +
-// number.getText() + "개." +
-// (paymethod.isChecked() ? "착불결제":""));
-// }
-// })
-// .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-// public void onClick(DialogInterface dialog, int whichButton) {
-// TextView text = (TextView)findViewById(R.id.text);
-// text.setText("주문을 취소했습니다.");
-// }
-// })
-// .show();
-// }
 

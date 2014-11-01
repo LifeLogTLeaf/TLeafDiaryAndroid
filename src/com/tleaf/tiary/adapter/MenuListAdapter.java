@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tleaf.tiary.R;
+import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.model.MyMenuItem;
 
 public class MenuListAdapter extends BaseExpandableListAdapter {
@@ -108,5 +109,12 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		// TODO Auto-generated method stub
 		return true;
+	}
+	
+	public void refreshData() {
+		DataManager dataMgr = new DataManager(mContext);
+		mChild.get(mContext.getString(R.string.folder)).clear();
+		mChild.put(mContext.getString(R.string.folder), dataMgr.getDistinctFolderList());
+		notifyDataSetChanged();
 	}
 }

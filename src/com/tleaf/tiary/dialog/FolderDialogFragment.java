@@ -27,8 +27,8 @@ import com.tleaf.tiary.util.Util;
 
 public class FolderDialogFragment extends DialogFragment {
 
-	private final boolean initialize = true;
-	private final boolean refresh = false;
+	private final int initialize = 1; //true;
+	private final int refresh = 2;//false;
 	
 	private DialogResultListener resultListener;
 	private int dateType;
@@ -126,7 +126,7 @@ public class FolderDialogFragment extends DialogFragment {
 		return mv;
 	}
 
-	private void setFolderList(boolean type) {
+	private void setFolderList(int type) {
 		ll.removeAllViews();
 		ArrayList<String> userFolders = new ArrayList<String>();
 		userFolders = dataMgr.getDistinctFolderList();
@@ -141,7 +141,7 @@ public class FolderDialogFragment extends DialogFragment {
 
 			if(previousData != null && previousData.contains(userFolders.get(i)) || selectFolders != null && selectFolders.contains(userFolders.get(i))) { //이전에 선택한 태그
 				txt_userfolder[i].setTextColor(getResources().getColor(R.color.point));		
-				if (type)
+				if (type == initialize)
 					selectFolders.add(userFolders.get(i));
 			} else {
 				txt_userfolder[i].setTextColor(getResources().getColor(R.color.diary_content));

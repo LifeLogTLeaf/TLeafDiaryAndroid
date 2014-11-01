@@ -7,7 +7,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.drive.internal.m;
+import com.tleaf.tiary.Common;
 import com.tleaf.tiary.MainActivity;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
@@ -53,11 +52,16 @@ public class DiaryFragment extends Fragment {
 		
 		String dateStr = MyTime.getLongToString(mContext, diary.getDate());
 		txt_date.setText(dateStr);
+		
+		TextView txt_date_time = (TextView)rootView.findViewById(R.id.txt_diary_date_time);
+		
+		String dateTimeStr = MyTime.getLongToOnlyTime(mContext, diary.getDate());
+		txt_date_time.setText(dateTimeStr);
 
 		ImageView img_emo = (ImageView) rootView.findViewById(R.id.img_edit_emotion);
 		
 		if(diary.getEmotion() != null) {
-			int index = Util.getIndexByEmomtionName(diary.getEmotion());
+			int index = Common.getIndexByEmomtionName(diary.getEmotion());
 			img_emo.setImageResource(getResources().getIdentifier(
 				"emo" + (index + 1), "drawable",
 				mContext.getPackageName()));
@@ -86,7 +90,9 @@ public class DiaryFragment extends Fragment {
 		}
 
 		TextView txt_location = (TextView) rootView.findViewById(R.id.txt_diary_location);
-		txt_location.setText(diary.getLocation());
+		String location = diary.getLocation();
+		if(location != null && !location.equals("null") && !location.equals(""))
+			txt_location.setText(diary.getLocation());
 
 		String tagStr = txt_tag.getText().toString();
 		String tagFolder = txt_folder.getText().toString();

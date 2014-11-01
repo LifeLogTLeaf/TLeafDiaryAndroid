@@ -73,10 +73,21 @@ public class DiaryListAdapter extends BaseAdapter {
 		TextView txt_content = (TextView)convertView.findViewById(R.id.item_txt_diary_content);
 		txt_content.setText(arrItem.get(position).getContent());
 
+		
+		
+		ImageView img_tag = (ImageView)convertView.findViewById(R.id.item_img_diary_tag);
+
 		TextView txt_tag = (TextView)convertView.findViewById(R.id.item_txt_diary_tag);
 		ArrayList<String> tags = arrItem.get(position).getTags();
-		if(tags != null && tags.size() != 0)
-			txt_tag.setText(tags.get(0)); 
+		if(tags != null && tags.size() != 0) {
+			txt_tag.setVisibility(View.VISIBLE);
+			txt_tag.setText(tags.get(0));
+			img_tag.setVisibility(View.VISIBLE);
+
+		} else {
+			txt_tag.setVisibility(View.GONE);
+			img_tag.setVisibility(View.GONE);
+		}
 
 		//사용자에게 더 있음을 알려주는 ui
 		//		String tag = "";
@@ -84,15 +95,34 @@ public class DiaryListAdapter extends BaseAdapter {
 		//			tag += tags[i] + ",";
 		//		}
 
+		
+		ImageView img_folder = (ImageView)convertView.findViewById(R.id.item_img_diary_folder);
+
 		TextView txt_folder = (TextView)convertView.findViewById(R.id.item_txt_diary_folder);
 		ArrayList<String> folders = arrItem.get(position).getFolders();
-		if(folders != null && folders.size() != 0)
+		if(folders != null && folders.size() != 0) {
+			txt_folder.setVisibility(View.VISIBLE);
 			txt_folder.setText(folders.get(0)); 
+			img_folder.setVisibility(View.VISIBLE);
+		} else { 
+			txt_folder.setVisibility(View.GONE);
+			img_folder.setVisibility(View.GONE);
+		}
+		
+		ImageView img_location = (ImageView)convertView.findViewById(R.id.item_img_diary_location);
 
 		TextView txt_location = (TextView)convertView.findViewById(R.id.item_txt_diary_location);
-		if(arrItem.get(position).getLocation() != null && folders.size() != 0)
+		String location = arrItem.get(position).getLocation();
+		if(location != null && !location.equals("null")) {
+			txt_location.setVisibility(View.VISIBLE);
 			txt_location.setText(arrItem.get(position).getLocation());
-
+			img_location.setVisibility(View.VISIBLE);
+			
+		} else {
+			txt_location.setVisibility(View.GONE);
+			img_location.setVisibility(View.GONE);
+		}
+		
 		return convertView;
 	}
 

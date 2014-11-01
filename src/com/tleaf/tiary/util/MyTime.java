@@ -22,6 +22,18 @@ public class MyTime {
 						| DateUtils.FORMAT_SHOW_YEAR);
 	}
 	
+	static public String getLongToStringWithTime(Context context, long millis) {
+		return DateUtils.formatDateTime(context,
+				millis, DateUtils.FORMAT_SHOW_DATE
+						| DateUtils.FORMAT_SHOW_WEEKDAY
+						| DateUtils.FORMAT_SHOW_YEAR
+						| DateUtils.FORMAT_SHOW_TIME);
+	}
+
+	static public String getLongToOnlyTime(Context context, long millis) {
+		return DateUtils.formatDateTime(context,
+				millis, DateUtils.FORMAT_SHOW_TIME);
+	}
 	//호출형식 : MyTime.getTodayToString(mContext, time.toMillis(false))
 //	static public String getTodayToString(Context context, long millis) {
 //		return DateUtils.formatDateTime(context,
