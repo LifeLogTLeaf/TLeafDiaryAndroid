@@ -111,13 +111,13 @@ public class DiaryFragment extends Fragment {
 				.findViewById(R.id.img_diary_delete);
 		img_delete.setOnClickListener(cl);
 
-		ImageView img_share = (ImageView) rootView
-				.findViewById(R.id.img_diary_share);
-		img_share.setOnClickListener(cl);
-
-		ImageView img_shack = (ImageView) rootView
-				.findViewById(R.id.img_diary_shack);
-		img_shack.setOnClickListener(cl);
+//		ImageView img_share = (ImageView) rootView
+//				.findViewById(R.id.img_diary_share);
+//		img_share.setOnClickListener(cl);
+//
+//		ImageView img_shack = (ImageView) rootView
+//				.findViewById(R.id.img_diary_shack);
+//		img_shack.setOnClickListener(cl);
 		return rootView;
 
 	}
@@ -159,12 +159,12 @@ public class DiaryFragment extends Fragment {
 
 
 			break;
-		case R.id.img_diary_share:
-			Util.tst(mContext, "공유하기");
-			break;
-		case R.id.img_diary_shack:
-			Util.tst(mContext, "shack으로 보내기(관련처리)");
-			break;
+//		case R.id.img_diary_share:
+//			Util.tst(mContext, "공유하기");
+//			break;
+//		case R.id.img_diary_shack:
+//			Util.tst(mContext, "shack으로 보내기(관련처리)");
+//			break;
 
 		}
 
