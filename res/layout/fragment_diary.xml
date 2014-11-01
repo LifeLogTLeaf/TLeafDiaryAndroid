@@ -76,7 +76,6 @@
                 android:textColor="@color/diary_content"
                 android:textSize="15sp" />
 
-            <!-- android:visibility="gone" -->
 
             <LinearLayout
                 android:id="@+id/layout_diary_user_add_info"
