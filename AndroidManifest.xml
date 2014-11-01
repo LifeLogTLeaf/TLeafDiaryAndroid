@@ -42,6 +42,7 @@
             android:name=".photo.InternalStorageContentProvider"
             android:authorities="com.tleaf.tiary"
             android:exported="true" />
+        <activity android:name="MapActivity"></activity>
     </application>
 
 </manifest>

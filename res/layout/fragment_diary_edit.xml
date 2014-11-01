@@ -31,8 +31,8 @@
                         android:id="@+id/txt_edit_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/diary_content"
                         android:text="2014.10.11.목"
+                        android:textColor="@color/diary_edit_edittext_hint"
                         android:textSize="20sp" />
 
                     <ImageView
@@ -40,8 +40,8 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_marginLeft="8dp"
-                        android:tint="@color/diary_content"
-                        android:src="@drawable/circle" />
+                        android:src="@drawable/circle"
+                        android:tint="@color/diary_edit_edittext_hint" />
                 </LinearLayout>
 
                 <EditText
@@ -51,8 +51,8 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:hint="Title"
-                    android:tint="@color/diary_content"
                     android:singleLine="true"
+                    android:textColor="@color/diary_edit_edittext_hint"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -79,9 +79,9 @@
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:gravity="top"
-                    android:tint="@color/diary_content"
                     android:hint="Today is..."
-                    android:minHeight="350dp"/>
+                    android:minHeight="360dp"
+                    android:textColor="@color/diary_edit_edittext_hint" />
             </ScrollView>
 
             <LinearLayout
@@ -168,88 +168,189 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/bottom_menu"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp" >
 
-        <ImageView
-            android:id="@+id/img_edit_gallery"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginTop="5dp"
-            android:padding="2dp"
-            android:src="@drawable/gallery" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/bottom_menu"
+            android:gravity="center" >
 
-        <ImageView
-            android:id="@+id/img_edit_tag"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-            android:src="@drawable/tag2" />
+            <ImageView
+                android:id="@+id/img_edit_gallery"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:src="@drawable/gallery"
+                android:tint="@color/diary_title" />
+        </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/img_edit_folder"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:src="@drawable/folder_list" />
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/background_grey" >
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/img_edit_location"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/location_sq" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/bottom_menu"
+            android:gravity="center" >
 
-        <ImageView
-            android:id="@+id/img_edit_add"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/add2" />
+            <ImageView
+                android:id="@+id/img_edit_tag"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/tag2"
+                android:tint="@color/diary_title" />
+        </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/img_edit_template"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:src="@drawable/template5" />
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/background_grey" >
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/img_edit_setting"
-            android:layout_width="20dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/theee_set2" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/bottom_menu"
+            android:gravity="center" >
 
-        <!-- 저장 버튼 사라지면 셋팅 이미지뷰 복구할것 -->
-        <!-- <ImageView -->
-        <!-- android:id="@+id/img_edit_setting" -->
-        <!-- android:layout_width="40dp" -->
-        <!-- android:layout_height="40dp" -->
-        <!-- android:layout_marginBottom="5dp" -->
-        <!-- android:layout_marginLeft="1dp" -->
-        <!-- android:layout_marginRight="1dp" -->
-        <!-- android:layout_marginTop="5dp" -->
-        <!-- android:src="@drawable/theee_set2" /> -->
+            <ImageView
+                android:id="@+id/img_edit_folder"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:paddingLeft="1dp"
+                android:src="@drawable/folder_list2"
+                android:tint="@color/diary_title" />
+        </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/img_edit_save"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:src="@drawable/done" />
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/background_grey" >
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/bottom_menu"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/img_edit_location"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/location_trim"
+                android:tint="@color/diary_title" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/background_grey" >
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/bottom_menu"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/img_edit_add"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:src="@drawable/add3"
+                android:tint="@color/diary_title" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/background_grey" >
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/bottom_menu"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/img_edit_template"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/template5_trim"
+                android:tint="@color/diary_title" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/background_grey" >
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/bottom_menu"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/img_edit_setting"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/theee_set3"
+                android:tint="@color/diary_title" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/background_grey" >
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="@color/bottom_menu"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/img_edit_save"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
+            <!-- android:layout_width="40dp" -->
+            <!-- android:layout_height="40dp" -->
+            <!-- android:src="@drawable/done"/> -->
+
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
