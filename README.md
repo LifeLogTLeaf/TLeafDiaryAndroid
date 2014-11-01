@@ -4,8 +4,8 @@ edited by choi seulgi
 
 branch csg
 commit log 
-#31
--title single line 지정
+#31		
+-title single line 지정	
 -가끔 앱 실행시 죽는 문제 해결 (onRestoreInstanceState에서 발생한는 exception 해결)
 -diary edit view, diary view ui 개선
 -folder dialog ui 개선
@@ -22,6 +22,3 @@ commit log
 -사용자가 선택해서 에디트 텍스트에 입력된 값을 지웠을 시 리스트에서 자동 셀렉 해제됨
 -에디트 텍스트 커서 항상 맨 뒤에 위치하도록 수정
 
-
-//수정시 에디트 텍스트에 안나옴
-//지웠을 시 삭제
