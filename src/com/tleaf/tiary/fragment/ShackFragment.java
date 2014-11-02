@@ -31,16 +31,16 @@ import com.tleaf.tiary.util.Util;
 
 public class ShackFragment extends Fragment {
 
-	GridView gridGallery;
-	Handler handler;
-	GalleryAdapter adapter;
+	private GridView gridGallery;
+	private Handler handler;
+	private GalleryAdapter adapter;
 
-	ImageView imgSinglePick;
-	Button btnGalleryPickMul;
+	private ImageView imgSinglePick;
+	private Button btnGalleryPickMul;
 
-	String action;
-	ViewSwitcher viewSwitcher;
-	ImageLoader imageLoader;
+	private String action;
+	private ViewSwitcher viewSwitcher;
+	private ImageLoader imageLoader;
 
 	private Context mContext;
 	private View rootView;

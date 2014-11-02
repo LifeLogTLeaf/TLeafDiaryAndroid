@@ -48,7 +48,6 @@ public class DiaryListViewFragement extends Fragment implements OnNavigationList
 		lv.setAdapter(mAdapter);
 		lv.setOnItemClickListener(mItemClickListener);
 
-
 		//	        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 		//	            @Override
 		//	            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -106,44 +105,3 @@ public class DiaryListViewFragement extends Fragment implements OnNavigationList
 }
 
 
-/*
-ArrayList<String> arrData = new ArrayList<String>();
-arrData.add("생일");
-arrData.add("생일");
-arrData.add("생일");
-
-
-if(type.equals("all")) {
-	arrData = new ArrayList<String>();
-	Diary d = new Diary();
-	d.setDate(20141011);
-	d.setImage("image");
-	d.setTitle("내생일 "); 
-	d.setContent("꼭 한번 가보고 싶었던 이태원 All that jazz에 다녀왔다. 공연이 정말 멋졌다.");
-	d.setTags(arrData);
-	d.setFolder("daily");
-	d.setLocaton("우리집");
-	d.setEmotion("기쁨");
-
-	for(int i=0; i < 20; i++)
-		arItem.add(d);
-
-	//			dataMgr.getDiaryList();
-} else {
-	String[] tags = {"생일", "이태원", "홍석천"};
-	Diary d = new Diary();
-	d.setDate(20141011);
-	d.setImage("image");
-	d.setTitle("내생일 "); 
-	d.setContent("안드로이드 개발.....템플릿 일기.....너이자식......");
-	d.setTags(arrData);
-	d.setFolder("daily");
-	d.setLocaton("우리집");
-	d.setEmotion("기쁨");
-
-	for(int i=0; i < 20; i++)
-		arItem.add(d);
-	//			dataMgr.getDiaryListByFolderName(type);
-}
-
- */

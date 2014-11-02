@@ -112,8 +112,8 @@ public class DiaryListAdapter extends BaseAdapter {
 		ImageView img_location = (ImageView)convertView.findViewById(R.id.item_img_diary_location);
 
 		TextView txt_location = (TextView)convertView.findViewById(R.id.item_txt_diary_location);
-		String location = arrItem.get(position).getLocation();
-		if(location != null && !location.equals("null")) {
+		String location = arrItem.get(position).getLocation().trim();
+		if(location != null && !location.equals("null") && !location.equals("")) {
 			txt_location.setVisibility(View.VISIBLE);
 			txt_location.setText(arrItem.get(position).getLocation());
 			img_location.setVisibility(View.VISIBLE);
@@ -125,14 +125,4 @@ public class DiaryListAdapter extends BaseAdapter {
 		
 		return convertView;
 	}
-
 }
-
-//d.setDate(20141011);
-//d.setImage("image");
-//d.setTitle("내생일 "); 
-//d.setContent("꼭 한번 가보고 싶었던 이태원 All that jazz에 다녀왔다. 공연이 정말 멋졌다.");
-//d.setTags(tags);
-//d.setFolder("daily");
-//d.setLocaton("우리집");
-//d.setEmotion("기쁨"); -> 그림으로    
