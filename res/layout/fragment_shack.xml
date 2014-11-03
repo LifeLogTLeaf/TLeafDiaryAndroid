@@ -1,57 +1,86 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#E4F7BA"
     android:orientation="vertical" >
 
-    <ViewSwitcher
-        android:id="@+id/viewSwitcher"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_weight="1" >
-
-        <GridView
-            android:id="@+id/gridGallery"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:layout_marginBottom="-10dp"
-            android:layout_marginLeft="-10dp"
-            android:layout_marginRight="-10dp"
-            android:layout_marginTop="-10dp"
-            android:horizontalSpacing="-15dp"
-            android:numColumns="3"
-            android:padding="0dp"
-            android:verticalSpacing="-15dp"
-            tools:listitem="@layout/gallery_item" >
-        </GridView>
-
-        <ImageView
-            android:id="@+id/imgSinglePick"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_gravity="center"
-            android:src="@drawable/no_media"
-            android:contentDescription="@string/app_name" />
-    </ViewSwitcher>
-
-    <LinearLayout
-        android:id="@+id/llBottomContainer"
-        android:layout_width="fill_parent"
+    <HorizontalScrollView
+        android:id="@+id/layout_hori_scrollview"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="5dp" >
+        android:scrollbars="none"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp" >
 
-        <Button
-            android:id="@+id/btnGalleryPickMul"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="갤러리선택" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_margin="3dp" >
+
+                <ImageView
+                    android:id="@+id/img_user_add"
+                    android:layout_width="@dimen/photo_width"
+                    android:layout_height="@dimen/photo_height"
+                    android:layout_centerInParent="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/no_media" />
+
+                <ImageView
+                    android:id="@+id/img_user_add_delete"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/img_delete"
+                    android:tint="@color/diary_title" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_margin="3dp" >
+
+                <ImageView
+                    android:layout_width="@dimen/photo_width"
+                    android:layout_height="@dimen/photo_height"
+                    android:layout_centerInParent="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/no_media" />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/img_delete"
+                    android:tint="@color/diary_title" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_margin="3dp" >
+
+                <ImageView
+                    android:layout_width="@dimen/photo_width"
+                    android:layout_height="@dimen/photo_height"
+                    android:layout_centerInParent="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/no_media" />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/img_delete"
+                    android:tint="@color/diary_title" />
+            </RelativeLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
 
 </LinearLayout>

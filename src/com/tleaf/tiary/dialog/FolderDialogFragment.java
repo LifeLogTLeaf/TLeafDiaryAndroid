@@ -31,24 +31,16 @@ public class FolderDialogFragment extends DialogFragment {
 	private final int refresh = 2;//false;
 	
 	private DialogResultListener resultListener;
-	private int dateType;
+	private int dataType;
 	private ArrayList<String> previousData;
 
 	private Context mContext;
 	private DataManager dataMgr;
 
 	private EditText edit_folder;
-
 	private ImageView img_add;
-
-	//	private boolean select = false;
-
-	//	private int selectedIndex = -1;
 	private TextView[] txt_userfolder;
-
-	//	private Map<String, Boolean> selectMap;
-
-	private boolean hasData = false;
+	
 	private ArrayList<String> selectFolders = new ArrayList<String>();
 
 	private LinearLayout ll;
@@ -57,11 +49,8 @@ public class FolderDialogFragment extends DialogFragment {
 	public static FolderDialogFragment newInstace(DialogResultListener resultListener, int dataType, ArrayList<String> previousData) {
 		FolderDialogFragment fragment = new FolderDialogFragment();
 		fragment.resultListener = resultListener;
-		fragment.dateType = dataType;
+		fragment.dataType = dataType;
 		fragment.previousData = previousData;
-		
-//		if(previousData != null && previousData.size() != 0)
-//			fragment.hasData = true;
 		return fragment;
 	}
 
@@ -176,24 +165,4 @@ public class FolderDialogFragment extends DialogFragment {
 
 		}
 	};
-
-	//	private void addSelctFolderArray() {
-	//		
-	//	}
 }
-
-
-//if (!select) { //셀렉트
-//tv.setTextColor(getResources().getColor(R.color.point));
-//if (!previousData.contains(tv.getText().toString())) {
-//	if (previousData == null && previousData.size() == 0)  
-//		previousData = new ArrayList<String>();
-//	previousData.add(tv.getText().toString());
-//	select = true;
-//}
-//			} else { //셀렉트해제
-//				tv.setTextColor(getResources().getColor(R.color.text_gray_custom));
-//				previousData.remove(tv.getText());
-//				select = false;
-//			}
-//			edit_folder.setText(Util.covertArrayToString(previousData));

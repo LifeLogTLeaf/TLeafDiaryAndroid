@@ -78,65 +78,65 @@ public class ShackFragment extends Fragment {
 
 	private void init() {
 
-		handler = new Handler();
-		gridGallery = (GridView) rootView.findViewById(R.id.gridGallery);
-		gridGallery.setFastScrollEnabled(true);
-		adapter = new GalleryAdapter(mContext, imageLoader);
-		adapter.setMultiplePick(false);
-		gridGallery.setAdapter(adapter);
-
-		viewSwitcher = (ViewSwitcher) rootView.findViewById(R.id.viewSwitcher);
-		viewSwitcher.setDisplayedChild(1);
-
-		btnGalleryPickMul = (Button) rootView.findViewById(R.id.btnGalleryPickMul);
-		btnGalleryPickMul.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent("luminous.ACTION_MULTIPLE_PICK");
-				startActivityForResult(i, 200);
-			}
-		});
-
-		imgSinglePick = (ImageView) rootView.findViewById(R.id.imgSinglePick);
+//		handler = new Handler();
+//		gridGallery = (GridView) rootView.findViewById(R.id.gridGallery);
+//		gridGallery.setFastScrollEnabled(true);
+//		adapter = new GalleryAdapter(mContext, imageLoader);
+//		adapter.setMultiplePick(false);
+//		gridGallery.setAdapter(adapter);
+//
+//		viewSwitcher = (ViewSwitcher) rootView.findViewById(R.id.viewSwitcher);
+//		viewSwitcher.setDisplayedChild(1);
+//
+//		btnGalleryPickMul = (Button) rootView.findViewById(R.id.btnGalleryPickMul);
+//		btnGalleryPickMul.setOnClickListener(new View.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				Intent i = new Intent("luminous.ACTION_MULTIPLE_PICK");
+//				startActivityForResult(i, 200);
+//			}
+//		});
+//
+//		imgSinglePick = (ImageView) rootView.findViewById(R.id.imgSinglePick);
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
-			Util.tst(mContext, data.getStringExtra("type"));
-			String type = data.getStringExtra("type");
-			if (type.equals("allPath")) {
-				String[] all_path = data.getStringArrayExtra("all_path");
-
-				ArrayList<MyGallery> dataT = new ArrayList<MyGallery>();
-
-				for (String string : all_path) {
-					MyGallery item = new MyGallery();
-					item.sdcardPath = string;
-
-					dataT.add(item);
-				}
-
-				viewSwitcher.setDisplayedChild(0);
-				adapter.addAll(dataT);
-			} else if (type.equals("crop")) {
-				Util.tst(mContext, "crop");
-				String path = data.getStringExtra("path");
-				Bitmap bitmap = BitmapFactory.decodeFile(path);
-				
-				gridGallery.setVisibility(View.INVISIBLE);
-				imgSinglePick.setVisibility(View.VISIBLE);
-				imgSinglePick.setImageBitmap(bitmap);
+//		if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
+//			Util.tst(mContext, data.getStringExtra("type"));
+//			String type = data.getStringExtra("type");
+//			if (type.equals("allPath")) {
+//				String[] all_path = data.getStringArrayExtra("all_path");
+//
+//				ArrayList<MyGallery> dataT = new ArrayList<MyGallery>();
+//
+//				for (String string : all_path) {
+//					MyGallery item = new MyGallery();
+//					item.sdcardPath = string;
+//
+//					dataT.add(item);
+//				}
+//
+//				viewSwitcher.setDisplayedChild(0);
+//				adapter.addAll(dataT);
+//			} else if (type.equals("crop")) {
+//				Util.tst(mContext, "crop");
+//				String path = data.getStringExtra("path");
+//				Bitmap bitmap = BitmapFactory.decodeFile(path);
+//				
+//				gridGallery.setVisibility(View.INVISIBLE);
+//				imgSinglePick.setVisibility(View.VISIBLE);
+//				imgSinglePick.setImageBitmap(bitmap);
 //				adapter.clear();
 
 //				viewSwitcher.setDisplayedChild(1);
 //				String single_path = data.getStringExtra("single_path");
 //				imageLoader.displayImage("file://" + path, imgSinglePick);
-			}
-		}
+//			}
+//		}
 	}
 }
 

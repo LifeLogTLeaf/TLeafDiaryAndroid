@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_white"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp" >
+
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo1"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo1"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo2"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo2"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo3"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo3"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo4"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo4"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo5"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo5"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo6"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo6"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo7"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo7"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo8"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo8"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo9"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo9"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo10"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo10"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo11"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo11"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo12"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo12"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo13"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo13"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo14"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo14"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo15"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo15"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo16"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo16"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo17"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo17"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo18"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo18"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo19"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo19"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo20"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo20"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo21"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo21"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo22"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo22"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo23"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo23"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo24"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo24"
+                    android:tint="@color/diary_title" />
+
+                <ImageView
+                    android:id="@+id/img_dialog_emo25"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/emo25"
+                    android:tint="@color/diary_title" />
+            </GridLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

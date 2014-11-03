@@ -73,8 +73,8 @@ public class DiaryListAdapter extends BaseAdapter {
 		TextView txt_content = (TextView)convertView.findViewById(R.id.item_txt_diary_content);
 		txt_content.setText(arrItem.get(position).getContent());
 
-		
-		
+	
+		//사용자에게 더 있음을 알려주는 ui
 		ImageView img_tag = (ImageView)convertView.findViewById(R.id.item_img_diary_tag);
 
 		TextView txt_tag = (TextView)convertView.findViewById(R.id.item_txt_diary_tag);
@@ -89,13 +89,6 @@ public class DiaryListAdapter extends BaseAdapter {
 			img_tag.setVisibility(View.GONE);
 		}
 
-		//사용자에게 더 있음을 알려주는 ui
-		//		String tag = "";
-		//		for(int i=0; i< tags.length; i++) {
-		//			tag += tags[i] + ",";
-		//		}
-
-		
 		ImageView img_folder = (ImageView)convertView.findViewById(R.id.item_img_diary_folder);
 
 		TextView txt_folder = (TextView)convertView.findViewById(R.id.item_txt_diary_folder);

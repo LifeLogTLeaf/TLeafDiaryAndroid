@@ -23,8 +23,8 @@
     <color name="background_grey">#F2F2F2</color>
     <color name="background_skyblue">#EBF7FF</color>
     <color name="diary_edit_edittext_hint">#838383</color>
-	<color name="edit_diary_date_blue">#53b7ee</color>
+    <color name="edit_diary_date_blue">#53b7ee</color>
     <color name="dialog_add_section">#fcfcfd</color>
-    
-    
+    <color name="no_image">#C2C2C1</color>
+
 </resources>

@@ -1,14 +1,14 @@
 package com.tleaf.tiary;
 
-import java.util.ArrayList;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,18 +19,14 @@ import com.tleaf.tiary.fragment.DiaryEditFragment;
 import com.tleaf.tiary.fragment.DiaryListViewFragement;
 import com.tleaf.tiary.fragment.EmotionFragement;
 import com.tleaf.tiary.fragment.ExpandableListFragment;
-import com.tleaf.tiary.fragment.FolderFragement;
-import com.tleaf.tiary.fragment.MyPageFragement;
-import com.tleaf.tiary.fragment.PlaceholderFragment;
-import com.tleaf.tiary.fragment.SettingFragement;
+import com.tleaf.tiary.fragment.HomeFragement;
 import com.tleaf.tiary.fragment.ShackFragment;
 import com.tleaf.tiary.fragment.TagFragement;
 import com.tleaf.tiary.util.Util;
 
-
-public class MainActivity extends Activity
-implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavigationListener {
-
+public class MainActivity extends Activity implements
+NavigationDrawerFragment.NavigationDrawerCallbacks,
+ActionBar.OnNavigationListener {
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -38,21 +34,27 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 	 */
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 
-	//	private String bundelKey;
+	// private String bundelKey;
 
 	/**
-	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+	 * Fragment managing the behaviors, interactions and presentation of the
+	 * navigation drawer.
 	 */
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
 	/**
-	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+	 * Used to store the last screen title. For use in
+	 * {@link #restoreActionBar()}.
 	 */
 	private CharSequence mTitle;
 
 	private DataManager dataMgr;
 
-	static public FragmentManager fragmentManager;
+	private static FragmentManager fragmentManager;
+	private boolean exitApplication = false;
+	private Fragment mFragment;
+
+	public static Handler mHandler = new Handler();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,34 +63,47 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 
 		dataMgr = new DataManager(getApplicationContext());
 
-		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(0, 153, 237)));
+		getActionBar().setBackgroundDrawable(
+				new ColorDrawable(Color.rgb(0, 153, 237)));
 
-		mNavigationDrawerFragment = (NavigationDrawerFragment)
-				getFragmentManager().findFragmentById(R.id.navigation_drawer);
+		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
+				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 
 		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(
-				R.id.navigation_drawer,
+		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+
+		// if (savedInstanceState != null) {
+		// mFragment = getFragmentManager().getFragment(savedInstanceState,
+		// "mFragment");
+		// }
+		//
+		// if (mFragment != null) {
+		// fragmentManager = getFragmentManager();
+		// fragmentManager.beginTransaction().replace(R.id.container, mFragment)
+		// .commit();
+		// }
 	}
 
 	@Override
-	public boolean onNavigationDrawerItemSelected(int position, int childPosition) {
+	public boolean onNavigationDrawerItemSelected(int position,
+			int childPosition) {
 		// update the main content by replacing fragments
 		fragmentManager = getFragmentManager();
 		Fragment fragment = null;
 
-		if(childPosition == -1) {
-			switch(position) {
+		if (childPosition == -1) {
+			switch (position) {
 			case Common.HOME:
-				fragment = new DiaryListViewFragement();//HomeFragement();
+				fragment = new DiaryListViewFragement();// HomeFragement();
 				break;
 			case Common.MYPAGE:
-				fragment = new ExpandableListFragment();//MyPageFragement(); //ExpandableListFragment
+				fragment = new ExpandableListFragment();// MyPageFragement();
+				// //ExpandableListFragment
 				break;
 			case Common.WRITE:
-				fragment = new DiaryEditFragment();//WriteFragement();
+				fragment = new DiaryEditFragment();// WriteFragement();
 				break;
 			case Common.FOLDER:
 				return true;
@@ -102,21 +117,28 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 				fragment = new ShackFragment();
 				break;
 			case Common.SETIING:
-				fragment = new ExpandableListFragment(); //SettingFragement();
+				fragment = new ExpandableListFragment(); // SettingFragement();
 				break;
-			} 
+			}
 		} else {
 			Util.tst(this, "childPosition " + childPosition);
-			fragment = new DiaryListViewFragement(dataMgr.getDistinctFolderList().get(childPosition));
+			fragment = new DiaryListViewFragement(dataMgr
+					.getDistinctFolderList().get(childPosition));
 		}
 
-		//		fragmentManager.beginTransaction()
-		//		.replace(R.id.container, fragment)//PlaceholderFragment.newInstance(position + 1))
-		//		.commit();
+		// fragmentManager.beginTransaction()
+		// .replace(R.id.container,
+		// fragment)//PlaceholderFragment.newInstance(position + 1))
+		// .commit();
 
-		changeFragment(fragment);
+//		changeFragment(fragment, false);
+		
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.replace(R.id.container, fragment);// PlaceholderFragment.newInstance(position
+		// + 1))
+		clearBackStack();
+		transaction.commit();
 
-		getApplication();
 		return false;
 	}
 
@@ -153,16 +175,16 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 		actionBar.setTitle(mTitle);
 	}
 
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (!mNavigationDrawerFragment.isDrawerOpen()) {
-			Util.tst(this, "mNavigationDrawerFragment.isDrawerOpen()"+mNavigationDrawerFragment.isDrawerOpen());
+			Util.tst(this, "mNavigationDrawerFragment.isDrawerOpen()"
+					+ mNavigationDrawerFragment.isDrawerOpen());
 			// Only show items in the action bar relevant to this screen
 			// if the drawer is not showing. Otherwise, let the drawer
 			// decide what to show in the action bar.
 			getMenuInflater().inflate(R.menu.main, menu);
-			//			setActionBar();
+			// setActionBar();
 			restoreActionBar();
 			return true;
 		}
@@ -185,22 +207,24 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 	public boolean onNavigationItemSelected(int position, long id) {
 		// When the given dropdown item is selected, show its contents in the
 		// container view.
-		//		getFragmentManager().beginTransaction()
-		//		.replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-		//		.commit();
-		//		return true;
+		// getFragmentManager().beginTransaction()
+		// .replace(R.id.container, PlaceholderFragment.newInstance(position +
+		// 1))
+		// .commit();
+		// return true;
 		return false;
 	}
-
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		// Restore the previously serialized current dropdown position.
 		if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
-			Util.ll("getActionBar().getNavigationItemCount()", getActionBar().getNavigationItemCount());
+			Util.ll("getActionBar().getNavigationItemCount()", getActionBar()
+					.getNavigationItemCount());
 			if (getActionBar().getNavigationItemCount() != 0) {
 				getActionBar().setSelectedNavigationItem(
-						savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
+						savedInstanceState
+						.getInt(STATE_SELECTED_NAVIGATION_ITEM));
 			}
 		}
 	}
@@ -208,20 +232,13 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		// Serialize the current dropdown position.
-		outState.putInt(STATE_SELECTED_NAVIGATION_ITEM,
-				getActionBar().getSelectedNavigationIndex());
+		outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getActionBar()
+				.getSelectedNavigationIndex());
 	}
 
-	//	private void setBundleKey(String key) {
+	// private void setBundleKey(String key) {
 	//
-	//	}
-
-	static public void changeFragment(Fragment fragment) {
-		fragmentManager.beginTransaction()
-		.replace(R.id.container, fragment)//PlaceholderFragment.newInstance(position + 1))
-		.commit();
-	}
-
+	// }
 
 	private void setActionBar() {
 		// Set up the action bar to show a dropdown list.
@@ -229,29 +246,85 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavig
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
-
 		// Set up the dropdown list navigation in the action bar.
 		actionBar.setListNavigationCallbacks(
 				// Specify a SpinnerAdapter to populate the dropdown list.
-				new ArrayAdapter<String>(
-						actionBar.getThemedContext(),
+				new ArrayAdapter<String>(actionBar.getThemedContext(),
 						android.R.layout.simple_list_item_1,
-						android.R.id.text1,
-						new String[] {"search", "home", "month", "listview", "[폴 더]", "폴더명1", "폴더명2", "폴더명3", "tag"
-						}),
-						this);
+						android.R.id.text1, new String[] { "search", "home",
+					"month", "listview", "[폴 더]", "폴더명1", "폴더명2",
+					"폴더명3", "tag" }), this);
 
-
-		//		new String[] {
-		//				getString(R.string.title_section1),
-		//				getString(R.string.title_section2),
-		//				getString(R.string.title_section3),
-		//			}),
+		// new String[] {
+		// getString(R.string.title_section1),
+		// getString(R.string.title_section2),
+		// getString(R.string.title_section3),
+		// }),
 	}
 
+	// 디비의 폴더리스트가 변경시 drawer를 refresh
 	public void refreshDrawer() {
-		// TODO Auto-generated method stub
 		mNavigationDrawerFragment.refreshDrawer();
 	}
-}
 
+	static public void changeFragment(Fragment fragment) {
+
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.replace(R.id.container, fragment);// PlaceholderFragment.newInstance(position
+		// + 1))
+		transaction.addToBackStack(null);
+		transaction.commit();
+	}
+
+	private void clearBackStack() {
+		int cnt = fragmentManager.getBackStackEntryCount();
+		for (int i = 0; i < cnt; i++) {
+			fragmentManager.popBackStack();
+		}
+	}
+
+	// public void switchContent(Fragment fragment, boolean addBackStack) {
+	// exitApplication = false;
+	// // mFragment = fragment;
+	//
+	// fragmentManager = getFragmentManager();
+	//
+	// if (!addBackStack) {
+	// fragmentManager.beginTransaction()
+	// .replace(R.id.container, fragment).commit();
+	// } else {
+	// fragmentManager.beginTransaction()
+	// .replace(R.id.container, fragment).addToBackStack(null)
+	// .commit();
+	// }
+	//
+	// }
+
+	// @Override
+	// public void onBackPressed() {
+	// // If the fragment exists and has some back-stack entry
+	// if (MainActivity.this != null
+	// && MainActivity.this.getFragmentManager()
+	// .getBackStackEntryCount() > 0) {
+	// // Get the fragment fragment manager - and pop the backstack
+	// MainActivity.this.getFragmentManager().popBackStack();
+	// }
+	// // Else, nothing in the direct fragment back stack
+	// else {
+	// if (exitApplication == false) {
+	// Util.tst(getApplicationContext(), "한번 더 누르면 종료");
+	// exitApplication = true;
+	// mHandler.postDelayed(new Runnable() {
+	// @Override
+	// public void run() {
+	// exitApplication = false;
+	// }
+	// }, 3000);
+	// } else {
+	// super.onBackPressed();
+	// }
+	//
+	// }
+	// }
+
+}
