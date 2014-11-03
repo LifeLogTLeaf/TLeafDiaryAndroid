@@ -5,8 +5,8 @@ edited by choi seulgi
 branch csg
 commit log 
 
-#31
--title single line 지정
+#31		
+-title single line 지정	
 -가끔 앱 실행시 죽는 문제 해결 (onRestoreInstanceState에서 발생한는 exception 해결)
 -diary edit view, diary view ui 개선
 -folder dialog ui 개선
@@ -37,5 +37,4 @@ commit log
 * 태그 다이어로그 기능 완성(폴더 다이어로그와 기능 동일)
 
 -캘린더, 월뷰 기능 완성 중
-
 
