@@ -44,8 +44,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dip"
-                android:text="제목"
                 android:singleLine="true"
+                android:text="제목"
                 android:textColor="@color/diary_title"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -149,6 +149,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:scaleType="fitXY"
-        android:src="@drawable/jazz" />
+       	android:background="@color/background_skyblue"
+        android:visibility="gone" />
 
 </LinearLayout>

@@ -3,6 +3,7 @@ package com.tleaf.tiary.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.Diary;
-import com.tleaf.tiary.model.MyMenuItem;
 import com.tleaf.tiary.util.MyTime;
 
 public class DiaryListAdapter extends BaseAdapter {
@@ -20,7 +26,8 @@ public class DiaryListAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private ArrayList<Diary> arrItem;
 	private int mLayout;
-
+	private ImageLoader imageLoader;
+	
 	public DiaryListAdapter(Context context, int layout, ArrayList<Diary> item) {
 		mContext = context;
 		mInflater = (LayoutInflater)context.getSystemService(
@@ -65,7 +72,27 @@ public class DiaryListAdapter extends BaseAdapter {
 		txt_date.setText(dateStr);
 
 		ImageView img = (ImageView)convertView.findViewById(R.id.item_img_diary);
-		img.setImageResource(R.drawable.day);
+		ArrayList<String> imgArr = arrItem.get(position).getImages();
+		
+		initImageLoader();
+		if (imgArr != null && imgArr.size() != 0) {
+			img.setVisibility(View.VISIBLE);
+			try {
+				imageLoader.displayImage("file://" + imgArr.get(0),
+						img, new SimpleImageLoadingListener() {
+					@Override
+					public void onLoadingStarted(String imageUri, View view) {
+						//						img_photo.setImageResource(R.drawable.no_media);
+						super.onLoadingStarted(imageUri, view);
+					}
+				});
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			img.setVisibility(View.GONE);
+		}
 
 		TextView txt_title = (TextView)convertView.findViewById(R.id.item_txt_diary_title);
 		txt_title.setText(arrItem.get(position).getTitle());
@@ -73,7 +100,7 @@ public class DiaryListAdapter extends BaseAdapter {
 		TextView txt_content = (TextView)convertView.findViewById(R.id.item_txt_diary_content);
 		txt_content.setText(arrItem.get(position).getContent());
 
-	
+
 		//사용자에게 더 있음을 알려주는 ui
 		ImageView img_tag = (ImageView)convertView.findViewById(R.id.item_img_diary_tag);
 
@@ -101,7 +128,7 @@ public class DiaryListAdapter extends BaseAdapter {
 			txt_folder.setVisibility(View.GONE);
 			img_folder.setVisibility(View.GONE);
 		}
-		
+
 		ImageView img_location = (ImageView)convertView.findViewById(R.id.item_img_diary_location);
 
 		TextView txt_location = (TextView)convertView.findViewById(R.id.item_txt_diary_location);
@@ -110,12 +137,27 @@ public class DiaryListAdapter extends BaseAdapter {
 			txt_location.setVisibility(View.VISIBLE);
 			txt_location.setText(arrItem.get(position).getLocation());
 			img_location.setVisibility(View.VISIBLE);
-			
+
 		} else {
 			txt_location.setVisibility(View.GONE);
 			img_location.setVisibility(View.GONE);
 		}
-		
+
+
 		return convertView;
+	}
+	
+	private void initImageLoader() {
+		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+		.cacheOnDisc().imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
+		.bitmapConfig(Bitmap.Config.RGB_565).build();
+
+		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
+				mContext).defaultDisplayImageOptions(defaultOptions).memoryCache(
+						new WeakMemoryCache());
+
+		ImageLoaderConfiguration config = builder.build();
+		imageLoader = ImageLoader.getInstance();
+		imageLoader.init(config);
 	}
 }

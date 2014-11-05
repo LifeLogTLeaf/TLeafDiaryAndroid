@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="125dp"
+    android:layout_height="125dp"
+    android:layout_margin="3dp">
+
+    <ImageView
+        android:id="@+id/img_user_add"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/no_media" />
+
+    <RelativeLayout
+        android:id="@+id/layout_img_delete"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true" >
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/img_user_add_delete"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:padding="5dp"
+        android:src="@drawable/img_delete"
+        android:tint="@color/diary_title" />
+
+</RelativeLayout>

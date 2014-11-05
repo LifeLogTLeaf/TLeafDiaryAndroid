@@ -6,18 +6,29 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.SimpleOnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.MainActivity;
 import com.tleaf.tiary.R;
+import com.tleaf.tiary.adapter.ImagePagerAdapter;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.MyTime;
@@ -31,6 +42,11 @@ public class DiaryFragment extends Fragment {
 
 	private Fragment fragment;
 
+	private ViewPager mPager;
+	private ImageLoader imageLoader;
+	private ImageView[] img_moving;
+	private LinearLayout ll;
+	private ImagePagerAdapter adapter;
 
 	public DiaryFragment(Diary diary) {
 		this.diary = diary;
@@ -47,24 +63,24 @@ public class DiaryFragment extends Fragment {
 
 		Util.ll("DiaryFragment setDate", diary.getDate());
 
-		
+
 		TextView txt_date = (TextView)rootView.findViewById(R.id.txt_diary_date);
-		
+
 		String dateStr = MyTime.getLongToString(mContext, diary.getDate());
 		txt_date.setText(dateStr);
-		
+
 		TextView txt_date_time = (TextView)rootView.findViewById(R.id.txt_diary_date_time);
-		
+
 		String dateTimeStr = MyTime.getLongToOnlyTime(mContext, diary.getDate());
 		txt_date_time.setText(dateTimeStr);
 
 		ImageView img_emo = (ImageView) rootView.findViewById(R.id.img_edit_emotion);
-		
+
 		if(diary.getEmotion() != null) {
 			int index = Common.getIndexByEmomtionName(diary.getEmotion());
 			img_emo.setImageResource(getResources().getIdentifier(
-				"emo" + (index + 1), "drawable",
-				mContext.getPackageName()));
+					"emo" + (index + 1), "drawable",
+					mContext.getPackageName()));
 		}
 		TextView txt_title = (TextView) rootView.findViewById(R.id.txt_diary_title);
 		txt_title.setText(diary.getTitle());
@@ -117,17 +133,65 @@ public class DiaryFragment extends Fragment {
 				.findViewById(R.id.img_diary_delete);
 		img_delete.setOnClickListener(cl);
 
-//		ImageView img_share = (ImageView) rootView
-//				.findViewById(R.id.img_diary_share);
-//		img_share.setOnClickListener(cl);
-//
-//		ImageView img_shack = (ImageView) rootView
-//				.findViewById(R.id.img_diary_shack);
-//		img_shack.setOnClickListener(cl);
+		//		ImageView img_share = (ImageView) rootView
+		//				.findViewById(R.id.img_diary_share);
+		//		img_share.setOnClickListener(cl);
+		//
+		//		ImageView img_shack = (ImageView) rootView
+		//				.findViewById(R.id.img_diary_shack);
+		//		img_shack.setOnClickListener(cl);
+
+
+		mPager = (ViewPager) rootView.findViewById(R.id.viewpager);
+		initImageLoader();
+		adapter = new ImagePagerAdapter(mContext, diary.getImages(), imageLoader);
+		mPager.setAdapter(adapter);
+		mPager.setOnPageChangeListener(mPageListener);
+
+		ll = (LinearLayout) rootView.findViewById(R.id.layout_moving);
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(25, 25);
+		llp.setMargins(20, 20, 20, 20);
+		
+		if (diary.getImages() != null & diary.getImages().size() > 0) {
+			final int size = diary.getImages().size();
+			img_moving = new ImageView[size];
+			for (int i = 0; i < diary.getImages().size(); i++) {
+				img_moving[i] = new ImageView(mContext);
+				img_moving[i].setLayoutParams(llp);
+				img_moving[i].setImageResource(R.drawable.moving);
+				img_moving[i].setAlpha(0.5f);
+				ll.addView(img_moving[i]);
+			}
+
+		}
 		return rootView;
 
 	}
 
+
+	private SimpleOnPageChangeListener mPageListener = new SimpleOnPageChangeListener() {
+		public void onPageSelected(int position) {
+//			adapter.getItemPosition(object);
+			if (position == 0) //현재 포지션이면
+				img_moving[position].setAlpha(0);
+			else 
+				img_moving[position].setAlpha(0.5f);
+		};
+	};
+
+	private void initImageLoader() {
+		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+		.cacheOnDisc().imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
+		.bitmapConfig(Bitmap.Config.RGB_565).build();
+
+		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
+				mContext).defaultDisplayImageOptions(defaultOptions).memoryCache(
+						new WeakMemoryCache());
+
+		ImageLoaderConfiguration config = builder.build();
+		imageLoader = ImageLoader.getInstance();
+		imageLoader.init(config);
+	}
 
 	private OnClickListener cl = new OnClickListener() {
 
@@ -146,7 +210,7 @@ public class DiaryFragment extends Fragment {
 			break;
 		case R.id.img_diary_delete:
 			new AlertDialog.Builder(mContext)
-			//			.setTitle("일기 삭제")
+			.setTitle("일기 삭제")
 			.setMessage("이 일기를 삭제하시겠습니까?")
 			.setPositiveButton("확인", new DialogInterface.OnClickListener() {
 				@Override
@@ -165,12 +229,12 @@ public class DiaryFragment extends Fragment {
 
 
 			break;
-//		case R.id.img_diary_share:
-//			Util.tst(mContext, "공유하기");
-//			break;
-//		case R.id.img_diary_shack:
-//			Util.tst(mContext, "shack으로 보내기(관련처리)");
-//			break;
+			//		case R.id.img_diary_share:
+			//			Util.tst(mContext, "공유하기");
+			//			break;
+			//		case R.id.img_diary_shack:
+			//			Util.tst(mContext, "shack으로 보내기(관련처리)");
+			//			break;
 
 		}
 

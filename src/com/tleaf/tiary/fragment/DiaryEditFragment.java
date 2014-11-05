@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.view.LayoutInflater;
@@ -23,10 +24,17 @@ import android.widget.TextView;
 
 import com.android.datetimepicker.date.DatePickerDialog;
 import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
+import com.google.android.gms.internal.ho;
+import com.google.android.gms.internal.ll;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.MainActivity;
-import com.tleaf.tiary.MapActivity;
 import com.tleaf.tiary.R;
+import com.tleaf.tiary.adapter.PhotoEditAdapter;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.dialog.DialogResultListener;
 import com.tleaf.tiary.dialog.EmotionDialogFragment;
@@ -34,6 +42,7 @@ import com.tleaf.tiary.dialog.FolderDialogFragment;
 import com.tleaf.tiary.dialog.LocationDialogFragment;
 import com.tleaf.tiary.dialog.TagDialogFragment;
 import com.tleaf.tiary.model.Diary;
+import com.tleaf.tiary.photo.HorizontalListView;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
@@ -71,6 +80,13 @@ public class DiaryEditFragment extends Fragment {
 	private ArrayList<String> selectedTags;
 	private Diary editedDiary;
 
+	private ImageLoader imageLoader;
+	private PhotoEditAdapter adapter;
+	private HorizontalListView horiView;
+
+	private ArrayList<String> selectedImages;
+
+
 	public DiaryEditFragment() {
 		edit = false;
 	}
@@ -91,7 +107,11 @@ public class DiaryEditFragment extends Fragment {
 		fm = getFragmentManager();
 		mTime = MyTime.getCurrentTimeToTime();
 		dataMgr = new DataManager(mContext);
-		
+
+		//image
+		initImageLoader();
+
+		selectedImages = new ArrayList<String>();
 		selectedFolders = new ArrayList<String>();
 		selectedTags = new ArrayList<String>();
 		selectedEmoIndex = -1;
@@ -103,9 +123,25 @@ public class DiaryEditFragment extends Fragment {
 			setCreatedDiary();
 		}
 		setInfoLayout();
+		setImageLayout();
 
 		return rootView;
 	}
+
+	private void initImageLoader() {
+		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+		.cacheOnDisc().imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
+		.bitmapConfig(Bitmap.Config.RGB_565).build();
+
+		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
+				mContext).defaultDisplayImageOptions(defaultOptions).memoryCache(
+						new WeakMemoryCache());
+
+		ImageLoaderConfiguration config = builder.build();
+		imageLoader = ImageLoader.getInstance();
+		imageLoader.init(config);
+	}
+
 
 	private void setComponent() {
 
@@ -168,13 +204,20 @@ public class DiaryEditFragment extends Fragment {
 				.findViewById(R.id.img_edit_save);
 		img_save.setOnClickListener(cl);
 
+
+		adapter = new PhotoEditAdapter(mContext, imageLoader);
+
+		horiView = (HorizontalListView) rootView.findViewById(R.id.list_photo);
+		horiView.setAdapter(adapter);
 	}
 
 	private void setCreatedDiary() {
 		txt_date.setText(MyTime.getLongToStringWithTime(mContext,
 				mTime.toMillis(false)));
-		selectedFolders = null;
-		selectedTags = null;
+		selectedFolders.clear();
+		selectedTags.clear();
+		selectedImages.clear();
+		//		adapter.isAdding(false);
 	}
 
 	private void setEditedDairy() {
@@ -192,13 +235,16 @@ public class DiaryEditFragment extends Fragment {
 		txt_title.setText(editedDiary.getTitle());
 		txt_content.setText(editedDiary.getContent());
 
+		selectedImages = editedDiary.getImages();
+		displayPhoto();
+
 		selectedFolders = editedDiary.getFolders();
 		if(selectedFolders != null && selectedFolders.size() != 0) {
 			Util.ll("folders.size()", selectedFolders.size());
 			Util.ll("Util.covertArrayToString(folders)", Util.covertArrayToString(selectedFolders));
 			txt_folder.setText(Util.covertArrayToString(selectedFolders)); 
 		}
-		
+
 		selectedTags = editedDiary.getTags();
 		if(selectedTags != null && selectedTags.size() != 0) {
 			Util.ll("tags.size()", selectedTags.size());
@@ -209,8 +255,23 @@ public class DiaryEditFragment extends Fragment {
 		selectedLocation = editedDiary.getLocation();
 		if(selectedLocation != null && !selectedLocation.equals("null") && !selectedLocation.equals(""))
 			txt_location.setText(selectedLocation);
+
+		selectedImages = editedDiary.getImages();
+		if(selectedImages != null && selectedImages.size() != 0) {
+			Util.ll("selectedImages.size()", selectedImages.size());
+			//			adapter.isAdding(false);
+			adapter.addAll(selectedImages);
+		}
+
 	}
 
+	private void setImageLayout() {
+		if(selectedImages != null && selectedImages.size() != 0) {
+			horiView.setVisibility(View.VISIBLE);
+		} else {
+			horiView.setVisibility(View.GONE);
+		}
+	}
 
 	private void setInfoLayout() {
 		String tagStr = txt_tag.getText().toString();
@@ -260,8 +321,11 @@ public class DiaryEditFragment extends Fragment {
 			break;
 
 		case R.id.img_edit_gallery:
-			Util.tst(mContext, "갤러리 호출 ");
-
+			//			if (selectedImages != null && selectedImages.size() != 0) {
+			//				adapter.isAdding(true);
+			//			}
+			Intent i = new Intent("luminous.ACTION_MULTIPLE_PICK");
+			startActivityForResult(i, 200);
 			break;
 
 		case R.id.img_edit_tag:
@@ -271,7 +335,7 @@ public class DiaryEditFragment extends Fragment {
 					Common.TAG, selectedTags);
 			dFragment.show(fm, "dialog");
 			break;
-			
+
 		case R.id.img_edit_folder:
 			if(selectedFolders != null && selectedFolders.size() != 0)
 				Util.ll("FolderDialogFragment newInstace", Util.covertArrayToString(selectedFolders));
@@ -322,6 +386,23 @@ public class DiaryEditFragment extends Fragment {
 		}
 	}
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//		Util.tst(mContext, "requestCode"+requestCode+"resultCode"+resultCode);
+		//		horiView.removeAllViews();
+		String[] all_path = data.getStringArrayExtra("all_path");
+		for (String string : all_path) {
+			selectedImages.add(string);
+			Util.ll("all_path", string);
+		}
+		displayPhoto();
+	}
+
+	private void displayPhoto() {
+		adapter.addAll(selectedImages);
+		setImageLayout();
+	}
+
 	private DialogResultListener dialogResultListener = new DialogResultListener() {
 
 		@Override
@@ -336,7 +417,7 @@ public class DiaryEditFragment extends Fragment {
 				selectedTags = result;
 				Util.ll("setResult 대입 후", Util.covertArrayToString(selectedTags));
 				txt_tag.setText(Util.covertArrayToString(result));
-				
+
 			} else if (type == Common.FOLDER) {
 				if(selectedFolders != null && !selectedFolders.isEmpty()) {
 					Util.ll("setResult clear 전", Util.covertArrayToString(selectedFolders));
@@ -407,7 +488,10 @@ public class DiaryEditFragment extends Fragment {
 			mDiary.setEmotion(Common.getEmomtionNameByIndex(selectedEmoIndex));
 
 		// 이미지
-	
+		if (selectedImages != null && selectedImages.size() != 0) {
+			mDiary.setImages(selectedImages);
+		}
+
 		if (selectedTags != null && selectedTags.size() != 0) {
 			mDiary.setTags(selectedTags);
 		}
