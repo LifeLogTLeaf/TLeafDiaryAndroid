@@ -250,6 +250,7 @@ public class DataManager {
 
 		return result;
 	}
+	
 	private boolean isContainedTag(String tag) {
 		db = dbHelper.getReadableDatabase(); 
 		String sql = "select * from " + TAG + " where tag = '" + tag + "'";
@@ -621,6 +622,27 @@ public class DataManager {
 		long folderNo = arr.get(0);
 		return folderNo;
 	}
+	
+	private long getTagNoByTag(String tag) {
+		ArrayList<Long> arr = new ArrayList<Long>();
+
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select no from " + TAG + " where tag = '" + tag + "'";
+		Cursor cursor = db.rawQuery(sql, null);
+
+		long item;
+		while(cursor.moveToNext()) {
+			item = cursor.getLong(0);
+			arr.add(item);
+		}
+		cursor.close();
+		dbHelper.close();
+
+		long tagno = arr.get(0);
+		Util.ll("tagno", tagno);
+		return tagno;
+	}
+
 
 	//리스트뷰의 0번지가 가장 최신 
 	//no 내림차순으로 가져와서 0번지부터 저장시
@@ -639,6 +661,24 @@ public class DataManager {
 		dbHelper.close();
 		return arrDiaryNo;
 	}
+	
+	private ArrayList<Long> getDiaryNoByTagNo(long tagNo) {
+		ArrayList<Long> arrDiaryNo = new ArrayList<Long>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select diaryno from " + DIARY_TAG + " where tagno = '" + tagNo + "' order by no desc";
+
+		Cursor cursor = db.rawQuery(sql, null);
+		Long diaryNo;
+		while(cursor.moveToNext()) {
+			diaryNo = cursor.getLong(0);
+			arrDiaryNo.add(diaryNo);
+		}
+		cursor.close();
+		dbHelper.close();
+		return arrDiaryNo;
+	}
+
+
 
 
 	public ArrayList<Diary> getDiaryListByFolderName(String folderName) {
@@ -655,6 +695,28 @@ public class DataManager {
 		return arItem;
 
 	}
+	
+	public ArrayList<Diary> getDiaryListByTag(String tag) {
+		if (!isContainedTag(tag))
+			return null;
+		
+		Util.ll("getDiaryListByTag", tag);
+		db = dbHelper.getReadableDatabase(); 
+
+		long tagNo = getTagNoByTag(tag);
+		ArrayList<Long> arrDiaryNo = getDiaryNoByTagNo(tagNo);
+		
+		ArrayList<Diary> arItem = new ArrayList<Diary>();
+		for(int i=0; i<arrDiaryNo.size(); i++) {
+			Diary diary = getDiaryByNo(arrDiaryNo.get(i));
+			arItem.add(diary);
+		}
+		return arItem;
+
+	}
+
+
+
 
 
 	public int getEmotionCount(String emotion) {

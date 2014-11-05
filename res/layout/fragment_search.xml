@@ -44,12 +44,19 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_serachWord"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:background="@color/bottom_menu"
+        android:padding="10dp"
         android:minHeight="72dp"
         android:orientation="horizontal" >
+<!--         android:background="@color/bottom_menu" -->
+<!--         <TextView -->
+<!--             android:id="@+id/txt_searchWord" -->
+<!--             android:layout_width="match_parent" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:textColor="@color/diary_title" /> -->
     </LinearLayout>
 
     <ListView

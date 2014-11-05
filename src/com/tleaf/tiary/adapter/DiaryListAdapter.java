@@ -34,6 +34,9 @@ public class DiaryListAdapter extends BaseAdapter {
 				Context.LAYOUT_INFLATER_SERVICE);
 		arrItem = item;
 		mLayout = layout;
+		
+		if (item == null)
+			arrItem = new ArrayList<Diary>();
 	}
 
 	public int getCount() {
@@ -48,6 +51,12 @@ public class DiaryListAdapter extends BaseAdapter {
 		return position;
 	}
 
+	public void updateItem(ArrayList<Diary> diaryArr) {
+		arrItem.clear();
+		arrItem.addAll(diaryArr);
+		notifyDataSetChanged();
+	}
+	
 	//	String table_diary = "create table diary (no integer primary key autoincrement, " +
 	//			"date integer, " +
 	//			"title text, " +

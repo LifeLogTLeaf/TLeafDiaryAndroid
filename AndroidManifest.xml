@@ -8,6 +8,7 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -35,14 +36,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
         <activity android:name="eu.janmuller.android.simplecropimage.CropImage" />
 
         <provider
             android:name=".photo.InternalStorageContentProvider"
             android:authorities="com.tleaf.tiary"
             android:exported="true" />
-        <activity android:name="MapActivity"></activity>
+
+        <activity android:name="MapActivity" >
+        </activity>
     </application>
 
 </manifest>
