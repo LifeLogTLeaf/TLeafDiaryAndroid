@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Common {
 
 	public static final int HOME = 0;
-	public static final int MYPAGE = 1;
+	public static final int MYLIFTLOG = 1;
 	public static final int WRITE = 2;
 	public static final int FOLDER = 3;
 	public static final int TAG = 4;

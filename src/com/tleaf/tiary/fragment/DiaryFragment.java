@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Adapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -143,22 +145,25 @@ public class DiaryFragment extends Fragment {
 
 
 		mPager = (ViewPager) rootView.findViewById(R.id.viewpager);
-		initImageLoader();
-		adapter = new ImagePagerAdapter(mContext, diary.getImages(), imageLoader);
-		mPager.setAdapter(adapter);
-		mPager.setOnPageChangeListener(mPageListener);
 
 		ll = (LinearLayout) rootView.findViewById(R.id.layout_moving);
-		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(25, 25);
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(20, 20);
 		llp.setMargins(20, 20, 20, 20);
-		
+
+		RelativeLayout rl =  (RelativeLayout) rootView.findViewById(R.id.layout_diary_image);
 		if (diary.getImages() != null & diary.getImages().size() > 0) {
-			final int size = diary.getImages().size();
+			initImageLoader();
+			adapter = new ImagePagerAdapter(mContext, diary.getImages(), imageLoader);
+			mPager.setAdapter(adapter);
+			mPager.setOnPageChangeListener(mPageListener);
+			rl.setVisibility(View.VISIBLE);
+			int size = diary.getImages().size();
 			img_moving = new ImageView[size];
-			for (int i = 0; i < diary.getImages().size(); i++) {
+			for (int i = 0; i < size; i++) {
 				img_moving[i] = new ImageView(mContext);
 				img_moving[i].setLayoutParams(llp);
 				img_moving[i].setImageResource(R.drawable.moving);
+				img_moving[i].setColorFilter(R.color.bottom_menu);
 				img_moving[i].setAlpha(0.5f);
 				ll.addView(img_moving[i]);
 			}
@@ -171,7 +176,7 @@ public class DiaryFragment extends Fragment {
 
 	private SimpleOnPageChangeListener mPageListener = new SimpleOnPageChangeListener() {
 		public void onPageSelected(int position) {
-//			adapter.getItemPosition(object);
+			//			adapter.getItemPosition(object);
 			if (position == 0) //현재 포지션이면
 				img_moving[position].setAlpha(0);
 			else 
@@ -240,7 +245,3 @@ public class DiaryFragment extends Fragment {
 
 	}
 }
-
-
-//ImageView img = (ImageView)convertView.findViewById(R.id.item_img_diary);
-//img.setImageResource(R.drawable.day);

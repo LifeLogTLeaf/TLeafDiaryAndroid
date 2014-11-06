@@ -20,6 +20,7 @@ import com.tleaf.tiary.fragment.DiaryListViewFragement;
 import com.tleaf.tiary.fragment.EmotionFragement;
 import com.tleaf.tiary.fragment.ExpandableListFragment;
 import com.tleaf.tiary.fragment.HomeFragement;
+import com.tleaf.tiary.fragment.MyLifeLogFragement;
 import com.tleaf.tiary.fragment.ShackFragment;
 import com.tleaf.tiary.fragment.TagFragement;
 import com.tleaf.tiary.util.Util;
@@ -98,8 +99,8 @@ ActionBar.OnNavigationListener {
 			case Common.HOME:
 				fragment = new DiaryListViewFragement();// HomeFragement();
 				break;
-			case Common.MYPAGE:
-				fragment = new ExpandableListFragment();// MyPageFragement();
+			case Common.MYLIFTLOG:
+				fragment = new MyLifeLogFragement();// MyPageFragement();
 				// //ExpandableListFragment
 				break;
 			case Common.WRITE:
@@ -148,7 +149,7 @@ ActionBar.OnNavigationListener {
 			mTitle = getString(R.string.home);
 			break;
 		case 2:
-			mTitle = getString(R.string.mypage);
+			mTitle = getString(R.string.mylifelog);
 			break;
 		case 3:
 			mTitle = getString(R.string.write);

@@ -44,7 +44,7 @@ public class DiaryListViewFragement extends Fragment implements OnNavigationList
 		View rootView = inflater.inflate(R.layout.fragment_diary_list, container, false);
 		ListView lv = (ListView) rootView.findViewById(R.id.list_diary);
 
-		DiaryListAdapter mAdapter = new DiaryListAdapter(mContext, R.layout.item_diary, getDiaryListByType()); //this.getActivity()
+		DiaryListAdapter mAdapter = new DiaryListAdapter(mContext, R.layout.item_diary_, getDiaryListByType()); //this.getActivity()
 		lv.setAdapter(mAdapter);
 		lv.setOnItemClickListener(mItemClickListener);
 

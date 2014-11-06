@@ -143,7 +143,7 @@ public class NavigationDrawerFragment extends Fragment {
 		ArrayList<MyMenuItem> mParent = new ArrayList<MyMenuItem>();
 		mParent.add(new MyMenuItem(R.drawable.home, getString(R.string.home)));
 		mParent.add(new MyMenuItem(R.drawable.person6,
-				getString(R.string.mypage)));
+				getString(R.string.mylifelog)));
 		mParent.add(new MyMenuItem(R.drawable.write, getString(R.string.write)));
 		mParent.add(new MyMenuItem(R.drawable.folder, getString(R.string.folder)));
 		mParent.add(new MyMenuItem(R.drawable.tag, getString(R.string.tag)));

@@ -47,8 +47,8 @@ public class TagFragement extends Fragment {
 
 	private DiaryListAdapter mAdapter;
 	private int no;
-	
 
+	
 	public TagFragement() {
 		// TODO Auto-generated constructor stub
 	}
@@ -125,6 +125,10 @@ public class TagFragement extends Fragment {
 		public void onClick(View v) {
 			Util.hideKeyboard(mContext, autotxt.getApplicationWindowToken());
 			String tag = autotxt.getText().toString();
+			if(tagArr.contains(tag)) {
+				Util.tst(mContext, "이미 선택한 태그 입니다");
+				return;
+			}
 			tagArr.add(tag);
 			//			int lastIndex = tagArr.size() -1;
 			putTagTextViewInLayout(tag);
@@ -184,7 +188,7 @@ public class TagFragement extends Fragment {
 				Util.ll("dataMgr.getDiaryListByTag(tag)", tagArr.get(i));
 				diaryArr.addAll(dataMgr.getDiaryListByTag(tagArr.get(i))); //cntRP
 			}
-			//			mAdapter.updateItem(diaryArr);
+						mAdapter.updateItem(diaryArr);
 			mAdapter = new DiaryListAdapter(mContext, R.layout.item_diary, diaryArr); //this.getActivity()
 			lv.setAdapter(mAdapter);
 		}

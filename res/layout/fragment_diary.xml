@@ -17,7 +17,9 @@
             android:orientation="vertical" >
 
             <RelativeLayout
+                android:id="@+id/layout_diary_image"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="250dp" >
 
                 <android.support.v4.view.ViewPager

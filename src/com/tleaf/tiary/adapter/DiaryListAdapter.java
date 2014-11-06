@@ -85,7 +85,7 @@ public class DiaryListAdapter extends BaseAdapter {
 		
 		initImageLoader();
 		if (imgArr != null && imgArr.size() != 0) {
-			img.setVisibility(View.VISIBLE);
+//			img.setVisibility(View.VISIBLE);
 			try {
 				imageLoader.displayImage("file://" + imgArr.get(0),
 						img, new SimpleImageLoadingListener() {
@@ -100,7 +100,8 @@ public class DiaryListAdapter extends BaseAdapter {
 				e.printStackTrace();
 			}
 		} else {
-			img.setVisibility(View.GONE);
+//			img.setVisibility(View.GONE);
+			img.setBackgroundColor(mContext.getResources().getColor(R.color.background_skyblue));
 		}
 
 		TextView txt_title = (TextView)convertView.findViewById(R.id.item_txt_diary_title);

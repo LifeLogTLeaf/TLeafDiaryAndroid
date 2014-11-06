@@ -3,7 +3,7 @@
 
     <string name="app_name">Tiary</string>
     <string name="home">Home</string>
-    <string name="mypage">My Page</string>
+    <string name="mylifelog">My LifeLog</string>
     <string name="write">Write</string>
     <string name="folder">Folder</string>
     <string name="tag">Tag</string>

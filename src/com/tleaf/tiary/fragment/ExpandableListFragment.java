@@ -86,7 +86,7 @@ public class ExpandableListFragment extends Fragment {
 				fragment = new DiaryListViewFragement();//HomeFragement();
 				break;
 			case 1:
-				fragment = new MyPageFragement();
+				fragment = new MyLifeLogFragement();
 				break;
 			case 2:
 				fragment = new DiaryEditFragment();//WriteFragement();
@@ -98,7 +98,7 @@ public class ExpandableListFragment extends Fragment {
 				fragment = new DiaryListViewFragement();//HomeFragement();
 				break;
 			case 1:
-				fragment = new MyPageFragement();
+				fragment = new MyLifeLogFragement();
 				break;
 			case 2:
 				fragment = new DiaryEditFragment();//WriteFragement();

@@ -1,0 +1,157 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/shape"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp" >
+          
+            <com.tleaf.tiary.util.RoundImageView 
+                android:id="@+id/item_img_diary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_skyblue"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/item_txt_diary_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="8dp"
+                android:alpha="0.8"
+                android:background="@color/diarylist_image_null"
+                android:paddingBottom="2dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:text="2014.10.11.목 날씨"
+                android:textColor="@color/diary_content" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="8dp" >
+
+            <TextView
+                android:id="@+id/item_txt_diary_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dip"
+                android:singleLine="true"
+                android:text="제목"
+                android:textColor="@color/diary_title"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/item_txt_diary_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dip"
+                android:paddingRight="2dip"
+                android:singleLine="true"
+                android:text="내용"
+                android:textColor="@color/diary_content" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="2dip"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/item_img_diary_tag"
+                        android:layout_width="16dp"
+                        android:layout_height="15dp"
+                        android:layout_margin="1dp"
+                        android:paddingBottom="1.5dp"
+                        android:paddingTop="1.5dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/tag2"
+                        android:tint="@color/point" />
+
+                    <TextView
+                        android:id="@+id/item_txt_diary_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="     "
+                        android:textColor="@color/diary_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="2dip"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/item_img_diary_folder"
+                        android:layout_width="20dp"
+                        android:layout_height="15dp"
+                        android:layout_margin="1dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/folder_list"
+                        android:tint="@color/point" />
+
+                    <TextView
+                        android:id="@+id/item_txt_diary_folder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="     "
+                        android:textColor="@color/diary_content" >
+                    </TextView>
+                </LinearLayout>
+                <!-- android:layout_marginRight="2dip" -->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="2dip"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/item_img_diary_location"
+                        android:layout_width="13dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:src="@drawable/location3"
+                        android:tint="@color/point" />
+
+                    <TextView
+                        android:id="@+id/item_txt_diary_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="     "
+                        android:textColor="@color/diary_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
