@@ -97,7 +97,7 @@ ActionBar.OnNavigationListener {
 		if (childPosition == -1) {
 			switch (position) {
 			case Common.HOME:
-				fragment = new DiaryListViewFragement();// HomeFragement();
+				fragment = new HomeFragement();// HomeFragement();DiaryListViewFragement
 				break;
 			case Common.MYLIFTLOG:
 				fragment = new MyLifeLogFragement();// MyPageFragement();

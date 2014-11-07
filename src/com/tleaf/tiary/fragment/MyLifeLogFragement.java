@@ -12,6 +12,12 @@ import android.widget.Switch;
 import com.google.android.gms.internal.fr;
 import com.tleaf.tiary.MainActivity;
 import com.tleaf.tiary.R;
+import com.tleaf.tiary.fragment.lifelog.BookMarkFragment;
+import com.tleaf.tiary.fragment.lifelog.CallFragment;
+import com.tleaf.tiary.fragment.lifelog.CardFragment;
+import com.tleaf.tiary.fragment.lifelog.GalleryFragment;
+import com.tleaf.tiary.fragment.lifelog.MyLocationFragment;
+import com.tleaf.tiary.fragment.lifelog.SmsFragment;
 import com.tleaf.tiary.model.Diary;
 
 public class MyLifeLogFragement extends Fragment {

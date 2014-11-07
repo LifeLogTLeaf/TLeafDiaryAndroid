@@ -137,9 +137,6 @@ public class DataManager {
 			return false;
 	}
 
-	public boolean updateFolder() { //완료
-		return true;
-	}
 
 	public boolean insertImageByDiary(Diary diary) { //완료
 		if (diary.getNo() == -1) 
