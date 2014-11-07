@@ -1,8 +1,7 @@
-package com.tleaf.tiary.fragment;
+package com.tleaf.tiary.fragment.lifelog;
 
 import java.util.ArrayList;
 
-import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -10,29 +9,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import com.tleaf.tiary.MainActivity;
+import com.tleaf.tiary.Common;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.adapter.DiaryListAdapter;
 import com.tleaf.tiary.db.DataManager;
+import com.tleaf.tiary.fragment.lifelog.adapter.CallLogAdapter;
+import com.tleaf.tiary.model.BookMark;
 import com.tleaf.tiary.model.Diary;
-import com.tleaf.tiary.util.Util;
 
-public class DiaryListViewFragement extends Fragment implements OnNavigationListener {
+public class SmsListViewFragment extends Fragment {
 
 	private Activity mContext;
 	private DataManager dataMgr;
 
-	private String type;
+	private int type;
 	private ArrayList<Diary> arItem;
 
-	public DiaryListViewFragement() {
-		type = "all";
-	}
-
-	public DiaryListViewFragement(String type) {
-		this.type = type;
+	public SmsListViewFragment() {
 	}
 
 	@Override
@@ -41,10 +37,10 @@ public class DiaryListViewFragement extends Fragment implements OnNavigationList
 		mContext = getActivity();
 		dataMgr = new DataManager(mContext);
 
-		View rootView = inflater.inflate(R.layout.fragment_list, container, false);
-		ListView lv = (ListView) rootView.findViewById(R.id.list_gen);
+		View rootView = inflater.inflate(R.layout.fragment_sms, container, false);
+		ListView lv = (ListView) rootView.findViewById(R.id.list_sms);
 
-		DiaryListAdapter mAdapter = new DiaryListAdapter(mContext, R.layout.item_diary_, getDiaryListByType()); //this.getActivity()
+		CallLogAdapter	mAdapter = new CallLogAdapter(mContext, R.layout.item_sms, dataMgr.getCallList()); //this.getActivity()
 		lv.setAdapter(mAdapter);
 		lv.setOnItemClickListener(mItemClickListener);
 
@@ -68,38 +64,25 @@ public class DiaryListViewFragement extends Fragment implements OnNavigationList
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			Diary diary = getDiaryListByType().get(position);
-			Fragment fragment = new DiaryFragment(diary);
-			MainActivity.changeFragment(fragment);
+			//			Diary diary = getDiaryListByType().get(position);
+			//			Fragment fragment = new DiaryFragment(diary);
+			//			MainActivity.changeFragment(fragment);
 		}
 
 	};
 
 
 
-
-	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		//		Fragment fragment = new HomeFragement();
-		//	    getFragmentManager().beginTransaction()
-		//        .replace(R.id.container, fragment)
-		//        .commit();
-		//		return true;
-		return false;
-	}
-
-
-
-	private ArrayList<Diary> getDiaryListByType() {
-		arItem = new ArrayList<Diary>(); //확인
-		if(type.equals("all")) {
-			arItem = dataMgr.getDiaryList();
-		} else { //folderName이 넘어오는 경우
-			arItem = dataMgr.getDiaryListByFolderName(type);
-		}
-		return arItem;
-
-	}
+	//	private ArrayList<Diary> getDiaryListByType() {
+	//		arItem = new ArrayList<Diary>(); //확인
+	//		if(type.equals("all")) {
+	//			arItem = dataMgr.getDiaryList();
+	//		} else { //folderName이 넘어오는 경우
+	//			arItem = dataMgr.getDiaryListByFolderName(type);
+	//		}
+	//		return arItem;
+	//
+	//	}
 
 
 }

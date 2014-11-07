@@ -14,6 +14,15 @@ public class Common {
 	public static final int SETIING = 7;
 	public static final int LOCATION = 8;
 	
+	public static final int CALL = 10;
+	public static final int SMS = 11;
+	public static final int CARD = 12;
+	public static final int GALLERY = 13;
+	public static final int BOOKMARK = 14;
+	
+	public static final String INCOMING = "수신";
+	public static final String OUTGOING = "발신";
+	public static final String MISSED = "부재중";
 	
 //	public static final int TAG = 10;
 //	public static final int FOLDER = 20;

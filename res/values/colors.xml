@@ -12,6 +12,7 @@
     <!-- <color name="android_darker_gray">#A7A7A7</color> -->
     <!-- <color name="text_gray_custom">#979797</color> -->
     <color name="point">#0099ED</color>
+    <color name="point_light">#6DC6F6</color>
     <!-- <color name="point2">#41b5f5</color> -->
     <color name="diary_title">#545454</color> <!-- 셀렉 -->
     <color name="diary_content">#4F4F4F</color>
@@ -32,5 +33,8 @@
     <color name="log_orange">#F68C36</color>
     <color name="log_red">#E9423B</color>
     <color name="log_violet">#AF92D7</color>
+    <color name="log_red_light">#FF6B63</color>
+    <color name="black">#000000</color>
+    
 
 </resources>

@@ -6,14 +6,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.nfc.Tag;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
 
-import com.google.android.gms.drive.internal.w;
+import com.tleaf.tiary.model.BookMark;
+import com.tleaf.tiary.model.Call;
+import com.tleaf.tiary.model.Card;
 import com.tleaf.tiary.model.Diary;
+import com.tleaf.tiary.model.MyLocation;
+import com.tleaf.tiary.model.Sms;
 import com.tleaf.tiary.model.Weather;
 import com.tleaf.tiary.util.Util;
 
@@ -29,6 +29,8 @@ public class DataManager {
 	private final String DIARY_TAG = "diary_tag";
 	private final String DIARY_FOLDER = "diary_folder";
 
+	private final String CALL = "call";
+	
 	private SQLiteDatabase db;
 	private ContentValues row;
 
@@ -731,7 +733,85 @@ public class DataManager {
 	}
 
 
-	//임
+
+	
+	public ArrayList<Sms> getSmsList() { //완료
+		return null;
+		
+	}
+	
+	public ArrayList<Card> getCardList() { //완료
+		return null;
+		
+	}
+	
+//	public ArrayList<Photo> getGalleryList() { //완료
+//		return null;
+//		
+//	}
+	
+	public ArrayList<MyLocation> getLocationList() { //완료
+		return null;
+		
+	}
+	
+	public ArrayList<BookMark> getBookMarkList() { //완료
+		return null;
+		
+	}
+	
+
+	public boolean insertCallList(ArrayList<Call> callArr) {  //완료
+		if (callArr != null && callArr.size() != 0) {
+			db = dbHelper.getWritableDatabase();
+			for(int i=0; i< callArr.size(); i++) {
+				row = new ContentValues();
+				row.put("name", callArr.get(i).getName());
+				row.put("number", callArr.get(i).getNumber());
+				row.put("type", callArr.get(i).getType());
+				row.put("date", callArr.get(i).getDate());
+				row.put("duration", callArr.get(i).getDuration());
+				db.insert(CALL, null, row);
+			}
+			dbHelper.close();
+		}
+		return true;
+	}
+	
+
+
+	public ArrayList<Call> getCallList() { //완료
+		//		Util.tst(mContext, "getDiaryList()");
+		ArrayList<Call> arItem = new ArrayList<Call>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + CALL + " order by date desc";
+			
+		Cursor cursor = db.rawQuery(sql, null);
+
+		while(cursor.moveToNext()) {
+			Call call = new Call();
+			long callNo = cursor.getInt(0);
+			String name = cursor.getString(1);
+			String number = cursor.getString(2);
+			String type = cursor.getString(3);
+			long date = cursor.getLong(4);
+			int duration = cursor.getInt(5);
+
+			call.setNo(callNo);
+			call.setName(name);
+			call.setNumber(number);
+			call.setType(type);
+			call.setDate(date);
+			call.setDuration(duration);
+
+			arItem.add(call);
+		}
+		cursor.close();
+		dbHelper.close();
+		return arItem;
+	}	
+	
+	
 	//	private ArrayList<String> getArrayList(long diaryNo, String table) {
 	//		ArrayList<String> arr = new ArrayList<String>();
 	//

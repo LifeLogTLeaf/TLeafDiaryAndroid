@@ -1,4 +1,4 @@
-package com.tleaf.tiary.fragment;
+package com.tleaf.tiary.fragment.lifelog;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -10,27 +10,21 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import com.google.android.gms.internal.fr;
+import com.tleaf.tiary.Common;
 import com.tleaf.tiary.MainActivity;
 import com.tleaf.tiary.R;
-import com.tleaf.tiary.fragment.lifelog.BookMarkFragment;
-import com.tleaf.tiary.fragment.lifelog.CallFragment;
-import com.tleaf.tiary.fragment.lifelog.CardFragment;
-import com.tleaf.tiary.fragment.lifelog.GalleryFragment;
-import com.tleaf.tiary.fragment.lifelog.MyLocationFragment;
-import com.tleaf.tiary.fragment.lifelog.SmsFragment;
 import com.tleaf.tiary.model.Diary;
 
 public class MyLifeLogFragement extends Fragment {
 
 	private RelativeLayout layout_call;
-	private RelativeLayout layout_msg;
+	private RelativeLayout layout_sms;
 	private RelativeLayout layout_galley;
 	private RelativeLayout layout_card;
 	private RelativeLayout layout_bookmark;
 	private RelativeLayout layout_location;
 
 	public MyLifeLogFragement() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -41,8 +35,8 @@ public class MyLifeLogFragement extends Fragment {
 
 		layout_call = (RelativeLayout) rootView.findViewById(R.id.layout_call);
 		layout_call.setOnClickListener(cl);
-		layout_msg = (RelativeLayout) rootView.findViewById(R.id.layout_msg);
-		layout_msg.setOnClickListener(cl);
+		layout_sms = (RelativeLayout) rootView.findViewById(R.id.layout_sms);
+		layout_sms.setOnClickListener(cl);
 		layout_galley = (RelativeLayout) rootView.findViewById(R.id.layout_gallery);
 		layout_galley.setOnClickListener(cl);
 		layout_card = (RelativeLayout) rootView.findViewById(R.id.layout_card);
@@ -62,25 +56,23 @@ public class MyLifeLogFragement extends Fragment {
 			Fragment fragment = null;
 			switch(v.getId()) {
 			case R.id.layout_call:
-				fragment = new CallFragment();
+				fragment = new CallListViewFragment();
 				break;
-			case R.id.layout_msg:
-				fragment = new SmsFragment();
+			case R.id.layout_sms:
+				fragment = new SmsListViewFragment();
 				break;
-
 			case R.id.layout_gallery:
-				fragment = new GalleryFragment();
+				fragment = new LogListViewFragment(Common.GALLERY);
 				break;
-
 			case R.id.layout_card:
-				fragment = new CardFragment();
+				fragment = new LogListViewFragment(Common.CARD);
 				break;
 
 			case R.id.layout_bookmark:
-				fragment = new BookMarkFragment();
+				fragment = new LogListViewFragment(Common.BOOKMARK);
 				break;
 			case R.id.layout_location:
-				fragment = new MyLocationFragment();
+				fragment = new LogListViewFragment(Common.LOCATION);
 				break;
 			}
 			MainActivity.changeFragment(fragment);

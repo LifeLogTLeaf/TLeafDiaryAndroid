@@ -60,7 +60,7 @@
             android:orientation="vertical" >
 
             <RelativeLayout
-                android:id="@+id/layout_msg"
+                android:id="@+id/layout_sms"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:layout_marginLeft="10dp"

@@ -16,6 +16,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.adapter.MenuListAdapter;
 import com.tleaf.tiary.adapter.MyExpandableListAdapter;
+import com.tleaf.tiary.fragment.lifelog.MyLifeLogFragement;
 import com.tleaf.tiary.model.ExpandableItem;
 import com.tleaf.tiary.util.Util;
 

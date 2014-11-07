@@ -85,6 +85,13 @@ public class DbHelper extends SQLiteOpenHelper {
 						"foreign key(folderno) references folder(no))";
 		String insert_myfolder = "insert into folder values (0, '" + mContext.getResources().getString(R.string.mydiary) + "')";
 
+		String table_call = "create table call (no integer primary key autoincrement, " +
+				"name text, " +
+				"number text, " +
+				"type text, " +
+				"date integer, " +
+				"duration integer)";
+
 
 		db.execSQL(table_diary);
 		db.execSQL(table_image);
@@ -94,6 +101,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
 		db.execSQL(table_diaryFolder);
 		db.execSQL(insert_myfolder);
+
+		db.execSQL(table_call);
 
 	}
 

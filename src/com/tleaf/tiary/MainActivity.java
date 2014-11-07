@@ -20,9 +20,9 @@ import com.tleaf.tiary.fragment.DiaryListViewFragement;
 import com.tleaf.tiary.fragment.EmotionFragement;
 import com.tleaf.tiary.fragment.ExpandableListFragment;
 import com.tleaf.tiary.fragment.HomeFragement;
-import com.tleaf.tiary.fragment.MyLifeLogFragement;
 import com.tleaf.tiary.fragment.ShackFragment;
 import com.tleaf.tiary.fragment.TagFragement;
+import com.tleaf.tiary.fragment.lifelog.MyLifeLogFragement;
 import com.tleaf.tiary.util.Util;
 
 public class MainActivity extends Activity implements
