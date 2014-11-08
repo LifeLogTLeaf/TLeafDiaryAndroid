@@ -18,17 +18,17 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.tleaf.tiary.R;
-import com.tleaf.tiary.model.MyLocation;
+import com.tleaf.tiary.model.MyLog;
 import com.tleaf.tiary.util.MyTime;
 
 public class LocationLogAdapter extends BaseAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;
-	private ArrayList<MyLocation> arrItem;
+	private ArrayList<MyLog> arrItem;
 	private int mLayout;
 	private ImageLoader imageLoader;
 	
-	public LocationLogAdapter(Context context, int layout, ArrayList<MyLocation> item) {
+	public LocationLogAdapter(Context context, int layout, ArrayList<MyLog> item) {
 		mContext = context;
 		mInflater = (LayoutInflater)context.getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);
@@ -36,14 +36,14 @@ public class LocationLogAdapter extends BaseAdapter {
 		mLayout = layout;
 		
 		if (item == null)
-			arrItem = new ArrayList<MyLocation>();
+			arrItem = new ArrayList<MyLog>();
 	}
 
 	public int getCount() {
 		return arrItem.size();
 	}
 
-	public MyLocation getItem(int position) {
+	public MyLog getItem(int position) {
 		return arrItem.get(position);
 	}
 
@@ -51,7 +51,7 @@ public class LocationLogAdapter extends BaseAdapter {
 		return position;
 	}
 
-	public void updateItem(ArrayList<MyLocation> diaryArr) {
+	public void updateItem(ArrayList<MyLog> diaryArr) {
 		arrItem.clear();
 		arrItem.addAll(diaryArr);
 		notifyDataSetChanged();

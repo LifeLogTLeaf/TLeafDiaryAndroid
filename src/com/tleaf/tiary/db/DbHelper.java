@@ -90,9 +90,17 @@ public class DbHelper extends SQLiteOpenHelper {
 				"number text, " +
 				"type text, " +
 				"date integer, " +
-				"duration integer)";
+				"duration integer)";//´Ù½Ã
 
-
+		
+		String table_mylog = "create table mylog (id text primary key autoincrement, " +
+				"id text primary key, " +
+				"rev text, " +
+				"latitude real, " +
+				"longitude real, " +
+				"date integer, " +
+				"type text)";
+		
 		db.execSQL(table_diary);
 		db.execSQL(table_image);
 		db.execSQL(table_tag);
@@ -103,6 +111,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.execSQL(insert_myfolder);
 
 		db.execSQL(table_call);
+		db.execSQL(table_mylog);
 
 	}
 

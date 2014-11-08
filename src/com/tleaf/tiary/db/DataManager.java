@@ -12,7 +12,7 @@ import com.tleaf.tiary.model.BookMark;
 import com.tleaf.tiary.model.Call;
 import com.tleaf.tiary.model.Card;
 import com.tleaf.tiary.model.Diary;
-import com.tleaf.tiary.model.MyLocation;
+import com.tleaf.tiary.model.MyLog;
 import com.tleaf.tiary.model.Sms;
 import com.tleaf.tiary.model.Weather;
 import com.tleaf.tiary.util.Util;
@@ -29,6 +29,7 @@ public class DataManager {
 	private final String DIARY_TAG = "diary_tag";
 	private final String DIARY_FOLDER = "diary_folder";
 
+	private final String MYLOG = "mylog";
 	private final String CALL = "call";
 	
 	private SQLiteDatabase db;
@@ -740,27 +741,45 @@ public class DataManager {
 		
 	}
 	
-	public ArrayList<Card> getCardList() { //완료
+	public ArrayList<Card> getCardList() { 
 		return null;
 		
 	}
 	
-//	public ArrayList<Photo> getGalleryList() { //완료
+//	public ArrayList<Photo> getGalleryList() { 
 //		return null;
 //		
 //	}
 	
-	public ArrayList<MyLocation> getLocationList() { //완료
+	public ArrayList<MyLog> getMyLogList() { 
 		return null;
 		
 	}
 	
-	public ArrayList<BookMark> getBookMarkList() { //완료
+	public ArrayList<BookMark> getBookMarkList() {
 		return null;
 		
 	}
-	
 
+
+	public boolean insertMyLogList(ArrayList<MyLog> logArr) {
+		if (logArr != null && logArr.size() != 0) {
+			db = dbHelper.getWritableDatabase();
+			for(int i=0; i< logArr.size(); i++) {
+				row = new ContentValues();
+				row.put("id", logArr.get(i).getId());
+				row.put("rev", logArr.get(i).getRev());
+				row.put("latitude", logArr.get(i).getLatitude());
+				row.put("longitude", logArr.get(i).getLongitude());
+				row.put("date", logArr.get(i).getDate());
+				row.put("type", logArr.get(i).getType());
+				db.insert(CALL, null, row);
+			}
+			dbHelper.close();
+		}
+		return true;
+	}
+	
 	public boolean insertCallList(ArrayList<Call> callArr) {  //완료
 		if (callArr != null && callArr.size() != 0) {
 			db = dbHelper.getWritableDatabase();

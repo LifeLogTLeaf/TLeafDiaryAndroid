@@ -1,4 +1,4 @@
-package com.tleaf.tiary.fragment.lifelog;
+package com.tleaf.tiary.fragment.lifelog.adapter;
 
 import java.util.ArrayList;
 

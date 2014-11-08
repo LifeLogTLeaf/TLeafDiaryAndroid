@@ -1,13 +1,11 @@
 package com.tleaf.tiary.model;
 
-public class Call {
+public class Call extends MyLog{
 	private long no;
 	private String name;
 	private String number;
 	private String type;
-	private long date;
 	private int duration; //초
-	
 	
 	public long getNo() {
 		return no;
@@ -33,12 +31,6 @@ public class Call {
 	}
 	public void setType(String type) {
 		this.type = type;
-	}
-	public long getDate() {
-		return date;
-	}
-	public void setDate(long date) {
-		this.date = date;
 	}
 	public int getDuration() {
 		return duration;

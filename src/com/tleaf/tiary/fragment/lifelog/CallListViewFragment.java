@@ -28,9 +28,6 @@ public class CallListViewFragment extends Fragment {
 	private Activity mContext;
 	private DataManager dataMgr;
 
-	private int type;
-	private ArrayList<Diary> arItem;
-
 	public CallListViewFragment() {
 	}
 

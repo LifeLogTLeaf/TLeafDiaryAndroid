@@ -91,6 +91,9 @@ commit log
 -call 기록 db에 쓰기, 읽기 기능 완성
 -call 프래그먼트 ui 완성
 
-
+#41
+-mylog 클래스 생성
+-mylog db연동
+-location 프래그먼트 생성
 
 

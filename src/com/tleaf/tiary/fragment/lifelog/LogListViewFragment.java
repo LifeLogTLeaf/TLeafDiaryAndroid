@@ -16,6 +16,7 @@ import com.tleaf.tiary.Common;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.adapter.DiaryListAdapter;
 import com.tleaf.tiary.db.DataManager;
+import com.tleaf.tiary.fragment.lifelog.adapter.BookMarkLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.CallLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.CardLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.LocationLogAdapter;
@@ -29,7 +30,6 @@ public class LogListViewFragment extends Fragment {
 	private DataManager dataMgr;
 
 	private int type;
-	private ArrayList<Diary> arItem;
 
 	public LogListViewFragment(int type) {
 		this.type = type;
@@ -59,7 +59,7 @@ public class LogListViewFragment extends Fragment {
 //			mAdapter = new GalleryLogAdapter(mContext, R.layout.item_diary_, get); //this.getActivity()
 			break;
 		case Common.LOCATION: 
-			mAdapter= new LocationLogAdapter(mContext, R.layout.item_location, dataMgr.getLocationList()); //this.getActivity()
+			mAdapter= new LocationLogAdapter(mContext, R.layout.item_location, dataMgr.getMyLogList()); //this.getActivity()
 			break;
 		case Common.BOOKMARK:
 			mAdapter = new BookMarkLogAdapter(mContext, R.layout.item_bookmark, dataMgr.getBookMarkList()); //this.getActivity()
