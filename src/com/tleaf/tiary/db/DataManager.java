@@ -8,13 +8,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.tleaf.tiary.Common;
 import com.tleaf.tiary.model.BookMark;
 import com.tleaf.tiary.model.Call;
 import com.tleaf.tiary.model.Card;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.model.MyLog;
-import com.tleaf.tiary.model.Sms;
+import com.tleaf.tiary.model.MySms;
 import com.tleaf.tiary.model.Weather;
+import com.tleaf.tiary.util.MyPreference;
 import com.tleaf.tiary.util.Util;
 
 public class DataManager {
@@ -31,13 +33,18 @@ public class DataManager {
 
 	private final String MYLOG = "mylog";
 	private final String CALL = "call";
-	
+	private final String SMS = "sms";
+
 	private SQLiteDatabase db;
 	private ContentValues row;
+
+	private MyPreference pref;
 
 	public DataManager(Context context) {
 		mContext = context;
 		dbHelper = new DbHelper(mContext);
+		pref = new MyPreference(mContext);
+
 	}
 
 	public boolean insertDiary(Diary diary) { //완료
@@ -250,8 +257,8 @@ public class DataManager {
 
 		return result;
 	}
-	
-	private boolean isContainedTag(String tag) {
+
+	public boolean isContainedTag(String tag) {
 		db = dbHelper.getReadableDatabase(); 
 		String sql = "select * from " + TAG + " where tag = '" + tag + "'";
 		Cursor cursor = db.rawQuery(sql, null);
@@ -421,7 +428,7 @@ public class DataManager {
 		tagNo = getTagNoByDiaryNo(diaryNo);
 		String sql;
 		String item;
-		
+
 		db = dbHelper.getReadableDatabase(); 
 		for (int i=0; i<tagNo.size(); i++) {
 			sql = "select tag from " + TAG + " where no = '" + tagNo.get(i) + "'";
@@ -591,12 +598,12 @@ public class DataManager {
 		}
 		cursor.close();
 		dbHelper.close();
-		
+
 
 		ArrayList<String> images = getImages(diaryNo);
 		ArrayList<String> tags = getTagsByDiaryNo(diaryNo);
 		ArrayList<String> folders = getFoldersByDiaryNo(diaryNo);
-		
+
 		diary.setImages(images);
 		diary.setTags(tags);
 		diary.setFolders(folders);
@@ -622,7 +629,7 @@ public class DataManager {
 		long folderNo = arr.get(0);
 		return folderNo;
 	}
-	
+
 	private long getTagNoByTag(String tag) {
 		ArrayList<Long> arr = new ArrayList<Long>();
 
@@ -661,7 +668,7 @@ public class DataManager {
 		dbHelper.close();
 		return arrDiaryNo;
 	}
-	
+
 	private ArrayList<Long> getDiaryNoByTagNo(long tagNo) {
 		ArrayList<Long> arrDiaryNo = new ArrayList<Long>();
 		db = dbHelper.getReadableDatabase(); 
@@ -695,24 +702,23 @@ public class DataManager {
 		return arItem;
 
 	}
-	
+
 	public ArrayList<Diary> getDiaryListByTag(String tag) {
 		if (!isContainedTag(tag))
 			return null;
-		
+
 		Util.ll("getDiaryListByTag", tag);
 		db = dbHelper.getReadableDatabase(); 
 
 		long tagNo = getTagNoByTag(tag);
 		ArrayList<Long> arrDiaryNo = getDiaryNoByTagNo(tagNo);
-		
+
 		ArrayList<Diary> arItem = new ArrayList<Diary>();
 		for(int i=0; i<arrDiaryNo.size(); i++) {
 			Diary diary = getDiaryByNo(arrDiaryNo.get(i));
 			arItem.add(diary);
 		}
 		return arItem;
-
 	}
 
 
@@ -734,31 +740,24 @@ public class DataManager {
 	}
 
 
-
-	
-	public ArrayList<Sms> getSmsList() { //완료
-		return null;
-		
-	}
-	
 	public ArrayList<Card> getCardList() { 
 		return null;
-		
+
 	}
-	
-//	public ArrayList<Photo> getGalleryList() { 
-//		return null;
-//		
-//	}
-	
+
+	//	public ArrayList<Photo> getGalleryList() { 
+	//		return null;
+	//		
+	//	}
+
 	public ArrayList<MyLog> getMyLogList() { 
 		return null;
-		
+
 	}
-	
+
 	public ArrayList<BookMark> getBookMarkList() {
 		return null;
-		
+
 	}
 
 
@@ -779,10 +778,42 @@ public class DataManager {
 		}
 		return true;
 	}
-	
+
+
+
+	public boolean insertSmsList(ArrayList<MySms> smsArr, String timetype) {  //완료
+		if (smsArr != null && smsArr.size() != 0) {
+			db = dbHelper.getWritableDatabase();
+			long max = -1;
+			for(int i=0; i< smsArr.size(); i++) {
+				row = new ContentValues();
+				row.put("name", smsArr.get(i).getName());
+				row.put("number", smsArr.get(i).getNumber());
+				row.put("type", smsArr.get(i).getType());
+				row.put("date", smsArr.get(i).getDate());
+				row.put("message", smsArr.get(i).getMessage());
+				db.insert(SMS, null, row);
+
+				if(smsArr.get(i).getDate() > max){
+					max  = smsArr.get(i).getDate();
+				}
+			}
+			if (max > 0) {
+				if (timetype.equals(Common.KEY_SMSINBOX_BASETIME))
+					pref.setLongPref(Common.KEY_SMSINBOX_BASETIME, max);
+				else if (timetype.equals(Common.KEY_SMSSENT_BASETIME))
+					pref.setLongPref(Common.KEY_SMSSENT_BASETIME, max);
+			}
+			dbHelper.close();
+		}
+		return true;
+	}
+
+
 	public boolean insertCallList(ArrayList<Call> callArr) {  //완료
 		if (callArr != null && callArr.size() != 0) {
 			db = dbHelper.getWritableDatabase();
+			long max = -1;
 			for(int i=0; i< callArr.size(); i++) {
 				row = new ContentValues();
 				row.put("name", callArr.get(i).getName());
@@ -791,20 +822,27 @@ public class DataManager {
 				row.put("date", callArr.get(i).getDate());
 				row.put("duration", callArr.get(i).getDuration());
 				db.insert(CALL, null, row);
+
+				if(callArr.get(i).getDate() > max){
+					max  = callArr.get(i).getDate();
+				}
 			}
 			dbHelper.close();
+			if (max > 0)
+				pref.setLongPref(Common.KEY_CALL_BASETIME, max);
 		}
 		return true;
 	}
-	
 
 
-	public ArrayList<Call> getCallList() { //완료
+
+
+	public ArrayList<MyLog> getCallList() { //완료
 		//		Util.tst(mContext, "getDiaryList()");
-		ArrayList<Call> arItem = new ArrayList<Call>();
+		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
 		db = dbHelper.getReadableDatabase(); 
 		String sql = "select * from " + CALL + " order by date desc";
-			
+
 		Cursor cursor = db.rawQuery(sql, null);
 
 		while(cursor.moveToNext()) {
@@ -830,7 +868,97 @@ public class DataManager {
 		return arItem;
 	}	
 	
+	public ArrayList<MyLog> getCallListByType(String subType) { //완료
+		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + CALL + " where type = '" +  subType + "' order by date desc";
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+		while(cursor.moveToNext()) {
+			Call call = new Call();
+			long callNo = cursor.getInt(0);
+			String name = cursor.getString(1);
+			String number = cursor.getString(2);
+			String type = cursor.getString(3);
+			long date = cursor.getLong(4);
+			int duration = cursor.getInt(5);
+
+			call.setNo(callNo);
+			call.setName(name);
+			call.setNumber(number);
+			call.setType(type);
+			call.setDate(date);
+			call.setDuration(duration);
+
+			arItem.add(call);
+		}
+		cursor.close();
+		dbHelper.close();
+		return arItem;
+	}
 	
+	public ArrayList<MyLog> getSmsListByType(String subType) { //완료
+		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + SMS + " where type = '" +  subType + "' order by date desc";
+		
+		Cursor cursor = db.rawQuery(sql, null);
+
+		while(cursor.moveToNext()) {
+			MySms sms = new MySms();
+			long smsNo = cursor.getInt(0);
+			String name = cursor.getString(1);
+			String number = cursor.getString(2);
+			String type = cursor.getString(3);
+			long date = cursor.getLong(4);
+			String message = cursor.getString(5);
+
+			sms.setNo(smsNo);
+			sms.setName(name);
+			sms.setNumber(number);
+			sms.setType(type);
+			sms.setDate(date);
+			sms.setMessage(message);
+
+			arItem.add(sms);
+		}
+		cursor.close();
+		dbHelper.close();
+		return arItem;
+	}
+
+	public ArrayList<MyLog> getSmsList() { //완료
+		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + SMS + " order by date desc";
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+		while(cursor.moveToNext()) {
+			MySms sms = new MySms();
+			long smsNo = cursor.getInt(0);
+			String name = cursor.getString(1);
+			String number = cursor.getString(2);
+			String type = cursor.getString(3);
+			long date = cursor.getLong(4);
+			String message = cursor.getString(5);
+
+			sms.setNo(smsNo);
+			sms.setName(name);
+			sms.setNumber(number);
+			sms.setType(type);
+			sms.setDate(date);
+			sms.setMessage(message);
+
+			arItem.add(sms);
+		}
+		cursor.close();
+		dbHelper.close();
+		return arItem;
+	}	
+
+
 	//	private ArrayList<String> getArrayList(long diaryNo, String table) {
 	//		ArrayList<String> arr = new ArrayList<String>();
 	//

@@ -20,6 +20,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.MyTime;
+import com.tleaf.tiary.util.Util;
 
 public class DiaryListAdapter extends BaseAdapter {
 	private Context mContext;
@@ -27,14 +28,22 @@ public class DiaryListAdapter extends BaseAdapter {
 	private ArrayList<Diary> arrItem;
 	private int mLayout;
 	private ImageLoader imageLoader;
-	
+
+	public DiaryListAdapter(Context context, int layout) {
+		mContext = context;
+		mInflater = (LayoutInflater)context.getSystemService(
+				Context.LAYOUT_INFLATER_SERVICE);
+		arrItem = new ArrayList<Diary>();
+		mLayout = layout;
+	}
+
 	public DiaryListAdapter(Context context, int layout, ArrayList<Diary> item) {
 		mContext = context;
 		mInflater = (LayoutInflater)context.getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);
 		arrItem = item;
 		mLayout = layout;
-		
+
 		if (item == null)
 			arrItem = new ArrayList<Diary>();
 	}
@@ -52,11 +61,12 @@ public class DiaryListAdapter extends BaseAdapter {
 	}
 
 	public void updateItem(ArrayList<Diary> diaryArr) {
+		Util.ll("DiaryListAdapter updateItem diaryArr", diaryArr.size());
 		arrItem.clear();
 		arrItem.addAll(diaryArr);
-		notifyDataSetChanged();
+		this.notifyDataSetChanged();
 	}
-	
+
 	//	String table_diary = "create table diary (no integer primary key autoincrement, " +
 	//			"date integer, " +
 	//			"title text, " +
@@ -82,10 +92,10 @@ public class DiaryListAdapter extends BaseAdapter {
 
 		ImageView img = (ImageView)convertView.findViewById(R.id.item_img_diary);
 		ArrayList<String> imgArr = arrItem.get(position).getImages();
-		
+
 		initImageLoader();
 		if (imgArr != null && imgArr.size() != 0) {
-//			img.setVisibility(View.VISIBLE);
+			//			img.setVisibility(View.VISIBLE);
 			try {
 				imageLoader.displayImage("file://" + imgArr.get(0),
 						img, new SimpleImageLoadingListener() {
@@ -100,7 +110,7 @@ public class DiaryListAdapter extends BaseAdapter {
 				e.printStackTrace();
 			}
 		} else {
-//			img.setVisibility(View.GONE);
+			//			img.setVisibility(View.GONE);
 			img.setBackgroundColor(mContext.getResources().getColor(R.color.background_skyblue));
 		}
 
@@ -156,7 +166,7 @@ public class DiaryListAdapter extends BaseAdapter {
 
 		return convertView;
 	}
-	
+
 	private void initImageLoader() {
 		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
 		.cacheOnDisc().imageScaleType(ImageScaleType.EXACTLY_STRETCHED)

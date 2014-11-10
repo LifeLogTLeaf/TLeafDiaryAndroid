@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +49,7 @@ public class TagFragement extends Fragment {
 	private DiaryListAdapter mAdapter;
 	private int no;
 
-	
+
 	public TagFragement() {
 		// TODO Auto-generated constructor stub
 	}
@@ -62,11 +63,11 @@ public class TagFragement extends Fragment {
 		tagArr = new ArrayList<String>();
 		diaryArr = new ArrayList<Diary>();
 		no = 0;
-		
+
 		View rootView = inflater.inflate(R.layout.fragment_search, container, false);
 
-		Spinner spin = (Spinner) rootView.findViewById(R.id.spin_search);
-		spin.setVisibility(View.GONE);
+		//		Spinner spin = (Spinner) rootView.findViewById(R.id.spin_search);
+		//		spin.setVisibility(View.GONE);
 
 		ArrayList<String> strArr = dataMgr.getDistinctTagList();
 
@@ -80,20 +81,11 @@ public class TagFragement extends Fragment {
 		img_search.setOnClickListener(cl);
 
 
-		ll = (LinearLayout) rootView.findViewById(R.id.layout_serachWord);
-		llp_txt = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		llp_txt.setMargins(7, 5, 5, 5);
-		llp_img = new LinearLayout.LayoutParams(70, 70);
-		llp_img.setMargins(0, 5, 5, 5);
-
-		llp_layout = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		llp_layout.setMargins(5, 5, 8, 5);
 		lv = (ListView) rootView.findViewById(R.id.list_diary_search);
 		lv.setOnItemClickListener(mItemClickListener);
 
-
-		//		mAdapter = new DiaryListAdapter(mContext, R.layout.item_diary, diaryArr); //this.getActivity()
-		//		lv.setAdapter(mAdapter);
+		mAdapter = new DiaryListAdapter(mContext, R.layout.item_diary_); 
+		lv.setAdapter(mAdapter);
 
 		//	        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 		//	            @Override
@@ -105,28 +97,45 @@ public class TagFragement extends Fragment {
 
 		//		lv.setItemChecked(mCurrentSelectedPosition, true);
 
+		ll = (LinearLayout) rootView.findViewById(R.id.layout_serachWord);
+		llp_txt = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		llp_txt.setMargins(7, 5, 5, 5);
+		llp_img = new LinearLayout.LayoutParams(40, 40);
+		llp_img.setMargins(0, 5, 5, 5);
+
+		llp_layout = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		llp_layout.setMargins(5, 5, 8, 5);
+
 		return rootView;
 	}
 
 	class Info {
 		int viewIndex;
 		String tagContent;
-		
+
 		Info(int viewIndex, String tagContent) {
 			this.viewIndex = viewIndex;
 			this.tagContent = tagContent;
 		}
-		
+
 	}
-	
+
 	private OnClickListener cl = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			Util.hideKeyboard(mContext, autotxt.getApplicationWindowToken());
-			String tag = autotxt.getText().toString();
+			String tag = autotxt.getText().toString().trim();
 			if(tagArr.contains(tag)) {
 				Util.tst(mContext, "이미 선택한 태그 입니다");
+				return;
+			}
+			if(TextUtils.isEmpty(tag)) {
+				Util.tst(mContext, "원하는 태그를 입력해주세요");
+				return;
+			}
+			if(!dataMgr.isContainedTag(tag)){
+				Util.tst(mContext, "입력하신 태그에 해당하는 일기가 없습니다");
 				return;
 			}
 			tagArr.add(tag);
@@ -170,8 +179,8 @@ public class TagFragement extends Fragment {
 		img.setImageResource(R.drawable.tag_cancel);
 		img.setColorFilter(getResources().getColor(R.color.diary_title));
 		img.setOnClickListener(cl_delete);
-		
-		
+
+
 		Info i = new Info(no, tag);
 		img.setTag(i);
 
@@ -182,18 +191,35 @@ public class TagFragement extends Fragment {
 	}
 
 	private void setDiaryList() {
-		if (tagArr != null && tagArr.size() != 0) {
-			Util.ll("tagArr", tagArr.toString());
-			for(int i = 0; i < tagArr.size(); i++) {
-				Util.ll("dataMgr.getDiaryListByTag(tag)", tagArr.get(i));
-				diaryArr.addAll(dataMgr.getDiaryListByTag(tagArr.get(i))); //cntRP
-			}
-						mAdapter.updateItem(diaryArr);
-			mAdapter = new DiaryListAdapter(mContext, R.layout.item_diary, diaryArr); //this.getActivity()
-			lv.setAdapter(mAdapter);
+		Util.ll("tagArr", tagArr.toString());
+		diaryArr.clear();
+		for(int i = 0; i < tagArr.size(); i++) {
+			diaryArr.addAll(dataMgr.getDiaryListByTag(tagArr.get(i)));
 		}
-
+		mAdapter.updateItem(diaryArr);
 	}
+	
+//	Util.ll("tagArr", tagArr.toString());
+//	ArrayList<Diary> arr = new ArrayList<Diary>();
+//	for(int i = 0; i < tagArr.size(); i++) {
+//		arr.addAll(dataMgr.getDiaryListByTag(tagArr.get(i)));
+//	}
+//	diaryArr.clear();
+//	diaryArr.addAll(arr); 
+//	mAdapter.updateItem(diaryArr);
+
+	//	if (tagArr != null && tagArr.size() != 0) {
+	//		Util.ll("tagArr", tagArr.toString());
+	//		for(int i = 0; i < tagArr.size(); i++) {
+	//			Util.ll("dataMgr.getDiaryListByTag(tag)", tagArr.get(i));
+	//			ArrayList<Diary> arr = dataMgr.getDiaryListByTag(tagArr.get(i));
+	//			if (arr == null)  //포함되지 않았을 태그인 경우
+	//				return;
+	//			diaryArr.addAll(arr); //cntRP
+	//		}
+	//		mAdapter.updateItem(diaryArr);
+	//	}
+
 
 	private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
 

@@ -6,41 +6,63 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="60dp"
         android:orientation="horizontal"
-        android:padding="3dp" >
+        android:padding="10dp" >
 
-        <Spinner
-            android:id="@+id/spin_search"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="4" />
-
-        <AutoCompleteTextView
-            android:id="@+id/autotxt_search"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="6"
-            android:ems="10"
-            android:hint="search tag.."
-            android:textColor="@color/diary_title" >
-
-            <requestFocus />
-        </AutoCompleteTextView>
+        <!-- <Spinner -->
+        <!-- android:id="@+id/spin_search" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:layout_weight="4" /> -->
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center" >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_search" >
+
+            <!-- android:layout_weight="6" -->
+
+            <AutoCompleteTextView
+                android:id="@+id/autotxt_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:background="@null"
+                android:ems="10"
+                android:hint="search tag.."
+                android:textColor="@color/diary_title" >
+
+                <requestFocus />
+            </AutoCompleteTextView>
 
             <ImageView
                 android:id="@+id/img_search"
                 android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="13dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
                 android:src="@drawable/search"
-                android:tint="@color/background_skyblue" />
+                android:tint="@color/point" />
         </RelativeLayout>
+
+        <!-- <RelativeLayout -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:layout_weight="1" -->
+        <!-- android:gravity="center" > -->
+
+
+        <!-- <ImageView -->
+        <!-- android:id="@+id/img_search" -->
+        <!-- android:layout_width="30dp" -->
+        <!-- android:layout_height="30dp" -->
+        <!-- android:src="@drawable/search" -->
+        <!-- android:tint="@color/background_skyblue" /> -->
+        <!-- </RelativeLayout> -->
     </LinearLayout>
 
     <LinearLayout
@@ -48,15 +70,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:padding="10dp"
         android:minHeight="72dp"
-        android:orientation="horizontal" >
-<!--         android:background="@color/bottom_menu" -->
-<!--         <TextView -->
-<!--             android:id="@+id/txt_searchWord" -->
-<!--             android:layout_width="match_parent" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:textColor="@color/diary_title" /> -->
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <!-- android:background="@color/bottom_menu" -->
+        <!-- <TextView -->
+        <!-- android:id="@+id/txt_searchWord" -->
+        <!-- android:layout_width="match_parent" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:textColor="@color/diary_title" /> -->
     </LinearLayout>
 
     <ListView

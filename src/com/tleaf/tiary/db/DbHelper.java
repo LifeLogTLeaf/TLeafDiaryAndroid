@@ -93,14 +93,23 @@ public class DbHelper extends SQLiteOpenHelper {
 				"duration integer)";//다시
 
 		
-		String table_mylog = "create table mylog (id text primary key autoincrement, " +
-				"id text primary key, " +
+		String table_mylog = "create table mylog (no integer primary key autoincrement, " +
+				"id text, " +
 				"rev text, " +
 				"latitude real, " +
 				"longitude real, " +
 				"date integer, " +
 				"type text)";
 		
+		String table_sms = "create table sms (no integer primary key autoincrement, " +
+				"name text, " +
+				"number text, " +
+				"type text, " +
+				"date integer, " +
+				"message text)";//다시
+
+	
+
 		db.execSQL(table_diary);
 		db.execSQL(table_image);
 		db.execSQL(table_tag);
@@ -112,6 +121,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 		db.execSQL(table_call);
 		db.execSQL(table_mylog);
+		db.execSQL(table_sms);
 
 	}
 

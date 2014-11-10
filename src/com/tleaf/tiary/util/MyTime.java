@@ -1,5 +1,8 @@
 package com.tleaf.tiary.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.content.Context;
 import android.text.format.DateUtils;
 import android.text.format.Time;
@@ -13,7 +16,15 @@ public class MyTime {
 		return time;
 	}
 
+//	Time time = new Time(Time.getCurrentTimezone());
+//	time.setToNow();
+//	time.toMillis(false);
+	static public long getCurrentTime() {
+		long time = System.currentTimeMillis();
+		return time;
+	}
 
+	
 	//호출형식 : MyTime.getTodayToString(mContext, time.toMillis(false))
 	static public String getLongToString(Context context, long millis) {
 		return DateUtils.formatDateTime(context,
@@ -22,6 +33,13 @@ public class MyTime {
 				| DateUtils.FORMAT_SHOW_YEAR);
 	}
 
+	static public String getLongToString(long time) {
+        Date date = new Date(time);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDate = dateFormat.format(date);
+        return currentDate;
+	}
+	
 	static public String getLongToStringWithTime(Context context, long millis) {
 		return DateUtils.formatDateTime(context,
 				millis, DateUtils.FORMAT_SHOW_DATE
@@ -34,6 +52,7 @@ public class MyTime {
 		return DateUtils.formatDateTime(context,
 				millis, DateUtils.FORMAT_SHOW_TIME);
 	}
+	
 	//호출형식 : MyTime.getTodayToString(mContext, time.toMillis(false))
 	//	static public String getTodayToString(Context context, long millis) {
 	//		return DateUtils.formatDateTime(context,

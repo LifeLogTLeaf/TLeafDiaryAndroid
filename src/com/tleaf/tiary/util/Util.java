@@ -26,6 +26,11 @@ public class Util {
 	public static void ll(String tag, int msg) {
 		Log.d(tag, ""+msg);
 	}
+	
+	public static void ll(String tag, boolean msg) {
+		Log.d(tag, ""+msg);
+	}
+
 
 	public static String covertArrayToString(ArrayList<String> arr) {
 		String str = "";

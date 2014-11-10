@@ -1,8 +1,12 @@
 package com.tleaf.tiary.fragment.lifelog.adapter;
 
+import java.util.ArrayList;
+
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,23 +16,24 @@ import com.tleaf.tiary.Common;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.Call;
 import com.tleaf.tiary.model.MyLog;
+import com.tleaf.tiary.model.MySms;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
-public class CallLogAdapter extends MyLogAdapter {
+public class SmsLogAdapter extends MyLogAdapter {
 	private int mLayout;
 	private ImageLoader imageLoader;
 
-	public CallLogAdapter(Context context, int layout) {
+	public SmsLogAdapter(Context context, int layout) {
 		super(context);
 		mLayout = layout;
 	}
 
-	public Call getItem(int position) {
-		MyLog call = super.getItem(position);
+	public MySms getItem(int position) {
+		MyLog sms = super.getItem(position);
 
-		if (call != null && call instanceof Call)
-			return (Call) arrItem.get(position);
+		if (sms != null && sms instanceof MySms)
+			return (MySms) arrItem.get(position);
 		else {
 			return null;
 		}
@@ -42,54 +47,48 @@ public class CallLogAdapter extends MyLogAdapter {
 		if (convertView == null) {
 			convertView = mInflater.inflate(mLayout, parent, false);
 		}
-		Call call = getItem(position);
+		MySms sms = getItem(position);
 
 		LinearLayout ll = (LinearLayout) convertView
-				.findViewById(R.id.layout_item_call);
+				.findViewById(R.id.layout_item_sms);
 		TextView txt_nolog = (TextView) convertView
-				.findViewById(R.id.item_txt_call_nolog);
-		TextView txt_name = (TextView) convertView
-				.findViewById(R.id.item_txt_name_call);
-		TextView txt_number = (TextView) convertView
-				.findViewById(R.id.item_txt_number_call);
-		TextView txt_date = (TextView) convertView
-				.findViewById(R.id.item_txt_date_call);
+				.findViewById(R.id.item_txt_sms_nolog);
 	
-		TextView txt_duration = (TextView) convertView
-				.findViewById(R.id.item_txt_duration_call);
-		ImageView img = (ImageView) convertView
-				.findViewById(R.id.item_img_call);
+		
+		TextView txt_name = (TextView) convertView
+				.findViewById(R.id.item_txt_name_sms);
+		TextView txt_number = (TextView) convertView
+				.findViewById(R.id.item_txt_number_sms);
+		TextView txt_date = (TextView) convertView
+				.findViewById(R.id.item_txt_date_sms);
+		TextView txt_msg = (TextView) convertView
+				.findViewById(R.id.item_txt_message_sms);
+		ImageView img = (ImageView) convertView.findViewById(R.id.item_img_sms);
 
-		if(call == null) {
+		if (sms == null) {
 			ll.setVisibility(View.GONE);
 			txt_nolog.setVisibility(View.VISIBLE);
 			return convertView;
-		} 
-		
-		ll.setVisibility(View.VISIBLE);
-		txt_nolog.setVisibility(View.GONE);
-		txt_name.setText(call.getName());
-		txt_number.setText(call.getNumber());
-		String dateStr = MyTime.getLongToStringWithTime(mContext,
-				call.getDate());
+		}
+
+		txt_name.setText(sms.getName());
+		txt_number.setText(sms.getNumber());
+		String dateStr = MyTime
+				.getLongToStringWithTime(mContext, sms.getDate());
 		txt_date.setText(dateStr);
-		String dur = MyTime.convertSecondToString(call.getDuration());
-		txt_duration.setText(dur);
-		
-		String type = arrItem.get(position).getType();
-		Util.ll("call type", type);
+		String msg = sms.getMessage();
+		txt_msg.setText(msg);
+
+		String type = sms.getType();
+		Util.ll("sms type", type);
 		if (type.equals(Common.INCOMING)) {
-			img.setImageResource(R.drawable.incoming);
+			img.setImageResource(R.drawable.incoming_sms);
 			img.setColorFilter(mContext.getResources().getColor(
 					R.color.point_light));
 		} else if (type.equals(Common.OUTGOING)) {
-			img.setImageResource(R.drawable.outgoing);
+			img.setImageResource(R.drawable.outgoing_sms);
 			img.setColorFilter(mContext.getResources().getColor(
-					R.color.log_red_light));
-		} else if (type.equals(Common.MISSED)) {
-			img.setImageResource(R.drawable.missing);
-			img.setColorFilter(mContext.getResources().getColor(
-					R.color.drawblemenu));
+					R.color.log_violet_light));
 		} else {
 			img.setImageResource(R.drawable.question);
 			img.setColorFilter(mContext.getResources().getColor(
@@ -97,4 +96,5 @@ public class CallLogAdapter extends MyLogAdapter {
 		}
 		return convertView;
 	}
+
 }

@@ -17,17 +17,18 @@ import android.widget.ArrayAdapter;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.fragment.DiaryEditFragment;
 import com.tleaf.tiary.fragment.DiaryListViewFragement;
+import com.tleaf.tiary.fragment.DiaryMonthFragment;
 import com.tleaf.tiary.fragment.EmotionFragement;
 import com.tleaf.tiary.fragment.ExpandableListFragment;
 import com.tleaf.tiary.fragment.HomeFragement;
 import com.tleaf.tiary.fragment.ShackFragment;
 import com.tleaf.tiary.fragment.TagFragement;
 import com.tleaf.tiary.fragment.lifelog.MyLifeLogFragement;
+import com.tleaf.tiary.util.MyPreference;
+import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
-public class MainActivity extends Activity implements
-NavigationDrawerFragment.NavigationDrawerCallbacks,
-ActionBar.OnNavigationListener {
+public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavigationListener {
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -56,6 +57,8 @@ ActionBar.OnNavigationListener {
 	private Fragment mFragment;
 
 	public static Handler mHandler = new Handler();
+	
+	private MyPreference pref;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ ActionBar.OnNavigationListener {
 		setContentView(R.layout.activity_main);
 
 		dataMgr = new DataManager(getApplicationContext());
+		pref = new MyPreference(getApplicationContext());
 
 		getActionBar().setBackgroundDrawable(
 				new ColorDrawable(Color.rgb(0, 153, 237)));
@@ -85,6 +89,23 @@ ActionBar.OnNavigationListener {
 		// fragmentManager.beginTransaction().replace(R.id.container, mFragment)
 		// .commit();
 		// }
+		
+		initializingLog();
+	}
+	private void initializingLog() {
+		setInstallTime();
+	}
+	
+	private void setInstallTime() {
+		if(!pref.getBooleanPref(Common.KEY_INSTALLATION)) { 
+			long currentTime = MyTime.getCurrentTime();
+			Util.ll(Common.KEY_INSTALL_TIME, MyTime.getLongToString(currentTime));
+			
+			pref.setLongPref(Common.KEY_INSTALL_TIME, currentTime);
+			pref.setBooleanPref(Common.KEY_INSTALLATION, true);
+			
+			Util.ll("installation true", pref.getBooleanPref(Common.KEY_INSTALLATION));
+		}
 	}
 
 	@Override
@@ -97,7 +118,7 @@ ActionBar.OnNavigationListener {
 		if (childPosition == -1) {
 			switch (position) {
 			case Common.HOME:
-				fragment = new HomeFragement();// HomeFragement();DiaryListViewFragement
+				fragment = new DiaryMonthFragment(this);// HomeFragement();DiaryListViewFragement DiaryMonthFragment(this)
 				break;
 			case Common.MYLIFTLOG:
 				fragment = new MyLifeLogFragement();// MyPageFragement();

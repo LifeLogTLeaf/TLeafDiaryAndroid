@@ -14,6 +14,18 @@
         android:padding="1dp" >
 
         <TextView
+            android:id="@+id/txt_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/log_violet"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="전체"
+            android:textColor="@color/background_white" />
+
+        <TextView
+            android:id="@+id/txt_incoming"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -24,6 +36,7 @@
             android:textColor="@color/log_violet" />
 
         <TextView
+            android:id="@+id/txt_outgoing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
