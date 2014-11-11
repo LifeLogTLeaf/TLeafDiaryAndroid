@@ -115,8 +115,8 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.execSQL(table_tag);
 		db.execSQL(table_folder);
 		db.execSQL(table_diaryTag);
-
 		db.execSQL(table_diaryFolder);
+
 		db.execSQL(insert_myfolder);
 
 		db.execSQL(table_call);

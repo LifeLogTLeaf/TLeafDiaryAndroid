@@ -1,7 +1,5 @@
 package com.tleaf.tiary.util;
 
-import com.tleaf.tiary.R;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -14,32 +12,26 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 
+import com.tleaf.tiary.R;
 
-public class RoundImageView extends ImageView
+public class SemiRoundImageView  extends ImageView
 {
 
-	private Bitmap roundBitmap;
-	private Bitmap b;
-	private Bitmap bitmap;
-	private int w, h;
-	private int pixels;
-	
-	public RoundImageView(Context context, AttributeSet attrs, int defStyle)
+	public SemiRoundImageView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
 		init(context);
 	}
 
-	public RoundImageView(Context context, AttributeSet attrs)
+	public SemiRoundImageView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 		init(context);
 	}
 
-	public RoundImageView(Context context)
+	public SemiRoundImageView(Context context)
 	{
 		super(context);
 		init(context);
@@ -61,21 +53,15 @@ public class RoundImageView extends ImageView
 			return;
 		}
 
-		b = ((BitmapDrawable) drawable).getBitmap();
-		bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
-		w = getWidth();
-		h = getHeight();
+		Bitmap b = ((BitmapDrawable) drawable).getBitmap();
+		Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
+		int w = getWidth(), h = getHeight();
 
-		pixels = (int) (3 * getResources().getDisplayMetrics().density);
+		int pixels = (int) (3 * getResources().getDisplayMetrics().density);
 
-		roundBitmap = RoundImageView.getRoundedCornerBitmap(
-				getContext(), bitmap, pixels, w, h, false, false, false, false);
+		Bitmap roundBitmap = RoundImageView.getRoundedCornerBitmap(
+				getContext(), bitmap, pixels, w, h, false, false, true, true);
 		canvas.drawBitmap(roundBitmap, 0, 0, null);
-	}
-	
-	public void setImageRounding(boolean leftTop, boolean rightTop, boolean leftBottom, boolean rightBottom) {
-		roundBitmap= RoundImageView.getRoundedCornerBitmap(
-				getContext(), bitmap, pixels, w, h, leftTop, rightTop, leftBottom, rightBottom);
 	}
 
 	public static Bitmap getRoundedCornerBitmap(Context context, Bitmap input,
@@ -127,7 +113,7 @@ public class RoundImageView extends ImageView
 		float xScale = (float) w / sourceWidth;
 		float yScale = (float) h / sourceHeight;
 		float scale;// = Math.max(xScale, yScale);
-		
+
 		scale = Math.max(xScale, yScale);
 
 		// Now get the size of the source bitmap when scaled
@@ -156,4 +142,3 @@ public class RoundImageView extends ImageView
 		return output;
 	}
 }
-

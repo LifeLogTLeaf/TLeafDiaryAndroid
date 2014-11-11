@@ -13,7 +13,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,7 +26,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
@@ -46,7 +44,7 @@ import eu.janmuller.android.simplecropimage.CropImage;
 
 
 
-public class MyGalleryActivity extends Activity {
+public class MyGalleryActivity_ extends Activity {
 
 	public static final String TAG = "MyGalleryActivity";
 
@@ -55,7 +53,7 @@ public class MyGalleryActivity extends Activity {
 
 	GridView gridGallery;
 	Handler handler;
-	GalleryAdapter adapter;
+	GalleryAdapter_ adapter;
 
 	ImageView imgNoMedia;
 	Button btnGalleryOk;
@@ -66,7 +64,7 @@ public class MyGalleryActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.gallery);
+		setContentView(R.layout.gallery_item);
 
 		action = getIntent().getAction();
 		if (action == null) {
@@ -104,11 +102,11 @@ public class MyGalleryActivity extends Activity {
 	}
 
 	private void init() {
+		ImageView img_album = (ImageView) findViewById(R.id.img_album);
+		ImageView img_camera = (ImageView) findViewById(R.id.img_camera);
 
-		TextView txt_album = (TextView) findViewById(R.id.txt_album);
-		TextView txt_camera = (TextView) findViewById(R.id.txt_camera);
 
-		txt_album.setOnClickListener(new OnClickListener() {
+		img_album.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -116,7 +114,7 @@ public class MyGalleryActivity extends Activity {
 			}
 		});
 
-		txt_camera.setOnClickListener(new OnClickListener() {
+		img_camera.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -133,18 +131,18 @@ public class MyGalleryActivity extends Activity {
 		}
 
 		handler = new Handler();
-		gridGallery = (GridView) findViewById(R.id.gridGallery);
+		gridGallery = (GridView) findViewById(R.id.grid_gallery);
 		gridGallery.setFastScrollEnabled(true);
-		adapter = new GalleryAdapter(getApplicationContext(), imageLoader);
+		adapter = new GalleryAdapter_(getApplicationContext(), imageLoader);
 		PauseOnScrollListener listener = new PauseOnScrollListener(imageLoader,
 				true, true);
 		gridGallery.setOnScrollListener(listener);
 
 		if (action.equalsIgnoreCase(Common.ACTION_MULTIPLE_PICK)) {
 
-			findViewById(R.id.llBottomContainer).setVisibility(View.VISIBLE);
+//			findViewById(R.id.llBottomContainer).setVisibility(View.VISIBLE);
 			gridGallery.setOnItemClickListener(mItemMulClickListener);
-			adapter.setMultiplePick(true);
+//			adapter.setMultiplePick(true);
 
 		} 
 		//		else if (action.equalsIgnoreCase(Action.ACTION_PICK)) {

@@ -12,20 +12,21 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    
+
     <!-- lifelog call -->
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_SMS" />
-<!--     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" /> -->
+    <!-- <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" /> -->
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/tiary_white"
+        android:icon="@drawable/icon_tiary_xhdpi2"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".LoignActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" >
             <intent-filter>
@@ -36,8 +37,9 @@
         </activity>
         <activity android:name=".photo.MyGalleryActivity" >
             <intent-filter>
-                <action android:name="luminous.ACTION_PICK" />
-                <action android:name="luminous.ACTION_MULTIPLE_PICK" />
+<!--                 <action android:name="luminous.ACTION_PICK" /> -->
+                <!-- <action android:name="luminous.ACTION_PICK" /> -->
+                <action android:name="myGallery" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

@@ -8,23 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.ExpandableItem;
-import com.tleaf.tiary.model.MyMenuItem;
+import com.tleaf.tiary.model.TemplateExpandableItem;
 
-public class MyExpandableListAdapter extends BaseExpandableListAdapter {
+public class TemplateExpandableListAdapter extends BaseExpandableListAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;
 	private ArrayList<String> mParent;
-	private HashMap<String, ArrayList<ExpandableItem>> mChild;
+	private HashMap<String, ArrayList<TemplateExpandableItem>> mChild;
 	private int mParentLayout;
 	private int mChildLayout;
 
-	public MyExpandableListAdapter(Context context, int layoutParent, int layoutChild, ArrayList<String> parent, HashMap<String, ArrayList<ExpandableItem>> child) {
+	public TemplateExpandableListAdapter(Context context, int layoutParent, int layoutChild, ArrayList<String> parent, HashMap<String, ArrayList<TemplateExpandableItem>> child) {
 		mContext = context;
 		mInflater = (LayoutInflater)context.getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);
@@ -53,7 +51,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public ExpandableItem getChild(int groupPosition, int childPosition) {
+	public TemplateExpandableItem getChild(int groupPosition, int childPosition) {
 		return mChild.get(mParent.get(groupPosition)).get(childPosition);
 	}
 
@@ -76,13 +74,13 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-		((ExpandableListView) parent).expandGroup(groupPosition);
+//		((ExpandableListView) parent).expandGroup(groupPosition);
 		final int pos = groupPosition;
 		if (convertView == null) {
 			convertView = mInflater.inflate(mParentLayout, parent, false);
 		}
 	
-		TextView txt = (TextView)convertView.findViewById(R.id.txt_expand_title);
+		TextView txt = (TextView)convertView.findViewById(R.id.txt_expand_template_title);
 		txt.setText(mParent.get(groupPosition));
 
 		return convertView;
@@ -97,10 +95,23 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 			convertView = mInflater.inflate(mChildLayout, parent, false);
 		}
 
-		TextView txt_title = (TextView)convertView.findViewById(R.id.txt_expand_child_title);
-		txt_title.setText(mChild.get(mParent.get(groupPosition)).get(childPosition).getTitle());
-		TextView txt_content = (TextView)convertView.findViewById(R.id.txt_expand_child_content);
-		txt_content.setText(mChild.get(mParent.get(groupPosition)).get(childPosition).getContent());
+//		RoundImageView rImg = (RoundImageView)  convertView.findViewById(R.id.img_expand_child_template);
+//		rImg.setImageRounding(false, false, false, false);
+		
+//		TextView txt_title = (TextView)convertView.findViewById(R.id.txt_expand_child_title);
+//		txt_title.setText(mChild.get(mParent.get(groupPosition)).get(childPosition).getTitle());
+		
+//		
+//        <com.tleaf.tiary.util.RoundImageView
+//        android:id="@+id/img_expand_child_template"
+//        android:layout_width="match_parent"
+//        android:layout_height="80dp"
+//        android:scaleType="centerCrop"
+//     	android:src="@drawable/template_daily" />
+		
+		
+//		TextView txt_content = (TextView) convertView.findViewById(R.id.txt_expand_child_template_title);
+//		txt_content.setText(mChild.get(mParent.get(groupPosition)).get(childPosition).getTitle());
 
 		return convertView;
 	}

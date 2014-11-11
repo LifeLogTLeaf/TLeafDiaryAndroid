@@ -87,16 +87,6 @@ public class TagFragement extends Fragment {
 		mAdapter = new DiaryListAdapter(mContext, R.layout.item_diary_); 
 		lv.setAdapter(mAdapter);
 
-		//	        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-		//	            @Override
-		//	            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		//	                selectItem(position);
-		//	            }
-		//	        });
-		//	        
-
-		//		lv.setItemChecked(mCurrentSelectedPosition, true);
-
 		ll = (LinearLayout) rootView.findViewById(R.id.layout_serachWord);
 		llp_txt = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		llp_txt.setMargins(7, 5, 5, 5);
@@ -198,28 +188,6 @@ public class TagFragement extends Fragment {
 		}
 		mAdapter.updateItem(diaryArr);
 	}
-	
-//	Util.ll("tagArr", tagArr.toString());
-//	ArrayList<Diary> arr = new ArrayList<Diary>();
-//	for(int i = 0; i < tagArr.size(); i++) {
-//		arr.addAll(dataMgr.getDiaryListByTag(tagArr.get(i)));
-//	}
-//	diaryArr.clear();
-//	diaryArr.addAll(arr); 
-//	mAdapter.updateItem(diaryArr);
-
-	//	if (tagArr != null && tagArr.size() != 0) {
-	//		Util.ll("tagArr", tagArr.toString());
-	//		for(int i = 0; i < tagArr.size(); i++) {
-	//			Util.ll("dataMgr.getDiaryListByTag(tag)", tagArr.get(i));
-	//			ArrayList<Diary> arr = dataMgr.getDiaryListByTag(tagArr.get(i));
-	//			if (arr == null)  //포함되지 않았을 태그인 경우
-	//				return;
-	//			diaryArr.addAll(arr); //cntRP
-	//		}
-	//		mAdapter.updateItem(diaryArr);
-	//	}
-
 
 	private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
 

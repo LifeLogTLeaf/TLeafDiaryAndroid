@@ -1,4 +1,4 @@
-TLeafDiarAndroid
+TLeafDiaryAndroid
 ================
 edited by choi seulgi
 
@@ -116,5 +116,14 @@ commit log
 -태그 검색 시 db에 없는 키워드 입력시 reject
 -태그 검색 프래그먼트 ui 개선
 -태그 재검색시 이전에 불러온 일기에서 새로 검색된 일기로 refresh안되는 문제 해결
+
+#44
+-템플랫 프래그먼트 ui 구현 (검색, expandable listview, 템플릿 imgaeview)
+-액티비티단위 안드로이드 회전 고정
+-갤러리 아이콘 선택 후 백 눌렀을 때 죽는 문제 해결
+-태그 검색 시 다이어리 라운딩 깨지는 현상 해결
+-태그, 폴더, 위치, 감정 다이어로그에서 확인 및 취소 구분선 안나오는 것 해결
+
+-갤러리 액티비티 수정중
 
 

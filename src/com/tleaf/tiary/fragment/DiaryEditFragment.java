@@ -34,7 +34,6 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.MainActivity;
 import com.tleaf.tiary.R;
-import com.tleaf.tiary.adapter.PhotoEditAdapter;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.dialog.DialogResultListener;
 import com.tleaf.tiary.dialog.EmotionDialogFragment;
@@ -43,6 +42,7 @@ import com.tleaf.tiary.dialog.LocationDialogFragment;
 import com.tleaf.tiary.dialog.TagDialogFragment;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.photo.HorizontalListView;
+import com.tleaf.tiary.photo.PhotoEditAdapter;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
@@ -324,7 +324,7 @@ public class DiaryEditFragment extends Fragment {
 			//			if (selectedImages != null && selectedImages.size() != 0) {
 			//				adapter.isAdding(true);
 			//			}
-			Intent i = new Intent("luminous.ACTION_MULTIPLE_PICK");
+			Intent i = new Intent(Common.MYGALLERY);
 			startActivityForResult(i, 200);
 			break;
 
@@ -369,9 +369,11 @@ public class DiaryEditFragment extends Fragment {
 
 		case R.id.img_edit_template:
 			Util.tst(mContext, "template 호출 ");
-			layout_menu.setVisibility(View.GONE);
-			layout_template.setVisibility(View.VISIBLE);
-			layout_add.setVisibility(View.GONE);
+			//			layout_menu.setVisibility(View.GONE);
+			//			layout_template.setVisibility(View.VISIBLE);
+			//			layout_add.setVisibility(View.GONE);
+			Fragment fragment = new TemplateSearchFragment();
+			MainActivity.changeFragment(fragment);
 			break;
 
 		case R.id.img_edit_setting:
@@ -390,12 +392,14 @@ public class DiaryEditFragment extends Fragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		//		Util.tst(mContext, "requestCode"+requestCode+"resultCode"+resultCode);
 		//		horiView.removeAllViews();
-		String[] all_path = data.getStringArrayExtra("all_path");
-		for (String string : all_path) {
-			selectedImages.add(string);
-			Util.ll("all_path", string);
+		if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
+			String[] all_path = data.getStringArrayExtra("all_path");
+			for (String string : all_path) {
+				selectedImages.add(string);
+				Util.ll("all_path", string);
+			}
+			displayPhoto();
 		}
-		displayPhoto();
 	}
 
 	private void displayPhoto() {

@@ -1,0 +1,76 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <!-- <Spinner -->
+        <!-- android:id="@+id/spin_search" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:layout_weight="4" /> -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_search" >
+
+            <!-- android:layout_weight="6" -->
+
+            <AutoCompleteTextView
+                android:id="@+id/autotxt_search_template"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:background="@null"
+                android:ems="10"
+                android:hint="search template.."
+                android:textColor="@color/diary_title" >
+
+                <requestFocus />
+            </AutoCompleteTextView>
+
+            <ImageView
+                android:id="@+id/img_search_template"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="13dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/search"
+                android:tint="@color/point" />
+        </RelativeLayout>
+
+        <!-- <RelativeLayout -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:layout_weight="1" -->
+        <!-- android:gravity="center" > -->
+
+
+        <!-- <ImageView -->
+        <!-- android:id="@+id/img_search" -->
+        <!-- android:layout_width="30dp" -->
+        <!-- android:layout_height="30dp" -->
+        <!-- android:src="@drawable/search" -->
+        <!-- android:tint="@color/background_skyblue" /> -->
+        <!-- </RelativeLayout> -->
+    </LinearLayout>
+
+    <ExpandableListView
+        android:id="@+id/list_expand_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="@null"
+        android:divider="@null"
+        android:padding="10dp" />
+
+</LinearLayout>

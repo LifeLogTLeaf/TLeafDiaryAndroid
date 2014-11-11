@@ -41,7 +41,8 @@ public class Common {
 	
 	
 	
-	
+	public static final String MYGALLERY = "myGallery";
+
 	public static final String ACTION_MULTIPLE_PICK = "luminous.ACTION_MULTIPLE_PICK";
 
 	public static final String TEMP_PHOTO_FILE_NAME = "temp_photo.jpg";

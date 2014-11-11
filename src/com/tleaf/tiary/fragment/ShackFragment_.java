@@ -24,8 +24,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.tleaf.tiary.R;
-import com.tleaf.tiary.adapter.GalleryAdapter;
 import com.tleaf.tiary.model.MyGallery;
+import com.tleaf.tiary.photo.GalleryAdapter_;
 import com.tleaf.tiary.util.Util;
 
 
@@ -33,7 +33,7 @@ public class ShackFragment_ extends Fragment {
 
 	private GridView gridGallery;
 	private Handler handler;
-	private GalleryAdapter adapter;
+	private GalleryAdapter_ adapter;
 
 	private ImageView imgSinglePick;
 	private Button btnGalleryPickMul;
@@ -56,13 +56,13 @@ public class ShackFragment_ extends Fragment {
 		rootView = inflater.inflate(R.layout.fragment_shack, container, false);
 
 		mContext = getActivity();
-		initImageLoader();
-		init();
+//		initImageLoader();
+//		init();
 
 		return rootView;
 	}
 
-
+/*
 	private void initImageLoader() {
 		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
 		.cacheOnDisc().imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
@@ -79,7 +79,7 @@ public class ShackFragment_ extends Fragment {
 	private void init() {
 
 		handler = new Handler();
-		gridGallery = (GridView) rootView.findViewById(R.id.gridGallery);
+//		gridGallery = (GridView) rootView.findViewById(R.id.gridGallery);
 		gridGallery.setFastScrollEnabled(true);
 		adapter = new GalleryAdapter(mContext, imageLoader);
 		adapter.setMultiplePick(false);
@@ -137,5 +137,5 @@ public class ShackFragment_ extends Fragment {
 				imageLoader.displayImage("file://" + path, imgSinglePick);
 			}
 		}
-	}
+	}*/
 }

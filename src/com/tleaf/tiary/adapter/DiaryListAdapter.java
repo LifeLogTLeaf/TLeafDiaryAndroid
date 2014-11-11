@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.MyTime;
+import com.tleaf.tiary.util.SemiRoundImageView;
 import com.tleaf.tiary.util.Util;
 
 public class DiaryListAdapter extends BaseAdapter {
@@ -89,8 +91,8 @@ public class DiaryListAdapter extends BaseAdapter {
 		TextView txt_date = (TextView)convertView.findViewById(R.id.item_txt_diary_date);
 		String dateStr = MyTime.getLongToString(mContext, arrItem.get(position).getDate());
 		txt_date.setText(dateStr);
-
-		ImageView img = (ImageView)convertView.findViewById(R.id.item_img_diary);
+		
+		SemiRoundImageView img = (SemiRoundImageView) convertView.findViewById(R.id.item_img_diary);
 		ArrayList<String> imgArr = arrItem.get(position).getImages();
 
 		initImageLoader();
@@ -110,8 +112,7 @@ public class DiaryListAdapter extends BaseAdapter {
 				e.printStackTrace();
 			}
 		} else {
-			//			img.setVisibility(View.GONE);
-			img.setBackgroundColor(mContext.getResources().getColor(R.color.background_skyblue));
+//						img.setVisibility(View.GONE);
 		}
 
 		TextView txt_title = (TextView)convertView.findViewById(R.id.item_txt_diary_title);

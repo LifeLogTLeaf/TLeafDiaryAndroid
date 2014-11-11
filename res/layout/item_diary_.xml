@@ -10,18 +10,19 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="6dp"
-        android:background="@drawable/shape"
+        android:background="@drawable/shape_diary"
         android:orientation="vertical" >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="100dp" >
-          
-            <com.tleaf.tiary.util.RoundImageView 
+<!--             android:src="@drawable/blurred" -->
+
+            <com.tleaf.tiary.util.SemiRoundImageView
                 android:id="@+id/item_img_diary"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background_skyblue"
+                android:src="@drawable/skyblue"
                 android:scaleType="centerCrop" />
 
             <TextView

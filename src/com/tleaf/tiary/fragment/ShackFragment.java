@@ -23,8 +23,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.tleaf.tiary.R;
-import com.tleaf.tiary.adapter.PhotoEditAdapter;
 import com.tleaf.tiary.photo.HorizontalListView;
+import com.tleaf.tiary.photo.PhotoEditAdapter;
 import com.tleaf.tiary.util.Util;
 
 
