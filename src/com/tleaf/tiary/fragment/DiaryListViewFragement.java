@@ -2,27 +2,21 @@ package com.tleaf.tiary.fragment;
 
 import java.util.ArrayList;
 
-import android.app.ActionBar.OnNavigationListener;
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.tleaf.tiary.MainActivity;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.adapter.DiaryListAdapter;
-import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.model.Diary;
-import com.tleaf.tiary.util.Util;
 
-public class DiaryListViewFragement extends Fragment implements OnNavigationListener {
-
-	private Activity mContext;
-	private DataManager dataMgr;
+public class DiaryListViewFragement extends BaseFragment {
 
 	private String type;
 	private ArrayList<Diary> arItem;
@@ -38,70 +32,53 @@ public class DiaryListViewFragement extends Fragment implements OnNavigationList
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mContext = getActivity();
-		dataMgr = new DataManager(mContext);
 
-		View rootView = inflater.inflate(R.layout.fragment_list, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_list, container,
+				false);
 		ListView lv = (ListView) rootView.findViewById(R.id.list_gen);
+		LinearLayout ll = (LinearLayout) rootView
+				.findViewById(R.id.ll_no_diary);
 
-		DiaryListAdapter mAdapter = new DiaryListAdapter(mContext, R.layout.item_diary_, getDiaryListByType()); //this.getActivity()
+		if (getDiaryListByType().size() == 0) {
+			lv.setVisibility(View.GONE);
+			ll.setVisibility(View.VISIBLE);
+		} else {
+			lv.setVisibility(View.VISIBLE);
+			ll.setVisibility(View.GONE);
+		}
+		DiaryListAdapter mAdapter = new DiaryListAdapter(mContext,
+				R.layout.item_diary_, getDiaryListByType()); // this.getActivity()
 		lv.setAdapter(mAdapter);
 		lv.setOnItemClickListener(mItemClickListener);
-
-		//	        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-		//	            @Override
-		//	            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		//	                selectItem(position);
-		//	            }
-		//	        });
-		//	        
-
-		//		lv.setItemChecked(mCurrentSelectedPosition, true);
-
 
 		return rootView;
 	}
 
-
-
 	private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
-
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
 			Diary diary = getDiaryListByType().get(position);
 			Fragment fragment = new DiaryFragment(diary);
 			MainActivity.changeFragment(fragment);
 		}
-
 	};
 
-
-
-
-	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		//		Fragment fragment = new HomeFragement();
-		//	    getFragmentManager().beginTransaction()
-		//        .replace(R.id.container, fragment)
-		//        .commit();
-		//		return true;
-		return false;
-	}
-
-
-
 	private ArrayList<Diary> getDiaryListByType() {
-		arItem = new ArrayList<Diary>(); //확인
-		if(type.equals("all")) {
+		arItem = new ArrayList<Diary>(); 
+		if (type.equals("all")) {
 			arItem = dataMgr.getDiaryList();
-		} else { //folderName이 넘어오는 경우
+		} else { // folderName이 넘어오는 경우
 			arItem = dataMgr.getDiaryListByFolderName(type);
 		}
 		return arItem;
 
 	}
 
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }
-
-

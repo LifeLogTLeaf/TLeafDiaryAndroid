@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class FolderFragement extends Fragment {
+public class FolderFragement extends BaseFragment {
 	
 	public FolderFragement() {
 		// TODO Auto-generated constructor stub
@@ -19,6 +19,12 @@ public class FolderFragement extends Fragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_folder, container, false);
 		return rootView;
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

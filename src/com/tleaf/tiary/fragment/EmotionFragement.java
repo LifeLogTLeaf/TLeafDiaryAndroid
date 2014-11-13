@@ -14,7 +14,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-public class EmotionFragement extends Fragment {
+public class EmotionFragement extends BaseFragment {
 
 	
 	public EmotionFragement() {
@@ -29,6 +29,12 @@ public class EmotionFragement extends Fragment {
 
 
 		return rootView;
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	

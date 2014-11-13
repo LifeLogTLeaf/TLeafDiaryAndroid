@@ -16,7 +16,7 @@ import com.sangmuk.month.ViewPager.OnPageChangeListener;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.calendar.MonthPagerAdapter;
 
-public class DiaryMonthFragment extends Fragment {
+public class DiaryMonthFragment extends BaseFragment {
 
 	private Context mContext;
 	private Activity mActivity;
@@ -84,6 +84,12 @@ public class DiaryMonthFragment extends Fragment {
 
 		return rootView;
 
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 

@@ -4,18 +4,16 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 
-import com.google.android.gms.internal.fr;
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.MainActivity;
 import com.tleaf.tiary.R;
-import com.tleaf.tiary.model.Diary;
+import com.tleaf.tiary.fragment.BaseFragment;
 
-public class MyLifeLogFragement extends Fragment {
+public class MyLifeLogFragement extends BaseFragment {
 
 	private RelativeLayout layout_call;
 	private RelativeLayout layout_sms;
@@ -78,4 +76,10 @@ public class MyLifeLogFragement extends Fragment {
 			MainActivity.changeFragment(fragment);
 		}
 	};
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

@@ -28,7 +28,7 @@ import com.tleaf.tiary.photo.PhotoEditAdapter;
 import com.tleaf.tiary.util.Util;
 
 
-public class ShackFragment extends Fragment {
+public class ShackFragment extends BaseFragment {
 
 //	private GridView gridGallery;
 //	private Handler handler;
@@ -129,6 +129,12 @@ public class ShackFragment extends Fragment {
 		//				imageLoader.displayImage("file://" + path, imgSinglePick);
 		//			}
 		//		}
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
 

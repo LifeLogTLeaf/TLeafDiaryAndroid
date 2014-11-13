@@ -1,38 +1,20 @@
 package com.tleaf.tiary.fragment.lifelog;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
-import android.app.Fragment;
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.R;
-import com.tleaf.tiary.adapter.DiaryListAdapter;
 import com.tleaf.tiary.db.DataManager;
-import com.tleaf.tiary.fragment.lifelog.adapter.BookMarkLogAdapter;
-import com.tleaf.tiary.fragment.lifelog.adapter.CallLogAdapter;
-import com.tleaf.tiary.fragment.lifelog.adapter.CardLogAdapter;
-import com.tleaf.tiary.fragment.lifelog.adapter.LocationLogAdapter;
+import com.tleaf.tiary.fragment.BaseFragment;
 import com.tleaf.tiary.fragment.lifelog.adapter.MyLogAdapter;
-import com.tleaf.tiary.fragment.lifelog.adapter.SmsLogAdapter;
-import com.tleaf.tiary.model.BookMark;
-import com.tleaf.tiary.model.Diary;
-import com.tleaf.tiary.model.MyLog;
-import com.tleaf.tiary.model.MySms;
-import com.tleaf.tiary.util.Util;
 
-public class LogListViewFragment extends Fragment {
+public class LogListViewFragment extends BaseFragment {
 
 	private Activity mContext;
 	private DataManager dataMgr;
@@ -133,6 +115,12 @@ public class LogListViewFragment extends Fragment {
 		}
 
 	};
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
 
 

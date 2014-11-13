@@ -20,11 +20,12 @@ import android.widget.TextView;
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
+import com.tleaf.tiary.fragment.BaseFragment;
 import com.tleaf.tiary.fragment.lifelog.adapter.CallLogAdapter;
 import com.tleaf.tiary.model.Call;
 import com.tleaf.tiary.model.Diary;
 
-public class CallListViewFragment extends Fragment {
+public class CallListViewFragment extends BaseFragment {
 
 	private Activity mContext;
 	private DataManager dataMgr;
@@ -99,5 +100,11 @@ public class CallListViewFragment extends Fragment {
 		}
 
 	};
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

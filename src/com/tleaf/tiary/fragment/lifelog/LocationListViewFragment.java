@@ -3,7 +3,6 @@ package com.tleaf.tiary.fragment.lifelog;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +12,12 @@ import android.widget.ListView;
 
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
+import com.tleaf.tiary.fragment.BaseFragment;
 import com.tleaf.tiary.fragment.lifelog.adapter.LocationLogAdapter;
 import com.tleaf.tiary.model.MyLog;
 
 
-public class LocationListViewFragment extends Fragment {
+public class LocationListViewFragment extends BaseFragment {
 
 	private Activity mContext;
 	private DataManager dataMgr;
@@ -72,6 +72,12 @@ public class LocationListViewFragment extends Fragment {
 
 //		dataMgr.insertMyLogList(callArr);
 		return locationArr;
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

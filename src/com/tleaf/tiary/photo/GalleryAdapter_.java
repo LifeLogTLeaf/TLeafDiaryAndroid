@@ -127,7 +127,7 @@ public class GalleryAdapter_ extends BaseAdapter {
 	}
 
 
-	public class ViewHolder {
+	private class ViewHolder {
 		ImageView img_photo;
 		ImageView img_photo_select;
 	}

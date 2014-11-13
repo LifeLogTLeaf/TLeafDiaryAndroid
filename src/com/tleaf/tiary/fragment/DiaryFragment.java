@@ -36,7 +36,7 @@ import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
-public class DiaryFragment extends Fragment {
+public class DiaryFragment extends BaseFragment {
 
 	private Diary diary;
 	private Context mContext;
@@ -243,5 +243,12 @@ public class DiaryFragment extends Fragment {
 
 		}
 
+	}
+
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

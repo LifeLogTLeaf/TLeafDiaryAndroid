@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class HomeFragement extends Fragment {
+public class HomeFragement extends BaseFragment {
 	
 	public HomeFragement() {
 		// TODO Auto-generated constructor stub
@@ -19,6 +19,12 @@ public class HomeFragement extends Fragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 		return rootView;
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

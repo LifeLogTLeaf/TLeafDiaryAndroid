@@ -19,9 +19,10 @@ import com.tleaf.tiary.adapter.MyExpandableListAdapter;
 import com.tleaf.tiary.adapter.TemplateExpandableListAdapter;
 import com.tleaf.tiary.fragment.lifelog.MyLifeLogFragement;
 import com.tleaf.tiary.model.TemplateExpandableItem;
+import com.tleaf.tiary.template.ChatFragement;
 import com.tleaf.tiary.util.Util;
 
-public class TemplateSearchFragment extends Fragment {
+public class TemplateSearchFragment extends BaseFragment {
 
 	private Context mContext;
 	private ExpandableListView exListView;
@@ -91,39 +92,46 @@ public class TemplateSearchFragment extends Fragment {
 		Util.tst(mContext, "position"+position+",childPosition"+childPosition);
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getFragmentManager();
-
-		Fragment fragment = null;
-
-		if(position == 0) {
-			switch(childPosition) {
-			case 0:
-				fragment = new DiaryListViewFragement();//HomeFragement();
-				break;
-			case 1:
-				fragment = new MyLifeLogFragement();
-				break;
-			case 2:
-				fragment = new DiaryEditFragment();//WriteFragement();
-				break;
-			} 
-		} else if(position == 1) {
-			switch(childPosition) {
-			case 0:
-				fragment = new DiaryListViewFragement();//HomeFragement();
-				break;
-			case 1:
-				fragment = new MyLifeLogFragement();
-				break;
-			case 2:
-				fragment = new DiaryEditFragment();//WriteFragement();
-				break;
-			} 
-		} 
+		Fragment fragment = new ChatFragement();
+		
+//		Fragment fragment = null;
+//
+//		if(position == 0) {
+//			switch(childPosition) {
+//			case 0:
+//				fragment = new ChatFragement();//HomeFragement();
+//				break;
+//			case 1:
+//				fragment = new MyLifeLogFragement();
+//				break;
+//			case 2:
+//				fragment = new DiaryEditFragment();//WriteFragement();
+//				break;
+//			} 
+//		} else if(position == 1) {
+//			switch(childPosition) {
+//			case 0:
+//				fragment = new DiaryListViewFragement();//HomeFragement();
+//				break;
+//			case 1:
+//				fragment = new MyLifeLogFragement();
+//				break;
+//			case 2:
+//				fragment = new DiaryEditFragment();//WriteFragement();
+//				break;
+//			} 
+//		} 
 
 		fragmentManager.beginTransaction()
 		.replace(R.id.container, fragment)//PlaceholderFragment.newInstance(position + 1))
 		.commit();
 
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
 

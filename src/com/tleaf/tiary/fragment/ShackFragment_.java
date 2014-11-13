@@ -29,7 +29,7 @@ import com.tleaf.tiary.photo.GalleryAdapter_;
 import com.tleaf.tiary.util.Util;
 
 
-public class ShackFragment_ extends Fragment {
+public class ShackFragment_ extends BaseFragment {
 
 	private GridView gridGallery;
 	private Handler handler;
@@ -60,6 +60,12 @@ public class ShackFragment_ extends Fragment {
 //		init();
 
 		return rootView;
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 /*

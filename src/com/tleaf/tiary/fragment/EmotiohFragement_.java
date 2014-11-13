@@ -14,7 +14,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-public class EmotiohFragement_ extends Fragment {
+public class EmotiohFragement_ extends BaseFragment {
 
 	private boolean isContinued = false;
 
@@ -98,5 +98,11 @@ public class EmotiohFragement_ extends Fragment {
 
 		}
 	};
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

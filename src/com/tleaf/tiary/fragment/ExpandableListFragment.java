@@ -20,7 +20,7 @@ import com.tleaf.tiary.fragment.lifelog.MyLifeLogFragement;
 import com.tleaf.tiary.model.ExpandableItem;
 import com.tleaf.tiary.util.Util;
 
-public class ExpandableListFragment extends Fragment {
+public class ExpandableListFragment extends BaseFragment {
 
 	private Context mContext;
 	private ExpandableListView exListView;
@@ -111,6 +111,12 @@ public class ExpandableListFragment extends Fragment {
 		.replace(R.id.container, fragment)//PlaceholderFragment.newInstance(position + 1))
 		.commit();
 
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
 

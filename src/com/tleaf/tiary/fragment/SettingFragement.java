@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.tleaf.tiary.R;
 
-public class SettingFragement extends Fragment {
+public class SettingFragement extends BaseFragment {
 	
 	public SettingFragement() {
 		// TODO Auto-generated constructor stub
@@ -19,6 +19,12 @@ public class SettingFragement extends Fragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_setting, container, false);
 		return rootView;
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

@@ -10,11 +10,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import com.tleaf.tiary.db.DataManager;
+import com.tleaf.tiary.fragment.BaseFragment;
 import com.tleaf.tiary.fragment.DiaryEditFragment;
 import com.tleaf.tiary.fragment.DiaryListViewFragement;
 import com.tleaf.tiary.fragment.DiaryMonthFragment;
@@ -23,12 +25,15 @@ import com.tleaf.tiary.fragment.ExpandableListFragment;
 import com.tleaf.tiary.fragment.HomeFragement;
 import com.tleaf.tiary.fragment.ShackFragment;
 import com.tleaf.tiary.fragment.TagFragement;
+import com.tleaf.tiary.fragment.TemplateSearchFragment;
 import com.tleaf.tiary.fragment.lifelog.MyLifeLogFragement;
 import com.tleaf.tiary.util.MyPreference;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
-public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, ActionBar.OnNavigationListener {
+public class MainActivity extends Activity implements
+NavigationDrawerFragment.NavigationDrawerCallbacks,
+ActionBar.OnNavigationListener {
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -57,8 +62,9 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	private Fragment mFragment;
 
 	public static Handler mHandler = new Handler();
-	
+
 	private MyPreference pref;
+	private Fragment mMainFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,22 +95,25 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		// fragmentManager.beginTransaction().replace(R.id.container, mFragment)
 		// .commit();
 		// }
-		
+
 		initializingLog();
 	}
+
 	private void initializingLog() {
 		setInstallTime();
 	}
-	
+
 	private void setInstallTime() {
-		if(!pref.getBooleanPref(Common.KEY_INSTALLATION)) { 
+		if (!pref.getBooleanPref(Common.KEY_INSTALLATION)) {
 			long currentTime = MyTime.getCurrentTime();
-			Util.ll(Common.KEY_INSTALL_TIME, MyTime.getLongToString(currentTime));
-			
+			Util.ll(Common.KEY_INSTALL_TIME,
+					MyTime.getLongToString(currentTime));
+
 			pref.setLongPref(Common.KEY_INSTALL_TIME, currentTime);
 			pref.setBooleanPref(Common.KEY_INSTALLATION, true);
-			
-			Util.ll("installation true", pref.getBooleanPref(Common.KEY_INSTALLATION));
+
+			Util.ll("installation true",
+					pref.getBooleanPref(Common.KEY_INSTALLATION));
 		}
 	}
 
@@ -118,14 +127,17 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		if (childPosition == -1) {
 			switch (position) {
 			case Common.HOME:
-				fragment = new DiaryMonthFragment(this);// HomeFragement();DiaryListViewFragement DiaryMonthFragment(this)
+				fragment = new DiaryListViewFragement();// HomeFragement();DiaryListViewFragement
+				// DiaryMonthFragment(this)
 				break;
 			case Common.MYLIFTLOG:
-				fragment = new MyLifeLogFragement();// MyPageFragement();
-				// //ExpandableListFragment
+				fragment = new MyLifeLogFragement();// MyPageFragement(); //ExpandableListFragment
+				break;
+			case Common.TEMPLATE:
+				fragment = new TemplateSearchFragment();
 				break;
 			case Common.WRITE:
-				fragment = new DiaryEditFragment();// WriteFragement();
+				fragment = new DiaryEditFragment();//  WriteFragement();
 				break;
 			case Common.FOLDER:
 				return true;
@@ -153,15 +165,30 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		// fragment)//PlaceholderFragment.newInstance(position + 1))
 		// .commit();
 
-//		changeFragment(fragment, false);
-		
+		// changeFragment(fragment, false);
+		mMainFragment = fragment;
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
 		transaction.replace(R.id.container, fragment);// PlaceholderFragment.newInstance(position
 		// + 1))
-		clearBackStack();
+		// clearBackStack();
 		transaction.commit();
 
 		return false;
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
+			if (mMainFragment != null && mMainFragment instanceof BaseFragment) {
+				if (((BaseFragment) mMainFragment).onBackPressed()) {
+					return true;
+				}
+			}
+		default:
+			break;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	public void onSectionAttached(int number) {
@@ -289,12 +316,21 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		mNavigationDrawerFragment.refreshDrawer();
 	}
 
-	static public void changeFragment(Fragment fragment) {
-
+	public void _changeFragment(Fragment fragment) {
+		mMainFragment = fragment;
+		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
 		transaction.replace(R.id.container, fragment);// PlaceholderFragment.newInstance(position
 		// + 1))
-		transaction.addToBackStack(null);
+		// transaction.addToBackStack(null);
+		transaction.commit();
+	}
+
+	static public void changeFragment(Fragment fragment) {
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.replace(R.id.container, fragment);// PlaceholderFragment.newInstance(position
+		// + 1))
+		// transaction.addToBackStack(null);
 		transaction.commit();
 	}
 

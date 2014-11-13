@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.tleaf.tiary.R;
 
-public class MonthDiaryListFragment  extends Fragment {
+public class MonthDiaryListFragment  extends BaseFragment {
 	
 	public MonthDiaryListFragment() {
 		// TODO Auto-generated constructor stub
@@ -19,6 +19,12 @@ public class MonthDiaryListFragment  extends Fragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_month_diary_list, container, false);
 		return rootView;
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

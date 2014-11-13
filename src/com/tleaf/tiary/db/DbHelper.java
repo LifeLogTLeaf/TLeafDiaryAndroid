@@ -108,7 +108,13 @@ public class DbHelper extends SQLiteOpenHelper {
 				"date integer, " +
 				"message text)";//´Ù½Ã
 
-	
+//		String table_template = "create table sms (no integer primary key autoincrement, " +
+//				"name text, " +
+//				"number text, " +
+//				"type text, " +
+//				"date integer, " +
+//				"message text)"
+
 
 		db.execSQL(table_diary);
 		db.execSQL(table_image);

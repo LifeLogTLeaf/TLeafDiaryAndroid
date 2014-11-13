@@ -28,7 +28,7 @@ import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.Util;
 
-public class TagFragement extends Fragment {
+public class TagFragement extends BaseFragment {
 
 	private Context mContext;
 	private DataManager dataMgr;
@@ -199,6 +199,13 @@ public class TagFragement extends Fragment {
 		}
 
 	};
+
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 
 }

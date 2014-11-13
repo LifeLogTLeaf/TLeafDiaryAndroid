@@ -1,13 +1,6 @@
 package com.tleaf.tiary.fragment.lifelog;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
-import android.app.Fragment;
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +13,10 @@ import android.widget.TextView;
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
+import com.tleaf.tiary.fragment.BaseFragment;
 import com.tleaf.tiary.fragment.lifelog.adapter.SmsLogAdapter;
-import com.tleaf.tiary.model.MySms;
-import com.tleaf.tiary.util.Util;
 
-public class SmsListViewFragment extends Fragment {
+public class SmsListViewFragment extends BaseFragment {
 	private Activity mContext;
 	private DataManager dataMgr;
 	private SmsLogAdapter mAdapter ;
@@ -95,6 +87,12 @@ public class SmsListViewFragment extends Fragment {
 		}
 
 	};
+
+	@Override
+	public boolean onBackPressed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }
 

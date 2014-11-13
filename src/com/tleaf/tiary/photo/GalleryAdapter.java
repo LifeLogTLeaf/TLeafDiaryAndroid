@@ -136,11 +136,11 @@ public class GalleryAdapter extends BaseAdapter {
 			holder.imgQueueMultiSelected = (ImageView) convertView
 					.findViewById(R.id.imgQueueMultiSelected);
 
-			if (isActionMultiplePick) {
+//			if (isActionMultiplePick) {
 				holder.imgQueueMultiSelected.setVisibility(View.VISIBLE);
-			} else {
+//			} else {
 				holder.imgQueueMultiSelected.setVisibility(View.GONE);
-			}
+//			}
 
 			convertView.setTag(holder);
 
@@ -161,12 +161,12 @@ public class GalleryAdapter extends BaseAdapter {
 						}
 					});
 
-			if (isActionMultiplePick) {
+//			if (isActionMultiplePick) {
 
 				holder.imgQueueMultiSelected
 						.setSelected(data.get(position).isSeleted);
 
-			}
+//			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -175,7 +175,7 @@ public class GalleryAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	public class ViewHolder {
+	private class ViewHolder {
 		ImageView imgQueue;
 		ImageView imgQueueMultiSelected;
 	}

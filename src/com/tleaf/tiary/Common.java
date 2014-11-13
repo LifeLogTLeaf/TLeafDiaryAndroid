@@ -6,13 +6,14 @@ public class Common {
 
 	public static final int HOME = 0;
 	public static final int MYLIFTLOG = 1;
-	public static final int WRITE = 2;
-	public static final int FOLDER = 3;
-	public static final int TAG = 4;
-	public static final int EMOTION = 5;
-	public static final int SHACK = 6;
-	public static final int SETIING = 7;
-	public static final int LOCATION = 8;
+	public static final int TEMPLATE = 2;
+	public static final int WRITE = 3;
+	public static final int FOLDER = 4;
+	public static final int TAG = 5;
+	public static final int EMOTION = 6;
+	public static final int SHACK = 7;
+	public static final int SETIING = 8;
+	public static final int LOCATION = 9;
 
 	public static final int CALL = 10;
 	public static final int SMS = 11;
@@ -20,6 +21,11 @@ public class Common {
 	public static final int GALLERY = 13;
 	public static final int BOOKMARK = 14;
 
+	
+	public static final int KEYBOARD = 20;
+	public static final int LOG = 21;
+
+	
 	public static final String INCOMING = "수신";
 	public static final String OUTGOING = "발신";
 	public static final String MISSED = "부재중";

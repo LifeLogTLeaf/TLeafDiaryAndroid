@@ -68,15 +68,6 @@ public class NavigationDrawerFragment extends Fragment {
 	private boolean mUserLearnedDrawer;
 
 	private Context mContext;
-
-	private View HomeView;
-	private View MyPageView;
-	private View WriteView;
-	private View FolderView;
-	private View TagView;
-	private View EmotionView;
-	private View SettingView;
-	
 	private DataManager dataMgr;
 	private MenuListAdapter mAdapter;
 
@@ -144,6 +135,7 @@ public class NavigationDrawerFragment extends Fragment {
 		mParent.add(new MyMenuItem(R.drawable.home, getString(R.string.home)));
 		mParent.add(new MyMenuItem(R.drawable.person6,
 				getString(R.string.mylifelog)));
+		mParent.add(new MyMenuItem(R.drawable.template6, getString(R.string.template)));
 		mParent.add(new MyMenuItem(R.drawable.write, getString(R.string.write)));
 		mParent.add(new MyMenuItem(R.drawable.folder, getString(R.string.folder)));
 		mParent.add(new MyMenuItem(R.drawable.tag, getString(R.string.tag)));
