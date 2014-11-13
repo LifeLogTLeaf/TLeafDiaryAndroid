@@ -37,5 +37,8 @@
     <color name="log_red_light">#FF6B63</color>
     <color name="black">#000000</color>
     <color name="background_skyblue_dark">#EFF4F8</color>
+    <color name="background_grey_white">#F7F7F7</color>
+    <color name="icon_grey_light">#C6C1BF</color>
+    <color name="icon_orange">#F3A18B</color>
 
 </resources>
