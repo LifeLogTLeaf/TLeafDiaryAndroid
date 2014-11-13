@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
+import com.tleaf.tiary.core.AppContext;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.fragment.DiaryEditFragment;
 import com.tleaf.tiary.fragment.DiaryListViewFragement;
@@ -304,6 +305,13 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 			fragmentManager.popBackStack();
 		}
 	}
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(!AppContext.getPreference().getBooleanPref("isAutoLogin")) AppContext.getPreference().setBooleanPref("isLogin", false);
+	}
+	
+	
 
 	// public void switchContent(Fragment fragment, boolean addBackStack) {
 	// exitApplication = false;
