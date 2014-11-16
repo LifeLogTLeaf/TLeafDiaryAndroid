@@ -17,18 +17,16 @@ import com.tleaf.tiary.fragment.BaseFragment;
 import com.tleaf.tiary.fragment.lifelog.adapter.CardLogAdapter;
 
 public class CardListViewFragment extends BaseFragment {
-	private Activity mContext;
+
 	private CardLogAdapter mAdapter ;
 
 	public CardListViewFragment() {
-
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mContext = getActivity();
-		dataMgr = new DataManager(mContext);
 
 		View rootView = inflater.inflate(R.layout.fragment_card, container,
 				false);

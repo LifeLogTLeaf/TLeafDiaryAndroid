@@ -130,7 +130,7 @@ public class TemplateExpandableListAdapter extends BaseExpandableListAdapter {
 					R.color.diary_edit_edittext_hint));
 			txt_template_info.setAlpha(1);
 		} else {
-			img.setImageResource(R.drawable.ic_launcher);
+			img.setImageResource(R.drawable.template_daily);
 			txt_template_info.setTextColor(mContext.getResources().getColor(
 					R.color.background_white));
 			txt_template_info.setAlpha(1);

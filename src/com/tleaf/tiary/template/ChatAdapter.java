@@ -12,6 +12,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.tleaf.tiary.R;
+import com.tleaf.tiary.model.Message;
 
 public class ChatAdapter extends BaseAdapter {
 

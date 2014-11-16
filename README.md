@@ -127,8 +127,12 @@ commit log
 /////갤러리 액티비티 수정 중
 
 
-#45
+#49
+by csg
 -temporary commit
 
+#50
+by csg
+-temporary commit
 
 

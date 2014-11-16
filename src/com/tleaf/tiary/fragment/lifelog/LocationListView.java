@@ -14,14 +14,14 @@ import com.tleaf.tiary.Common;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.fragment.BaseFragment;
+import com.tleaf.tiary.fragment.lifelog.adapter.LocationLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.SmsLogAdapter;
 
-public class SmsListViewFragment extends BaseFragment {
+public class LocationListView extends BaseFragment {
 
-	private SmsLogAdapter mAdapter ;
+	private LocationLogAdapter mAdapter ;
 
-	public SmsListViewFragment() {
-
+	public LocationListView() {
 	}
 
 	@Override
@@ -30,15 +30,15 @@ public class SmsListViewFragment extends BaseFragment {
 		mContext = getActivity();
 		dataMgr = new DataManager(mContext);
 
-		View rootView = inflater.inflate(R.layout.fragment_sms, container,
+		View rootView = inflater.inflate(R.layout.fragment_location, container,
 				false);
-		ListView lv = (ListView) rootView.findViewById(R.id.list_sms);
+		ListView lv = (ListView) rootView.findViewById(R.id.list_location);
 
-		mAdapter = new SmsLogAdapter(mContext, R.layout.item_sms);
+		mAdapter = new LocationLogAdapter(mContext, R.layout.item_location);
 		lv.setAdapter(mAdapter);
 		lv.setOnItemClickListener(mItemClickListener);
 
-		new AsyncMyLogLoad(mContext, Common.SMS, mAdapter).execute();
+		new AsyncMyLogLoad(mContext, Common.LOCATION, mAdapter).execute();
 
 
 		TextView txt_all = (TextView) rootView
@@ -47,8 +47,8 @@ public class SmsListViewFragment extends BaseFragment {
 
 			@Override
 			public void onClick(View v) {
-				new AsyncMyLogLoad(mContext, Common.SMS, mAdapter).execute();
-				
+//				new AsyncMyLogLoad(mContext, Common.SMS, mAdapter).execute();
+
 			}
 		});
 		TextView txt_incoming = (TextView) rootView
@@ -57,7 +57,7 @@ public class SmsListViewFragment extends BaseFragment {
 
 			@Override
 			public void onClick(View v) {
-				new AsyncMyLogLoad(mContext, Common.SMS, Common.INCOMING, mAdapter).execute();
+//				new AsyncMyLogLoad(mContext, Common.SMS, Common.INCOMING, mAdapter).execute();
 
 			}
 		});
@@ -67,7 +67,7 @@ public class SmsListViewFragment extends BaseFragment {
 
 			@Override
 			public void onClick(View v) {
-				new AsyncMyLogLoad(mContext, Common.SMS, Common.OUTGOING, mAdapter).execute();
+//				new AsyncMyLogLoad(mContext, Common.SMS, Common.OUTGOING, mAdapter).execute();
 
 			}
 		});

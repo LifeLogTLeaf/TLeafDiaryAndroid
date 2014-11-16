@@ -17,6 +17,7 @@ import android.text.format.Time;
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.fragment.lifelog.adapter.MyLogAdapter;
+import com.tleaf.tiary.model.BookMark;
 import com.tleaf.tiary.model.Call;
 import com.tleaf.tiary.model.Card;
 import com.tleaf.tiary.model.MyLog;
@@ -93,10 +94,33 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 			cardArr.addAll(collectCard());
 			dataMgr.insertCardList(cardArr);
 			return dataMgr.getCardList();
-		default:
-			break;
+		case Common.LOCATION:
+			ArrayList<MyLog> locationArr = new ArrayList<MyLog>();
+			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			return locationArr;
+		case Common.BOOKMARK:
+			ArrayList<BookMark> bookMarkArr = new ArrayList<BookMark>();
+			bookMarkArr.add(new BookMark("shack", "shack.tleaf.us", MyTime.getCurrentTime()));
+			bookMarkArr.add(new BookMark("shack", "shack.tleaf.us", MyTime.getCurrentTime()));
+			bookMarkArr.add(new BookMark("shack", "shack.tleaf.us", MyTime.getCurrentTime()));
+			bookMarkArr.add(new BookMark("shack", "shack.tleaf.us", MyTime.getCurrentTime()));
+			bookMarkArr.add(new BookMark("shack", "shack.tleaf.us", MyTime.getCurrentTime()));
+			ArrayList<MyLog> returnArr = new ArrayList<MyLog>();
+			returnArr.addAll(bookMarkArr);
+			return returnArr;
+		case Common.GALLERY:
+//			ArrayList<MyLog> locationArr = new ArrayList<MyLog>();
+//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+//			return locationArr;
 		}
-
 		return new ArrayList<MyLog>();
 	}
 

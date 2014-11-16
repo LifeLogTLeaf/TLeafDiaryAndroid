@@ -1,173 +1,118 @@
 package com.tleaf.tiary.fragment.lifelog.adapter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.view.LayoutInflater;
+import android.text.format.Time;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.MyLog;
 import com.tleaf.tiary.util.MyTime;
+import com.tleaf.tiary.util.Util;
 
-public class LocationLogAdapter extends BaseAdapter {
-	private Context mContext;
-	private LayoutInflater mInflater;
-	private ArrayList<MyLog> arrItem;
+public class LocationLogAdapter extends MyLogAdapter {
 	private int mLayout;
-	private ImageLoader imageLoader;
-	
-	public LocationLogAdapter(Context context, int layout, ArrayList<MyLog> item) {
-		mContext = context;
-		mInflater = (LayoutInflater)context.getSystemService(
-				Context.LAYOUT_INFLATER_SERVICE);
-		arrItem = item;
+	private HashSet<Integer> mFirstDayPositionSet;
+
+	public LocationLogAdapter(Context context, int layout) {
+		super(context);
 		mLayout = layout;
-		
-		if (item == null)
-			arrItem = new ArrayList<MyLog>();
-	}
-
-	public int getCount() {
-		return arrItem.size();
-	}
-
-	public MyLog getItem(int position) {
-		return arrItem.get(position);
+		mFirstDayPositionSet = new HashSet<Integer>();
 	}
 
 	public long getItemId(int position) {
 		return position;
 	}
 
-	public void updateItem(ArrayList<MyLog> diaryArr) {
-		arrItem.clear();
-		arrItem.addAll(diaryArr);
-		notifyDataSetChanged();
+	@Override
+	public void updateItem(ArrayList<MyLog> arr) {
+		Util.ll("updateItem LocationLogAdapter arr", arr.size());
+		if (arr.size() == 0) {
+			super.updateItem(arr);
+			return;
+		}
+
+		/* location log array에서 요일이 바뀌는 position을 확인한다 */
+		mFirstDayPositionSet.clear();
+		mFirstDayPositionSet.add(0);
+
+		Time time = new Time(Time.getCurrentTimezone());
+		time.setToNow();
+		int befoJulian, julian;
+
+		befoJulian = Time.getJulianDay(arr.get(0).getDate(), time.gmtoff);
+
+		for (int i = 1; i < arr.size(); i++) {
+			julian = Time.getJulianDay(arr.get(i).getDate(), time.gmtoff);
+			if (julian != befoJulian) {
+				mFirstDayPositionSet.add(i);
+			}
+			befoJulian = julian;
+		}
+
+		super.updateItem(arr);
+
 	}
-	
-	//	String table_diary = "create table diary (no integer primary key autoincrement, " +
-	//			"date integer, " +
-	//			"title text, " +
-	//			"content text, " +
-	//			"emotion text, " +
-	//			"images text, " +
-	//			"tags text, " +
-	//			"folders text, " +
-	//			"location text, " +
-	//			"todayWeather text, " +
-	//			"temperature real, " +
-	//			"humidity real)";
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final int pos = position;
 		if (convertView == null) {
 			convertView = mInflater.inflate(mLayout, parent, false);
 		}
-/*
-		TextView txt_date = (TextView)convertView.findViewById(R.id.item_txt_diary_date);
-		String dateStr = MyTime.getLongToString(mContext, arrItem.get(position).getDate());
+		MyLog location = getItem(position);
+
+		LinearLayout ll = (LinearLayout) convertView
+				.findViewById(R.id.layout_item_location);
+		TextView txt_nolog = (TextView) convertView
+				.findViewById(R.id.item_txt_location_nolog);
+
+		TextView txt_name = (TextView) convertView
+				.findViewById(R.id.item_txt_name_location);
+		TextView txt_address = (TextView) convertView
+				.findViewById(R.id.item_txt_address_location);
+		TextView txt_date = (TextView) convertView
+				.findViewById(R.id.item_txt_date_location);
+
+
+		RelativeLayout ll_date = (RelativeLayout) convertView
+				.findViewById(R.id.layout_item_location_day);
+		TextView txt_date_title = (TextView) convertView
+				.findViewById(R.id.item_txt_location_date);
+
+		/* location log가 없을 경우 없음을 알리는 뷰를 visible한다, location log를 보여주는 listview와 날짜 타이틀 뷰를 gone한다 */
+		if (location == null) {
+			ll.setVisibility(View.GONE);
+			ll_date.setVisibility(View.GONE);
+			txt_nolog.setVisibility(View.VISIBLE);
+			return convertView;
+		}
+
+		/* location log array에서 요일이 바뀌는 position일 경우 날짜 타이틀 뷰를 visible한다 */
+		if (mFirstDayPositionSet.contains(position)) {
+			ll_date.setVisibility(View.VISIBLE);
+			txt_date_title.setText(MyTime.getLongToString(mContext,
+					location.getDate()));
+		} else {
+			ll_date.setVisibility(View.GONE);
+		}
+
+		ll.setVisibility(View.VISIBLE);
+		txt_nolog.setVisibility(View.GONE);
+
+		txt_name.setText(location.getMyAddressName());
+		txt_address.setText(location.getMyAddress());
+
+		String dateStr = MyTime
+				.getLongToStringWithTime(mContext, location.getDate());
+
 		txt_date.setText(dateStr);
-
-		ImageView img = (ImageView)convertView.findViewById(R.id.item_img_diary);
-		ArrayList<String> imgArr = arrItem.get(position).getImages();
-		
-		initImageLoader();
-		if (imgArr != null && imgArr.size() != 0) {
-//			img.setVisibility(View.VISIBLE);
-			try {
-				imageLoader.displayImage("file://" + imgArr.get(0),
-						img, new SimpleImageLoadingListener() {
-					@Override
-					public void onLoadingStarted(String imageUri, View view) {
-						//						img_photo.setImageResource(R.drawable.no_media);
-						super.onLoadingStarted(imageUri, view);
-					}
-				});
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
-//			img.setVisibility(View.GONE);
-			img.setBackgroundColor(mContext.getResources().getColor(R.color.background_skyblue));
-		}
-
-		TextView txt_title = (TextView)convertView.findViewById(R.id.item_txt_diary_title);
-		txt_title.setText(arrItem.get(position).getTitle());
-
-		TextView txt_content = (TextView)convertView.findViewById(R.id.item_txt_diary_content);
-		txt_content.setText(arrItem.get(position).getContent());
-
-
-		//사용자에게 더 있음을 알려주는 ui
-		ImageView img_tag = (ImageView)convertView.findViewById(R.id.item_img_diary_tag);
-
-		TextView txt_tag = (TextView)convertView.findViewById(R.id.item_txt_diary_tag);
-		ArrayList<String> tags = arrItem.get(position).getTags();
-		if(tags != null && tags.size() != 0) {
-			txt_tag.setVisibility(View.VISIBLE);
-			txt_tag.setText(tags.get(0));
-			img_tag.setVisibility(View.VISIBLE);
-
-		} else {
-			txt_tag.setVisibility(View.GONE);
-			img_tag.setVisibility(View.GONE);
-		}
-
-		ImageView img_folder = (ImageView)convertView.findViewById(R.id.item_img_diary_folder);
-
-		TextView txt_folder = (TextView)convertView.findViewById(R.id.item_txt_diary_folder);
-		ArrayList<String> folders = arrItem.get(position).getFolders();
-		if(folders != null && folders.size() != 0) {
-			txt_folder.setVisibility(View.VISIBLE);
-			txt_folder.setText(folders.get(0)); 
-			img_folder.setVisibility(View.VISIBLE);
-		} else { 
-			txt_folder.setVisibility(View.GONE);
-			img_folder.setVisibility(View.GONE);
-		}
-
-		ImageView img_location = (ImageView)convertView.findViewById(R.id.item_img_diary_location);
-
-		TextView txt_location = (TextView)convertView.findViewById(R.id.item_txt_diary_location);
-		String location = arrItem.get(position).getLocation().trim();
-		if(location != null && !location.equals("null") && !location.equals("")) {
-			txt_location.setVisibility(View.VISIBLE);
-			txt_location.setText(arrItem.get(position).getLocation());
-			img_location.setVisibility(View.VISIBLE);
-
-		} else {
-			txt_location.setVisibility(View.GONE);
-			img_location.setVisibility(View.GONE);
-		}
-*/
 
 		return convertView;
 	}
-	
-	private void initImageLoader() {
-		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-		.cacheOnDisc().imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
-		.bitmapConfig(Bitmap.Config.RGB_565).build();
 
-		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
-				mContext).defaultDisplayImageOptions(defaultOptions).memoryCache(
-						new WeakMemoryCache());
-
-		ImageLoaderConfiguration config = builder.build();
-		imageLoader = ImageLoader.getInstance();
-		imageLoader.init(config);
-	}
 }

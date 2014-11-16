@@ -13,13 +13,13 @@ import android.widget.ListView;
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.fragment.lifelog.AsyncMyLogLoad;
+import com.tleaf.tiary.fragment.lifelog.adapter.BookMarkLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.CallLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.CardLogAdapter;
+import com.tleaf.tiary.fragment.lifelog.adapter.GalleryLogAdapter;
+import com.tleaf.tiary.fragment.lifelog.adapter.LocationLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.SmsLogAdapter;
-import com.tleaf.tiary.model.Call;
-import com.tleaf.tiary.model.Card;
 import com.tleaf.tiary.model.MyLog;
-import com.tleaf.tiary.model.MySms;
 
 public class LogPagerAdapter extends PagerAdapter {
 
@@ -35,10 +35,14 @@ public class LogPagerAdapter extends PagerAdapter {
 	private CallLogAdapter callAdapter;
 	private SmsLogAdapter smsAdapter;
 	private CardLogAdapter cardAdapter;
+//	private GalleryLogAdapter galleryAdapter;
+	private LocationLogAdapter locationAdapter;
+	private BookMarkLogAdapter bookmarkAdapter;
 
+	
 	private String[] titleArr = {Common.STRING_CALL, Common.STRING_SMS,
-			Common.STRING_CARD, Common.STRING_GALLERY, Common.STRING_BOOKMARK,
-			Common.STRING_LOCATION };
+			Common.STRING_CARD, Common.STRING_LOCATION, Common.STRING_BOOKMARK,
+			Common.STRING_GALLERY };
 
 	private OnItemClickLogPagerListener mOnItemClickLogPager;
 
@@ -95,8 +99,25 @@ public class LogPagerAdapter extends PagerAdapter {
 			lv_log.setAdapter(cardAdapter);
 			lv_log.setOnItemClickListener(cl);
 			break;
+		case 3:
+			locationAdapter = new LocationLogAdapter(mContext, R.layout.item_location);
+			new AsyncMyLogLoad(mActivity, Common.LOCATION, locationAdapter).execute();
+			lv_log.setAdapter(locationAdapter);
+			lv_log.setOnItemClickListener(cl);
+			break;
+		case 4:
+			bookmarkAdapter = new BookMarkLogAdapter(mContext, R.layout.item_bookmark);
+			new AsyncMyLogLoad(mActivity, Common.BOOKMARK, bookmarkAdapter).execute();
+			lv_log.setAdapter(bookmarkAdapter);
+			lv_log.setOnItemClickListener(cl);
+			break;
+		case 5:
+//			galleryAdapter = new GalleryLogAdapter(mContext, R.layout.item_gallery);
+//			new AsyncMyLogLoad(mActivity, Common.GALLERY, cardAdapter).execute();
+//			lv_log.setAdapter(cardAdapter);
+//			lv_log.setOnItemClickListener(cl);
+			break;
 		}
-
 		rootView.setTag(position);
 		((ViewPager) container).addView(rootView);
 		// (rootView, 0); //확인

@@ -54,23 +54,22 @@ public class MyLifeLogFragement extends BaseFragment {
 			Fragment fragment = null;
 			switch(v.getId()) {
 			case R.id.layout_call:
-				fragment = new CallListViewFragment();
+				fragment = new CallListViewFragment();//CallListViewFragment
 				break;
 			case R.id.layout_sms:
 				fragment = new SmsListViewFragment();
 				break;
 			case R.id.layout_gallery:
-				fragment = new  LogListViewFragment(Common.BOOKMARK);
+				fragment = new GalleryListViewFragment();
 				break;
 			case R.id.layout_card:
 				fragment = new CardListViewFragment();
 				break;
-
 			case R.id.layout_bookmark:
-				fragment = new LogListViewFragment(Common.BOOKMARK);
+				fragment = new BookMarkListView();
 				break;
 			case R.id.layout_location:
-				fragment = new LogListViewFragment(Common.LOCATION);
+				fragment = new LocationListView();
 				break;
 			}
 			MainActivity.changeFragment(fragment);

@@ -1,4 +1,4 @@
-package com.tleaf.tiary.template;
+package com.tleaf.tiary.model;
 
 public class Message {
 	private String message;

@@ -25,9 +25,11 @@ import com.tleaf.tiary.MainActivity;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.fragment.BaseFragment;
 import com.tleaf.tiary.fragment.DiaryEditFragment;
+import com.tleaf.tiary.model.BookMark;
 import com.tleaf.tiary.model.Call;
 import com.tleaf.tiary.model.Card;
 import com.tleaf.tiary.model.Diary;
+import com.tleaf.tiary.model.Message;
 import com.tleaf.tiary.model.MyLog;
 import com.tleaf.tiary.model.MySms;
 import com.tleaf.tiary.model.TemplateContent;
@@ -44,8 +46,8 @@ public class ChatFragement extends BaseFragment {
 	private ImageView img_change;
 	private LinearLayout ll_change;
 
-	private static Random rand = new Random();
-	private static String templateName;
+//	private static Random rand = new Random();
+//	private static String templateName;
 
 	private int currentIcon = Common.LOG;
 
@@ -106,7 +108,15 @@ public class ChatFragement extends BaseFragment {
 					selectedLog = "";
 					MySms sms = (MySms) myLog;
 					selectedLog = sms.getNumber();
+				} else if (myLog instanceof BookMark) {
+					selectedLog = "";
+					BookMark bookmark = (BookMark) myLog;
+					selectedLog = bookmark.getTitle();
+				} else {
+					selectedLog = "";
+					selectedLog = myLog.getMyAddressName();
 				}
+				
 				Util.ll("selectedLog", selectedLog);
 				edit_chat.setFocusableInTouchMode(true);
 				edit_chat.setFocusable(true);
@@ -274,7 +284,7 @@ public class ChatFragement extends BaseFragment {
 		@Override
 		public void onProgressUpdate(String... v) {
 
-			if (messages.get(messages.size() - 1).isStatusMessage) {
+			if (messages.get(messages.size() - 1).isStatusMessage()) {
 				messages.get(messages.size() - 1).setMessage(v[0]);
 				mAdapter.notifyDataSetChanged();
 				lv_chat.setSelection(messages.size() - 1);
@@ -285,7 +295,7 @@ public class ChatFragement extends BaseFragment {
 
 		@Override
 		protected void onPostExecute(Message msg) {
-			if (messages.get(messages.size() - 1).isStatusMessage) {
+			if (messages.get(messages.size() - 1).isStatusMessage()) {//isStatusMessage
 				messages.remove(messages.size() - 1);
 			}
 			addNewMessage(msg);

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@color/log_yellow"
+        android:background="@color/log_green"
         android:orientation="horizontal"
         android:padding="1dp" >
 
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/log_yellow"
+            android:background="@color/log_green"
             android:gravity="center"
             android:padding="5dp"
             android:text="분류1"
@@ -33,14 +33,14 @@
             android:gravity="center"
             android:padding="5dp"
             android:text="분류2"
-            android:textColor="@color/log_yellow" />
+            android:textColor="@color/log_green" />
 
         <TextView
             android:id="@+id/txt_outgoing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/log_yellow"
+            android:background="@color/log_green"
             android:gravity="center"
             android:padding="5dp"
             android:text="분류3"
@@ -48,7 +48,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/list_card"
+        android:id="@+id/list_bookMark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@null" >
