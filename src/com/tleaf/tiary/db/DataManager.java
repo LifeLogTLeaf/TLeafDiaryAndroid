@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.google.android.gms.drive.internal.ar;
 import com.tleaf.tiary.Common;
 import com.tleaf.tiary.model.BookMark;
 import com.tleaf.tiary.model.Call;
@@ -15,8 +16,11 @@ import com.tleaf.tiary.model.Card;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.model.MyLog;
 import com.tleaf.tiary.model.MySms;
+import com.tleaf.tiary.model.MyTemplate;
+import com.tleaf.tiary.model.TemplateContent;
 import com.tleaf.tiary.model.Weather;
 import com.tleaf.tiary.util.MyPreference;
+import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
 public class DataManager {
@@ -34,6 +38,10 @@ public class DataManager {
 	private final String MYLOG = "mylog";
 	private final String CALL = "call";
 	private final String SMS = "sms";
+	private final String CARD = "card";
+
+	private final String TEMPLATE = "template";
+	private final String TEMPLATE_CONTENT = "template_content";
 
 	private SQLiteDatabase db;
 	private ContentValues row;
@@ -740,10 +748,6 @@ public class DataManager {
 	}
 
 
-	public ArrayList<Card> getCardList() { 
-		return null;
-
-	}
 
 	//	public ArrayList<Photo> getGalleryList() { 
 	//		return null;
@@ -771,7 +775,7 @@ public class DataManager {
 				row.put("latitude", logArr.get(i).getLatitude());
 				row.put("longitude", logArr.get(i).getLongitude());
 				row.put("date", logArr.get(i).getDate());
-				row.put("type", logArr.get(i).getType());
+				row.put("type", logArr.get(i).getMyLogType());
 				db.insert(CALL, null, row);
 			}
 			dbHelper.close();
@@ -780,6 +784,32 @@ public class DataManager {
 	}
 
 
+	public boolean insertCardList(ArrayList<Card> cardArr) { 
+		if (cardArr != null && cardArr.size() != 0) {
+			Util.ll("insertCardList  cardArr.size()",  cardArr.size());
+			db = dbHelper.getWritableDatabase();
+			long max = -1;
+			for(int i=0; i< cardArr.size(); i++) {
+				row = new ContentValues();
+				row.put("smsno", cardArr.get(i).getNo());
+				row.put("cardType", cardArr.get(i).getCardType());
+				row.put("cardDate", cardArr.get(i).getCardDate());
+				row.put("spendedMoney", cardArr.get(i).getSpendedMoney());
+				row.put("spendedPlace", cardArr.get(i).getSpendedPlace());
+				row.put("leftMoney", cardArr.get(i).getLeftMoney());
+				db.insert(CARD, null, row);
+
+				if(cardArr.get(i).getDate() > max){
+					max  = cardArr.get(i).getDate();
+				}
+			}
+			if (max > 0) {
+				pref.setLongPref(Common.KEY_CARD_BASETIME, max);
+			}
+			dbHelper.close();
+		}
+		return true;
+	}
 
 	public boolean insertSmsList(ArrayList<MySms> smsArr, String timetype) {  //완료
 		if (smsArr != null && smsArr.size() != 0) {
@@ -867,7 +897,7 @@ public class DataManager {
 		dbHelper.close();
 		return arItem;
 	}	
-	
+
 	public ArrayList<MyLog> getCallListByType(String subType) { //완료
 		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
 		db = dbHelper.getReadableDatabase(); 
@@ -897,12 +927,17 @@ public class DataManager {
 		dbHelper.close();
 		return arItem;
 	}
-	
-	public ArrayList<MyLog> getSmsListByType(String subType) { //완료
+
+	public ArrayList<MyLog> getSmsListByType(String subType, long baseTime) { //완료
 		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select * from " + SMS + " where type = '" +  subType + "' order by date desc";
+	
+		String sql = "select * from " + SMS + " where type = '" +  subType + "' ";
 		
+		if(baseTime != -1) 
+			sql += "and date > '" + baseTime + "' ";
+		sql += "order by date desc";
+
 		Cursor cursor = db.rawQuery(sql, null);
 
 		while(cursor.moveToNext()) {
@@ -928,6 +963,7 @@ public class DataManager {
 		return arItem;
 	}
 
+	
 	public ArrayList<MyLog> getSmsList() { //완료
 		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
 		db = dbHelper.getReadableDatabase(); 
@@ -953,10 +989,198 @@ public class DataManager {
 
 			arItem.add(sms);
 		}
+		
+		Util.ll("getSmsList", arItem.size());
 		cursor.close();
 		dbHelper.close();
 		return arItem;
 	}	
+
+
+
+	public ArrayList<MyLog> getCardList() { 
+		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
+		ArrayList<Card> cardArr = new ArrayList<Card>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + CARD + " order by cardDate desc";
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+		while(cursor.moveToNext()) {
+			Card card = new Card();
+			long cardNo = cursor.getInt(0);
+			long smsNo = cursor.getInt(1);
+			String cardType = cursor.getString(2);
+			long cardDate = cursor.getLong(3);
+			int spendedMoney = cursor.getInt(4);
+			String spendedPlace = cursor.getString(5);
+			int leftMoney = cursor.getInt(6);
+
+			card.setCardNo(cardNo);
+			card.setNo(smsNo);
+			card.setCardType(cardType);
+			card.setCardDate(cardDate);
+			card.setSpendedMoney(spendedMoney);
+			card.setSpendedPlace(spendedPlace);
+			card.setLeftMoney(leftMoney);
+
+			cardArr.add(card);
+		}
+		cursor.close();
+		dbHelper.close();
+
+		ArrayList<Card> fullCardArr = new ArrayList<Card>();
+		for (int i=0; i < cardArr.size(); i++) {
+			fullCardArr.add(getSmsBySmsNo(cardArr.get(i))); //패턴 
+		}
+		arItem.addAll(fullCardArr);
+	
+		Util.ll("getCardList  cardArr.size()",  cardArr.size());
+		Util.ll("getCardList  arItem.size()",  arItem.size());
+		return arItem;
+	}	
+	
+
+//	String table_sms = "create table sms (no integer primary key autoincrement, " +
+//			"name text, " +
+//			"number text, " +
+//			"type text, " +
+//			"date integer, " +
+//			"message text)";//re
+
+	public Card getSmsBySmsNo(Card card) { //완료
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + SMS + " where no = '" +  card.getNo() + "'";
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+		cursor.moveToFirst();
+		long smsNo = cursor.getInt(0);
+		String name = cursor.getString(1);
+		String number = cursor.getString(2);
+		String type = cursor.getString(3);
+		long date = cursor.getLong(4);
+		String message = cursor.getString(5);
+
+		card.setNo(smsNo);
+		card.setName(name);
+		card.setNumber(number);
+		card.setType(type);
+		card.setDate(date);
+		card.setMessage(message);
+
+		Util.ll("getSmsBySmsNo date", MyTime.getLongToString(date));
+//		card = (Card) sms;//확인
+
+		cursor.close();
+		dbHelper.close();
+		return card;
+	}
+
+
+	public ArrayList<MyTemplate> getTemplateList(String categoryType) { 
+		ArrayList<MyTemplate> arItem = new ArrayList<MyTemplate>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + TEMPLATE;
+
+		if (categoryType != Common.ALL) {
+			sql += " where category = '" + categoryType + "'";
+		}
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+		while(cursor.moveToNext()) {
+			MyTemplate template = new MyTemplate();
+			long templateNo = cursor.getInt(0);
+			String name = cursor.getString(1);
+			String category = cursor.getString(2);
+			String information = cursor.getString(3);
+			String author = cursor.getString(4);
+
+			template.setNo(templateNo);
+			template.setName(name);
+			template.setCategory(category);
+			template.setInformation(information);
+			template.setAuthor(author);
+
+			arItem.add(template);
+		}
+		cursor.close();
+		dbHelper.close();
+		return arItem;
+	}	
+
+	public ArrayList<String> getDistinctTemplateCategory() {
+		ArrayList<String> arItem = new ArrayList<String>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select distinct category from " + TEMPLATE;
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+		while(cursor.moveToNext()) {
+			arItem.add(cursor.getString(0));
+		}
+		cursor.close();
+		dbHelper.close();
+		return arItem;
+	}
+
+	public ArrayList<TemplateContent> getTemplateContentByNo(long rcvTemplateNo) { 
+		ArrayList<TemplateContent> arItem = new ArrayList<TemplateContent>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + TEMPLATE_CONTENT + " where templateno = '" + rcvTemplateNo + "' order by no asc";
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+		while(cursor.moveToNext()) {
+			TemplateContent tempContent = new TemplateContent();
+			long contentNo = cursor.getInt(0);
+			long templateNo = cursor.getInt(1);
+
+			String question = cursor.getString(2);
+			String content = cursor.getString(3);
+			String front = cursor.getString(4);
+			String end = cursor.getString(5);
+			String type = cursor.getString(6);
+
+			tempContent.setNo(contentNo);
+			tempContent.setTemplateNo(templateNo);
+			tempContent.setQuestion(question);
+			tempContent.setContent(content);
+			tempContent.setFront(front);
+			tempContent.setEnd(end);
+			tempContent.setType(type);
+
+			arItem.add(tempContent);
+		}
+		cursor.close();
+		dbHelper.close();
+		return arItem;
+	}	
+	//	String table_template_content = "create table template_content (no integer primary key autoincrement, " +
+	//			"templateno integer, " +
+	//			"question text, " +
+	//			"content text, " +
+	//			"front text, " +
+	//			"end text, " +
+	//			"foreign key(templateno) references template(no))";		
+	//
+	//	String insert_template1 = "insert into template values (0, 'my life log', 'daily', '하루동안 발생한 로그로 일기를 작성해보세요', 'tiary')";
+	//	String insert_template2 = "insert into template values (1, '오늘의 지출', 'money', '가계부, 이제 일일이 적지 않아요', 'tiary')";
+	//	String insert_template3 = "insert into template values (2, '여긴 누구, 난 어디?', 'location', '내가 오늘 이동한 장소로 하루를 확인하세요', 'tiary')";
+	//	String insert_template4 = "insert into template values (3, '나의 다이어트 일기', 'diet', '나의 다이어트 정보를 기록하는 똑똑한 일', 'tiary')";
+	//
+	//	String insert_template2_1 = "insert into table_template_content values (0, 1, '안녕하세요:)\n오늘은 " + MyTime.getLongToString(MyTime.getCurrentTime()) + "입니다, " +
+	//			"null, null, null)";
+	//	String insert_template2_2 = "insert into table_template_content values (1, 1, '오늘도 현명하게 소비하셨나요? 아니시라면 오늘부터 Tiary를 통해 가계부 습관들 들여보아요\n질문에 키워드로 답변해주세요', " +
+	//			"null, null, null)";
+	//	String insert_template2_3 = "insert into table_template_content values (2, 1, '오늘 식비는 얼마나 쓰셨나요?\n하나씩 선택해서 입력 가능 or 금액만 써주세요', " +
+	//			"'', '식비: ', '원')";
+	//	String insert_template2_4 = "insert into table_template_content values (3, 1, '오늘 교통비는 얼마나 쓰셨나요?\n', " +
+	//			"'', '교통비: ', '원')";
+	//	String insert_template2_5 = "insert into table_template_content values (4, 1, '오늘 갑작스런 지출이 있으셨나요?\n항목:금액 형식으로 입력해주세요\n(예)가족 식사: 100,000 ', " +
+	//			"'', 'cust', '원')";
+
 
 
 	//	private ArrayList<String> getArrayList(long diaryNo, String table) {

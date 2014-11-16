@@ -6,7 +6,7 @@ public class Call extends MyLog{
 	private String number;
 	private String type;
 	private int duration; //초
-	
+
 	public long getNo() {
 		return no;
 	}

@@ -12,6 +12,7 @@ import com.tleaf.tiary.Common;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.fragment.BaseFragment;
+import com.tleaf.tiary.fragment.lifelog.adapter.CardLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.MyLogAdapter;
 
 public class LogListViewFragment extends BaseFragment {
@@ -20,7 +21,7 @@ public class LogListViewFragment extends BaseFragment {
 	private DataManager dataMgr;
 
 	private int type;
-	
+
 	private MyLogAdapter mAdapter;
 
 	public LogListViewFragment(int type) {
@@ -37,17 +38,14 @@ public class LogListViewFragment extends BaseFragment {
 		ListView lv = (ListView) rootView.findViewById(R.id.list_gen);
 
 		switch (type) {
-		case Common.CARD:
-//			mAdapter= new CardLogAdapter(mContext, R.layout.item_card, dataMgr.getCardList()); //this.getActivity()
-			break;
 		case Common.GALLERY:
-			//			mAdapter = new GalleryLogAdapter(mContext, R.layout.item_diary_, get); //this.getActivity()
+//			mAdapter = new GalleryLogAdapter(mContext, R.layout.item_diary_, get); //this.getActivity()
 			break;
 		case Common.LOCATION: 
-//			mAdapter= new LocationLogAdapter(mContext, R.layout.item_location, dataMgr.getMyLogList()); //this.getActivity()
+			//			mAdapter= new LocationLogAdapter(mContext, R.layout.item_location, dataMgr.getMyLogList()); //this.getActivity()
 			break;
 		case Common.BOOKMARK:
-//			mAdapter = new BookMarkLogAdapter(mContext, R.layout.item_bookmark, dataMgr.getBookMarkList()); //this.getActivity()
+			//			mAdapter = new BookMarkLogAdapter(mContext, R.layout.item_bookmark, dataMgr.getBookMarkList()); //this.getActivity()
 			break;
 		}
 
@@ -70,7 +68,7 @@ public class LogListViewFragment extends BaseFragment {
 
 
 
-	
+
 
 
 	private void getLogsInDb(final int type) { // 킨 시간에 다시 불러오기

@@ -16,7 +16,7 @@ import com.tleaf.tiary.R;
 public class ChatAdapter extends BaseAdapter {
 
 	private Context mContext;
-	private ArrayList<Message> msgArr;
+	private ArrayList<Message> msgArr = new ArrayList<Message>();
 
 	public ChatAdapter(Context context, ArrayList<Message> messages) {
 		this.mContext = context;

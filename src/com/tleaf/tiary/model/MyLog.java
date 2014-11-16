@@ -9,9 +9,15 @@ public class MyLog {
 	private double longitude;
 //	private long locationTime; -> 일단은 time으로 하고 전송타임은  sendTime으로 따로 하는게 낫지 않을까요?
 
-	private long date;
-	private String type;
+	private long date; //로그 발생 타임
+	private String myLogType;
 	
+	public String getMyLogType() {
+		return myLogType;
+	}
+	public void setMyLogType(String myLogType) {
+		this.myLogType = myLogType;
+	}
 	public String getId() {
 		return id;
 	}
@@ -48,10 +54,5 @@ public class MyLog {
 	public void setDate(long date) {
 		this.date = date;
 	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}	
+
 }

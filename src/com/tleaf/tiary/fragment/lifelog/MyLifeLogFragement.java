@@ -60,10 +60,10 @@ public class MyLifeLogFragement extends BaseFragment {
 				fragment = new SmsListViewFragment();
 				break;
 			case R.id.layout_gallery:
-				fragment = new LogListViewFragment(Common.GALLERY);
+				fragment = new  LogListViewFragment(Common.BOOKMARK);
 				break;
 			case R.id.layout_card:
-				fragment = new LogListViewFragment(Common.CARD);
+				fragment = new CardListViewFragment();
 				break;
 
 			case R.id.layout_bookmark:

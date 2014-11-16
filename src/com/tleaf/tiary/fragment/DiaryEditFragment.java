@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -266,7 +265,9 @@ public class DiaryEditFragment extends BaseFragment {
 		txt_content.setText(editedDiary.getContent());
 
 		selectedImages = editedDiary.getImages();
-		displayPhoto();
+		if (selectedFolders != null && selectedFolders.size() != 0) {
+			displayPhoto();
+		}
 
 		selectedFolders = editedDiary.getFolders();
 		if (selectedFolders != null && selectedFolders.size() != 0) {
@@ -333,7 +334,6 @@ public class DiaryEditFragment extends BaseFragment {
 		case R.id.txt_edit_date:
 			DatePickerDialog datepicker = DatePickerDialog.newInstance(
 					new OnDateSetListener() {
-
 						@Override
 						public void onDateSet(DatePickerDialog dialog,
 								int year, int monthOfYear, int dayOfMonth) {

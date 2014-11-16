@@ -8,30 +8,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tleaf.tiary.R;
-import com.tleaf.tiary.model.ExpandableItem;
-import com.tleaf.tiary.model.TemplateExpandableItem;
+import com.tleaf.tiary.model.MyTemplate;
+import com.tleaf.tiary.util.Util;
 
 public class TemplateExpandableListAdapter extends BaseExpandableListAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;
 	private ArrayList<String> mParent;
-	private HashMap<String, ArrayList<TemplateExpandableItem>> mChild;
+	private HashMap<String, ArrayList<MyTemplate>> mChild;
 	private int mParentLayout;
 	private int mChildLayout;
 
-	public TemplateExpandableListAdapter(Context context, int layoutParent, int layoutChild, ArrayList<String> parent, HashMap<String, ArrayList<TemplateExpandableItem>> child) {
+	public TemplateExpandableListAdapter(Context context, int layoutParent,
+			int layoutChild, ArrayList<String> parent,
+			HashMap<String, ArrayList<MyTemplate>> child) {
 		mContext = context;
-		mInflater = (LayoutInflater)context.getSystemService(
-				Context.LAYOUT_INFLATER_SERVICE);
+		mInflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mParent = parent;
 		mChild = child;
 		mParentLayout = layoutParent;
 		mChildLayout = layoutChild;
 	}
-
 
 	@Override
 	public int getGroupCount() {
@@ -40,9 +42,9 @@ public class TemplateExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		if(mChild.get(mParent.get(groupPosition)) == null) 
+		if (mChild.get(mParent.get(groupPosition)) == null)
 			return 0;
- 		return mChild.get(mParent.get(groupPosition)).size();
+		return mChild.get(mParent.get(groupPosition)).size();
 	}
 
 	@Override
@@ -51,7 +53,7 @@ public class TemplateExpandableListAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public TemplateExpandableItem getChild(int groupPosition, int childPosition) {
+	public MyTemplate getChild(int groupPosition, int childPosition) {
 		return mChild.get(mParent.get(groupPosition)).get(childPosition);
 	}
 
@@ -74,13 +76,14 @@ public class TemplateExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-//		((ExpandableListView) parent).expandGroup(groupPosition);
+		// ((ExpandableListView) parent).expandGroup(groupPosition);
 		final int pos = groupPosition;
 		if (convertView == null) {
 			convertView = mInflater.inflate(mParentLayout, parent, false);
 		}
-	
-		TextView txt = (TextView)convertView.findViewById(R.id.txt_expand_template_title);
+
+		TextView txt = (TextView) convertView
+				.findViewById(R.id.txt_expand_template_title);
 		txt.setText(mParent.get(groupPosition));
 
 		return convertView;
@@ -95,23 +98,59 @@ public class TemplateExpandableListAdapter extends BaseExpandableListAdapter {
 			convertView = mInflater.inflate(mChildLayout, parent, false);
 		}
 
-//		RoundImageView rImg = (RoundImageView)  convertView.findViewById(R.id.img_expand_child_template);
-//		rImg.setImageRounding(false, false, false, false);
-		
-//		TextView txt_title = (TextView)convertView.findViewById(R.id.txt_expand_child_title);
-//		txt_title.setText(mChild.get(mParent.get(groupPosition)).get(childPosition).getTitle());
-		
-//		
-//        <com.tleaf.tiary.util.RoundImageView
-//        android:id="@+id/img_expand_child_template"
-//        android:layout_width="match_parent"
-//        android:layout_height="80dp"
-//        android:scaleType="centerCrop"
-//     	android:src="@drawable/template_daily" />
-		
-		
-//		TextView txt_content = (TextView) convertView.findViewById(R.id.txt_expand_child_template_title);
-//		txt_content.setText(mChild.get(mParent.get(groupPosition)).get(childPosition).getTitle());
+		TextView txt_template_name = (TextView) convertView
+				.findViewById(R.id.txt_expand_child_template_title);
+		txt_template_name.setText(mChild.get(mParent.get(groupPosition))
+				.get(childPosition).getName());
+
+		TextView txt_template_info = (TextView) convertView
+				.findViewById(R.id.txt_expand_child_template_info);
+		txt_template_info.setText(mChild.get(mParent.get(groupPosition))
+				.get(childPosition).getInformation());
+
+		// 임시
+		String category = getChild(groupPosition, childPosition).getCategory();
+		Util.ll("child view category", category);
+		ImageView img = (ImageView) convertView
+				.findViewById(R.id.img_expand_child_template);
+
+		if (category.equals("Money")) {
+			img.setImageResource(R.drawable.money);
+			txt_template_info.setTextColor(mContext.getResources().getColor(
+					R.color.background_white));
+			txt_template_info.setAlpha(1);
+		} else if (category.equals("Location")) {
+			img.setImageResource(R.drawable.location_template);
+			txt_template_info.setTextColor(mContext.getResources().getColor(
+					R.color.background_white));
+			txt_template_info.setAlpha(0.8f);
+		} else if (category.equals("Diet")) {
+			img.setImageResource(R.drawable.food);
+			txt_template_info.setTextColor(mContext.getResources().getColor(
+					R.color.diary_edit_edittext_hint));
+			txt_template_info.setAlpha(1);
+		} else {
+			img.setImageResource(R.drawable.ic_launcher);
+			txt_template_info.setTextColor(mContext.getResources().getColor(
+					R.color.background_white));
+			txt_template_info.setAlpha(1);
+		}
+
+		// TextView txt_title =
+		// (TextView)convertView.findViewById(R.id.txt_expand_child_title);
+		// txt_title.setText(mChild.get(mParent.get(groupPosition)).get(childPosition).getTitle());
+
+		//
+		// <com.tleaf.tiary.util.RoundImageView
+		// android:id="@+id/img_expand_child_template"
+		// android:layout_width="match_parent"
+		// android:layout_height="80dp"
+		// android:scaleType="centerCrop"
+		// android:src="@drawable/template_daily" />
+
+		// TextView txt_content = (TextView)
+		// convertView.findViewById(R.id.txt_expand_child_template_title);
+		// txt_content.setText(mChild.get(mParent.get(groupPosition)).get(childPosition).getTitle());
 
 		return convertView;
 	}
