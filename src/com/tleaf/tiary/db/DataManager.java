@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.format.Time;
 import android.util.Log;
 
 import com.tleaf.tiary.Common;
@@ -15,8 +16,11 @@ import com.tleaf.tiary.model.Card;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.model.MyLog;
 import com.tleaf.tiary.model.MySms;
+import com.tleaf.tiary.model.MyTemplate;
+import com.tleaf.tiary.model.TemplateContent;
 import com.tleaf.tiary.model.Weather;
 import com.tleaf.tiary.util.MyPreference;
+import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
 public class DataManager {
@@ -34,19 +38,31 @@ public class DataManager {
 	private final String MYLOG = "mylog";
 	private final String CALL = "call";
 	private final String SMS = "sms";
+	private final String CARD = "card";
+
+	private final String TEMPLATE = "template";
+	private final String TEMPLATE_CONTENT = "template_content";
 
 	private SQLiteDatabase db;
 	private ContentValues row;
 
 	private MyPreference pref;
+	
+	private long todayTime;
 
 	public DataManager(Context context) {
 		mContext = context;
 		dbHelper = new DbHelper(mContext);
 		pref = new MyPreference(mContext);
-
+		Time time = new Time();
+		time.setToNow();
+		time.hour = 0;
+		time.minute = 0;
+		time.second = 0;
+		todayTime = time.toMillis(false);
 	}
 
+	/** 다이어리를 다이어리, 이미지, 태그, 폴더 테이블에 추가한다 **/
 	public boolean insertDiary(Diary diary) { //완료
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
@@ -81,7 +97,7 @@ public class DataManager {
 
 	}
 
-
+	/** 수정된 다이어리를 다이어리, 이미지, 태그, 폴더 테이블에 반영한다 **/
 	public boolean updateDiary(Diary diary) { //완료
 		db = dbHelper.getWritableDatabase();
 
@@ -119,6 +135,7 @@ public class DataManager {
 		return true;
 	}
 
+	/** 수정된 다이어리에 있는 수정된 이미지를 반영한다 **/
 	public boolean updateImageByDiary(Diary diary) { //완료
 		boolean resuslt_delete = deleteImageByDiary(diary.getNo());
 		boolean resuslt_insert = insertImageByDiary(diary);
@@ -128,6 +145,7 @@ public class DataManager {
 			return false;
 	}
 
+	/** 수정된 다이어리에 있는 수정된 태그를 반영한다 **/
 	public boolean updateTagByDiary(Diary diary) { //완료
 		boolean resuslt_delete = deleteDiaryTag(diary.getNo());
 		boolean resuslt_insert = insertTagByDiary(diary);
@@ -137,7 +155,7 @@ public class DataManager {
 			return false;
 	}
 
-
+	/** 수정된 다이어리에 있는 수정된 폴더를 반영한다 **/
 	public boolean updateFolderByDiary(Diary diary) { //완료
 		boolean resuslt_delete = deleteDiaryFolder(diary.getNo());
 		boolean resuslt_insert = insertFolderByDiary(diary);
@@ -147,7 +165,7 @@ public class DataManager {
 			return false;
 	}
 
-
+	/** 새로추가하는 다이어리의 새로운 이미지를 이미지 테이블에 넣는다 **/
 	public boolean insertImageByDiary(Diary diary) { //완료
 		if (diary.getNo() == -1) 
 			return false;
@@ -165,6 +183,7 @@ public class DataManager {
 		return true;
 	}
 
+	/** 새로추가하는 다이어리의 새로운 태그를 태그 테이블에 넣는다 **/
 	public boolean insertTagByDiary(Diary diary) { //완료
 		if (diary.getNo() == -1) 
 			return false;
@@ -188,7 +207,7 @@ public class DataManager {
 		return true;
 	}
 
-
+	/** 다이어리를 새로 추가할 때 다이어리 테이블과 태그 테이블를 연계하는 중간 테이블에 관계를 삽입한다 **/
 	public boolean setDiaryTagRelation(long diaryNo, long tagNo){ //완료
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
@@ -197,8 +216,9 @@ public class DataManager {
 		db.insert(DIARY_TAG, null, row);
 		dbHelper.close();
 		return true;
-
 	}
+
+	/** 새로추가하는 다이어리의 새로운 폴더를 폴더 테이블에 넣는다 **/
 	public boolean insertFolderByDiary(Diary diary) { //밖으로 빼고, return만한다면 //완료
 		if (diary.getNo() == -1) 
 			return false;
@@ -222,7 +242,7 @@ public class DataManager {
 		return true;
 	}
 
-	//빈 폴더 생성의 경우
+	/** 새로 폴더 테이블에 폴더를 추가한다 **/
 	public boolean insertFolder(String folder) {  //완료
 		if(isContainedFolder(folder)) 
 			return false;
@@ -234,7 +254,7 @@ public class DataManager {
 		return true;
 	}
 
-	//빈 태그 생성의 경우
+	/** 새로 태그 테이블에 태그를 추가한다 **/
 	public boolean insertTag(String tag) {  //완료
 		if(isContainedTag(tag)) 
 			return false;
@@ -246,6 +266,7 @@ public class DataManager {
 		return true;
 	}
 
+	/** 사용자가 새로 추가한 폴더가 이미 있는 폴더인지 확인한다 **/
 	private boolean isContainedFolder(String folder) {
 		db = dbHelper.getReadableDatabase(); 
 		String sql = "select * from " + FOLDER + " where folder = '" + folder + "'";
@@ -258,6 +279,7 @@ public class DataManager {
 		return result;
 	}
 
+	/** 사용자가 새로 추가한 태그가 이미 있는 태그인지 확인한다 **/
 	public boolean isContainedTag(String tag) {
 		db = dbHelper.getReadableDatabase(); 
 		String sql = "select * from " + TAG + " where tag = '" + tag + "'";
@@ -270,6 +292,7 @@ public class DataManager {
 		return result;
 	}
 
+	/** 태그 테이블에서 태그명으로 태그 pk인 no를 찾는다 **/
 	private long getTagNo(String tag) {
 		db = dbHelper.getReadableDatabase(); 
 		String sql = "select no from " + TAG + " where tag = '" + tag + "'";
@@ -283,6 +306,7 @@ public class DataManager {
 		return tagNo;
 	}
 
+	/** 폴더 테이블에서 폴더명으로 폴더 pk인 no를 찾는다 **/
 	private long getFolderNo(String folder) {
 		db = dbHelper.getReadableDatabase(); 
 		String sql = "select no from " + FOLDER + " where folder = '" + folder + "'";
@@ -296,6 +320,7 @@ public class DataManager {
 		return folderNo;
 	}
 
+	/** 다이어리를 새로 추가할 때 다이어리 테이블과 폴더 테이블를 연계하는 중간 테이블에 관계를 삽입한다 **/
 	public boolean setDiaryFolderRelation(long diaryNo, long folderNo){ //완료
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
@@ -307,7 +332,7 @@ public class DataManager {
 
 	}
 
-
+	/** 다이어리 pk에 해당하는 이미지를 이미지 테이블에서 삭제한다 **/
 	public boolean deleteImageByDiary(long diaryNo) { //완료
 		Util.ll("no", diaryNo);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -318,6 +343,7 @@ public class DataManager {
 		return true;
 	}
 
+	/** 다이어리를 삭제할 때 다이어리테이블과 태그 테이블을 연계하는 중간 테이블에 관계를 삭제한다 **/
 	public boolean deleteDiaryTag(long diaryNo) { //완료
 		Util.ll("no", diaryNo);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -328,6 +354,7 @@ public class DataManager {
 		return true;
 	}
 
+	/** 다이어리를 삭제할 때 다이어리테이블과 폴더 테이블을 연계하는 중간 테이블에 관계를 삭제한다 **/
 	public boolean deleteDiaryFolder(long diaryNo) { //완료
 		Util.ll("no", diaryNo);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -338,6 +365,7 @@ public class DataManager {
 		return true;
 	}
 
+	/** 다이어리를 삭제하기위해 다이어리, 이미지, 태그, 폴더 테이블 및 관계 테이블에서 해당 정보를 삭제한다 **/
 	public boolean deleteDiary(long diaryNo) { //완료
 		Util.ll("no", diaryNo);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -352,6 +380,7 @@ public class DataManager {
 		return true;
 	}
 
+	/** 다이어리 테이블에서 현재 있는 다이어리를 가져온다 **/
 	public ArrayList<Diary> getDiaryList() { //완료
 		//		Util.tst(mContext, "getDiaryList()");
 		ArrayList<Diary> arItem = new ArrayList<Diary>();
@@ -404,6 +433,7 @@ public class DataManager {
 		return arItem;
 	}	
 
+	/** 이미지 테이블에서 다이어리 pk에 해당하는 이미지를 가져온다 **/
 	public ArrayList<String> getImages(long diaryNo) { //완료
 		ArrayList<String> arr = new ArrayList<String>();
 
@@ -422,6 +452,7 @@ public class DataManager {
 		return arr;
 	}
 
+	/** 태그 테이블에서 다이어리 pk에 해당하는 태그를 가져온다 **/
 	public ArrayList<String> getTagsByDiaryNo(long diaryNo) { //완료
 		ArrayList<String> tagArr = new ArrayList<String>();
 		ArrayList<Long> tagNo = new ArrayList<Long>();
@@ -443,6 +474,7 @@ public class DataManager {
 		return tagArr;
 	}
 
+	/** 해당 다이어리 pk에 해당하는 태그 pk를 가져온다 **/
 	public ArrayList<Long> getTagNoByDiaryNo(long diaryNo) { //완료
 		ArrayList<Long> tagNoArr = new ArrayList<Long>();
 
@@ -460,8 +492,7 @@ public class DataManager {
 		return tagNoArr;
 	}
 
-
-	//해당 다이어리가 담긴 폴더들을 다이어리번호로 가져온다
+	/** 해당 다이어리 pk에 해당하는 폴더 pk를 가져온다 **/
 	public ArrayList<String> getFoldersByDiaryNo(long diaryNo) { //완료
 		ArrayList<String> folderArr = new ArrayList<String>();
 		Util.ll("db.isOpen()", ""+db.isOpen());
@@ -487,7 +518,7 @@ public class DataManager {
 		return folderArr;
 	}
 
-	//다이어리와 폴더의 다대다 관계를 정의해주는 테이블에서 다이어리번호에 해당하는 폴더번호를 가져온다
+	/** 다이어리와 폴더의 다대다 관계를 정의해주는 테이블에서 다이어리번호에 해당하는 폴더번호를 가져온다 **/
 	public ArrayList<Long> getFolderNoByDiaryNo(long diaryNo) { //완료
 		ArrayList<Long> folderNoArr = new ArrayList<Long>();
 
@@ -505,7 +536,7 @@ public class DataManager {
 		return folderNoArr;
 	}
 
-
+	/** 태그 테이블에 중복되지 않은 태그 목록을 가져온다 **/
 	public ArrayList<String> getDistinctTagList() { //완료
 		ArrayList<String> arr = new ArrayList<String>();
 
@@ -523,6 +554,7 @@ public class DataManager {
 		return arr;
 	}
 
+	/** 폴더 테이블에 중복되지 않은 폴더 목록을 가져온다 **/
 	public ArrayList<String> getDistinctFolderList() { //완료
 		ArrayList<String> arr = new ArrayList<String>();
 
@@ -540,7 +572,7 @@ public class DataManager {
 		return arr;
 	}
 
-
+	/** 다이어리 테이블에 중복되지 않은 장소 목록을 가져온다 **/
 	public ArrayList<String> getDistinctLocationList() { //완료
 		ArrayList<String> locationArr = new ArrayList<String>();
 
@@ -560,6 +592,7 @@ public class DataManager {
 	}
 
 
+	/** 다이어리 pk에 해당하는 다이어리를 얻는다 **/
 	public Diary getDiaryByNo(Long diaryNo) {
 		Util.ll("diaryNo", diaryNo);
 		SQLiteDatabase db = dbHelper.getReadableDatabase(); 
@@ -610,6 +643,7 @@ public class DataManager {
 		return diary;
 	}	
 
+	/** 폴더 테이블에서 폴더 이름에 해당하는 폴더 번호를 가져온다 **/
 	private long getFolderNoByFolderName(String folderName) {
 
 		ArrayList<Long> arr = new ArrayList<Long>();
@@ -630,6 +664,7 @@ public class DataManager {
 		return folderNo;
 	}
 
+	/** 태그 테이블에서 태그 이름에 해당하는 태그 번호를 가져온다 **/
 	private long getTagNoByTag(String tag) {
 		ArrayList<Long> arr = new ArrayList<Long>();
 
@@ -653,6 +688,7 @@ public class DataManager {
 
 	//리스트뷰의 0번지가 가장 최신 
 	//no 내림차순으로 가져와서 0번지부터 저장시
+	/** 폴더 pk에 해당하는 다이어리 pk를 가져온다 **/
 	private ArrayList<Long> getDiaryNoByFolderNo(long folderNo) {
 		ArrayList<Long> arrDiaryNo = new ArrayList<Long>();
 		db = dbHelper.getReadableDatabase(); 
@@ -669,6 +705,7 @@ public class DataManager {
 		return arrDiaryNo;
 	}
 
+	/** 태그 pk에 해당하는 다이어리 pk를 가져온다 **/
 	private ArrayList<Long> getDiaryNoByTagNo(long tagNo) {
 		ArrayList<Long> arrDiaryNo = new ArrayList<Long>();
 		db = dbHelper.getReadableDatabase(); 
@@ -685,9 +722,7 @@ public class DataManager {
 		return arrDiaryNo;
 	}
 
-
-
-
+	/** 폴더명에 해당되는 다이어리들을 가져온다 **/
 	public ArrayList<Diary> getDiaryListByFolderName(String folderName) {
 		db = dbHelper.getReadableDatabase(); 
 
@@ -700,9 +735,9 @@ public class DataManager {
 			arItem.add(diary);
 		}
 		return arItem;
-
 	}
 
+	/** 태그명에 해당하는 다이어리들을 가져온다 **/
 	public ArrayList<Diary> getDiaryListByTag(String tag) {
 		if (!isContainedTag(tag))
 			return null;
@@ -740,10 +775,6 @@ public class DataManager {
 	}
 
 
-	public ArrayList<Card> getCardList() { 
-		return null;
-
-	}
 
 	//	public ArrayList<Photo> getGalleryList() { 
 	//		return null;
@@ -760,27 +791,54 @@ public class DataManager {
 
 	}
 
+//	public boolean insertMyLogList(ArrayList<MyLog> logArr) {
+//		if (logArr != null && logArr.size() != 0) {
+//			db = dbHelper.getWritableDatabase();
+//			for(int i=0; i< logArr.size(); i++) {
+//				row = new ContentValues();
+//				row.put("id", logArr.get(i).getId());
+//				row.put("rev", logArr.get(i).getRev());
+//				row.put("latitude", logArr.get(i).getLatitude());
+//				row.put("longitude", logArr.get(i).getLongitude());
+//				row.put("date", logArr.get(i).getDate());
+//				row.put("type", logArr.get(i).getShackLogType());
+//				db.insert(CALL, null, row);
+//			}
+//			dbHelper.close();
+//		}
+//		return true;
+//	}
 
-	public boolean insertMyLogList(ArrayList<MyLog> logArr) {
-		if (logArr != null && logArr.size() != 0) {
+
+	/** 카드로그를 카드 테이블에 넣는다 **/
+	public boolean insertCardList(ArrayList<Card> cardArr) { 
+		if (cardArr != null && cardArr.size() != 0) {
+			Util.ll("insertCardList  cardArr.size()",  cardArr.size());
 			db = dbHelper.getWritableDatabase();
-			for(int i=0; i< logArr.size(); i++) {
+			long max = -1;
+			for(int i=0; i< cardArr.size(); i++) {
 				row = new ContentValues();
-				row.put("id", logArr.get(i).getId());
-				row.put("rev", logArr.get(i).getRev());
-				row.put("latitude", logArr.get(i).getLatitude());
-				row.put("longitude", logArr.get(i).getLongitude());
-				row.put("date", logArr.get(i).getDate());
-				row.put("type", logArr.get(i).getType());
-				db.insert(CALL, null, row);
+				row.put("smsno", cardArr.get(i).getNo());
+				row.put("cardType", cardArr.get(i).getCardType());
+				row.put("cardDate", cardArr.get(i).getCardDate());
+				row.put("spendedMoney", cardArr.get(i).getSpendedMoney());
+				row.put("spendedPlace", cardArr.get(i).getSpendedPlace());
+				row.put("leftMoney", cardArr.get(i).getLeftMoney());
+				db.insert(CARD, null, row);
+
+				if(cardArr.get(i).getDate() > max){
+					max  = cardArr.get(i).getDate();
+				}
+			}
+			if (max > 0) {
+				pref.setLongPref(Common.KEY_CARD_BASETIME, max);
 			}
 			dbHelper.close();
 		}
 		return true;
 	}
 
-
-
+	/** 문자로그를 문자 테이블에 넣는다 **/
 	public boolean insertSmsList(ArrayList<MySms> smsArr, String timetype) {  //완료
 		if (smsArr != null && smsArr.size() != 0) {
 			db = dbHelper.getWritableDatabase();
@@ -809,7 +867,7 @@ public class DataManager {
 		return true;
 	}
 
-
+	/** 전화기록을 전화 테이블에 넣는다 **/
 	public boolean insertCallList(ArrayList<Call> callArr) {  //완료
 		if (callArr != null && callArr.size() != 0) {
 			db = dbHelper.getWritableDatabase();
@@ -834,9 +892,7 @@ public class DataManager {
 		return true;
 	}
 
-
-
-
+	/** 전화 테이블에 있는 전화로그를 가져온다 **/
 	public ArrayList<MyLog> getCallList() { //완료
 		//		Util.tst(mContext, "getDiaryList()");
 		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
@@ -868,6 +924,29 @@ public class DataManager {
 		return arItem;
 	}	
 	
+	
+	/** 각 로그테이블에서 오늘의 로그 개수를 세온다 **/
+	public int getLogCountByType(String type) { //완료
+		//		Util.tst(mContext, "getDiaryList()");
+		db = dbHelper.getReadableDatabase(); 
+		
+		String dateType;
+		if (type.equals(CARD))
+			dateType = "cardDate";
+		else 
+			dateType = "date";
+		
+		String sql = "select count(*) from " + type + " where "+  dateType + " >= '" + todayTime + "'";
+
+		Cursor cursor = db.rawQuery(sql, null);
+		int count = cursor.getCount();
+		
+		cursor.close();
+		dbHelper.close();
+		return count;
+	}	
+	
+	/** 전화 테이블에서 전화 타입(수신, 발신, 부재중)에 따른 전화기록을 가져온다 **/
 	public ArrayList<MyLog> getCallListByType(String subType) { //완료
 		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
 		db = dbHelper.getReadableDatabase(); 
@@ -897,12 +976,19 @@ public class DataManager {
 		dbHelper.close();
 		return arItem;
 	}
-	
-	public ArrayList<MyLog> getSmsListByType(String subType) { //완료
+
+	/** 문자 테이블에서 문자 타입(수신, 발신)에 따른 문자기록을 가져온다
+	  * 또한 card정보를 파싱하기 위해 기준 타임 이후 수신메시지만 가져온다 **/
+	public ArrayList<MyLog> getSmsListByType(String subType, long baseTime) { //완료
 		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
 		db = dbHelper.getReadableDatabase(); 
-		String sql = "select * from " + SMS + " where type = '" +  subType + "' order by date desc";
-		
+
+		String sql = "select * from " + SMS + " where type = '" +  subType + "' ";
+
+		if(baseTime != -1) 
+			sql += "and date > '" + baseTime + "' ";
+		sql += "order by date desc";
+
 		Cursor cursor = db.rawQuery(sql, null);
 
 		while(cursor.moveToNext()) {
@@ -928,6 +1014,7 @@ public class DataManager {
 		return arItem;
 	}
 
+	/** 문자테이블에서 문자 로그를 가져온다 **/
 	public ArrayList<MyLog> getSmsList() { //완료
 		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
 		db = dbHelper.getReadableDatabase(); 
@@ -953,10 +1040,193 @@ public class DataManager {
 
 			arItem.add(sms);
 		}
+
+		Util.ll("getSmsList", arItem.size());
 		cursor.close();
 		dbHelper.close();
 		return arItem;
 	}	
+
+	/** 카드 테이블에서 카드 로그를 가져온다
+	 *  카드 테이블에 있는 sms pk를 가져와서 sms에 해당하는 정보도 넣어준다 **/
+	public ArrayList<MyLog> getCardList() { 
+		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
+		ArrayList<Card> cardArr = new ArrayList<Card>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + CARD + " order by cardDate desc";
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+		while(cursor.moveToNext()) {
+			Card card = new Card();
+			long cardNo = cursor.getInt(0);
+			long smsNo = cursor.getInt(1);
+			String cardType = cursor.getString(2);
+			long cardDate = cursor.getLong(3);
+			int spendedMoney = cursor.getInt(4);
+			String spendedPlace = cursor.getString(5);
+			int leftMoney = cursor.getInt(6);
+
+			card.setCardNo(cardNo);
+			card.setNo(smsNo);
+			card.setCardType(cardType);
+			card.setCardDate(cardDate);
+			card.setSpendedMoney(spendedMoney);
+			card.setSpendedPlace(spendedPlace);
+			card.setLeftMoney(leftMoney);
+
+			cardArr.add(card);
+		}
+		cursor.close();
+		dbHelper.close();
+
+		ArrayList<Card> fullCardArr = new ArrayList<Card>();
+		for (int i=0; i < cardArr.size(); i++) {
+			fullCardArr.add(getSmsBySmsNo(cardArr.get(i))); //패턴 
+		}
+		arItem.addAll(fullCardArr);
+
+		Util.ll("getCardList  cardArr.size()",  cardArr.size());
+		Util.ll("getCardList  arItem.size()",  arItem.size());
+		return arItem;
+	}	
+
+	/** sms 테이블에서 sms pk에 해당하는 sms 정보를 card 객체로 반환한다 **/
+	public Card getSmsBySmsNo(Card card) { //완료
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + SMS + " where no = '" +  card.getNo() + "'";
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+		cursor.moveToFirst();
+		long smsNo = cursor.getInt(0);
+		String name = cursor.getString(1);
+		String number = cursor.getString(2);
+		String type = cursor.getString(3);
+		long date = cursor.getLong(4);
+		String message = cursor.getString(5);
+
+		card.setNo(smsNo);
+		card.setName(name);
+		card.setNumber(number);
+		card.setType(type);
+		card.setDate(date);
+		card.setMessage(message);
+
+		Util.ll("getSmsBySmsNo date", MyTime.getLongToString(date));
+		//		card = (Card) sms;//확인
+
+		cursor.close();
+		dbHelper.close();
+		return card;
+	}
+
+	/** 템플릿 테이블에서 카테고리 타입에 해당하는 템플릿 객체를 반환한다 **/
+	public ArrayList<MyTemplate> getTemplateList(String categoryType) { 
+		ArrayList<MyTemplate> arItem = new ArrayList<MyTemplate>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + TEMPLATE;
+
+		if (categoryType != Common.ALL) {
+			sql += " where category = '" + categoryType + "'";
+		}
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+		while(cursor.moveToNext()) {
+			MyTemplate template = new MyTemplate();
+			long templateNo = cursor.getInt(0);
+			String name = cursor.getString(1);
+			String category = cursor.getString(2);
+			String information = cursor.getString(3);
+			String author = cursor.getString(4);
+
+			template.setNo(templateNo);
+			template.setName(name);
+			template.setCategory(category);
+			template.setInformation(information);
+			template.setAuthor(author);
+
+			arItem.add(template);
+		}
+		cursor.close();
+		dbHelper.close();
+		return arItem;
+	}	
+
+	/** 템플릿 테이블에서 중복되지 않는 카테고리 목록을 반환한다 **/ //re
+	public ArrayList<String> getDistinctTemplateCategory() {
+		ArrayList<String> arItem = new ArrayList<String>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select distinct category from " + TEMPLATE;
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+		while(cursor.moveToNext()) {
+			arItem.add(cursor.getString(0));
+		}
+		cursor.close();
+		dbHelper.close();
+		return arItem;
+	}
+
+	/** 템플릿 컨텐츠 테이블에서 템플릿 pk에 해당하는 텀플릿 컨텐츠 객체를 반환한다 **/
+	public ArrayList<TemplateContent> getTemplateContentByNo(long rcvTemplateNo) { 
+		ArrayList<TemplateContent> arItem = new ArrayList<TemplateContent>();
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + TEMPLATE_CONTENT + " where templateno = '" + rcvTemplateNo + "' order by no asc";
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+		while(cursor.moveToNext()) {
+			TemplateContent tempContent = new TemplateContent();
+			long contentNo = cursor.getInt(0);
+			long templateNo = cursor.getInt(1);
+
+			String question = cursor.getString(2);
+			String content = cursor.getString(3);
+			String front = cursor.getString(4);
+			String end = cursor.getString(5);
+			String type = cursor.getString(6);
+
+			tempContent.setNo(contentNo);
+			tempContent.setTemplateNo(templateNo);
+			tempContent.setQuestion(question);
+			tempContent.setContent(content);
+			tempContent.setFront(front);
+			tempContent.setEnd(end);
+			tempContent.setType(type);
+
+			arItem.add(tempContent);
+		}
+		cursor.close();
+		dbHelper.close();
+		return arItem;
+	}	
+	//	String table_template_content = "create table template_content (no integer primary key autoincrement, " +
+	//			"templateno integer, " +
+	//			"question text, " +
+	//			"content text, " +
+	//			"front text, " +
+	//			"end text, " +
+	//			"foreign key(templateno) references template(no))";		
+	//
+	//	String insert_template1 = "insert into template values (0, 'my life log', 'daily', '하루동안 발생한 로그로 일기를 작성해보세요', 'tiary')";
+	//	String insert_template2 = "insert into template values (1, '오늘의 지출', 'money', '가계부, 이제 일일이 적지 않아요', 'tiary')";
+	//	String insert_template3 = "insert into template values (2, '여긴 누구, 난 어디?', 'location', '내가 오늘 이동한 장소로 하루를 확인하세요', 'tiary')";
+	//	String insert_template4 = "insert into template values (3, '나의 다이어트 일기', 'diet', '나의 다이어트 정보를 기록하는 똑똑한 일', 'tiary')";
+	//
+	//	String insert_template2_1 = "insert into table_template_content values (0, 1, '안녕하세요:)\n오늘은 " + MyTime.getLongToString(MyTime.getCurrentTime()) + "입니다, " +
+	//			"null, null, null)";
+	//	String insert_template2_2 = "insert into table_template_content values (1, 1, '오늘도 현명하게 소비하셨나요? 아니시라면 오늘부터 Tiary를 통해 가계부 습관들 들여보아요\n질문에 키워드로 답변해주세요', " +
+	//			"null, null, null)";
+	//	String insert_template2_3 = "insert into table_template_content values (2, 1, '오늘 식비는 얼마나 쓰셨나요?\n하나씩 선택해서 입력 가능 or 금액만 써주세요', " +
+	//			"'', '식비: ', '원')";
+	//	String insert_template2_4 = "insert into table_template_content values (3, 1, '오늘 교통비는 얼마나 쓰셨나요?\n', " +
+	//			"'', '교통비: ', '원')";
+	//	String insert_template2_5 = "insert into table_template_content values (4, 1, '오늘 갑작스런 지출이 있으셨나요?\n항목:금액 형식으로 입력해주세요\n(예)가족 식사: 100,000 ', " +
+	//			"'', 'cust', '원')";
+
 
 
 	//	private ArrayList<String> getArrayList(long diaryNo, String table) {

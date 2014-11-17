@@ -64,7 +64,7 @@ public class LoignActivity extends Activity implements OnClickListener{
             	startActivity(new Intent(LoignActivity.this, ShackSignUpActivity.class));
                 break;
             case R.id.txt_login:
-            	startActivity(new Intent(LoignActivity.this, ShackLoginActivity.class));
+            	startActivity(new Intent(LoignActivity.this, MainActivity.class));//ShackLoginActivity
                 break;
             default:
                 break;

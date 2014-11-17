@@ -27,9 +27,6 @@ import com.tleaf.tiary.model.Diary;
 
 public class CallListViewFragment extends BaseFragment {
 
-	private Activity mContext;
-	private DataManager dataMgr;
-
 	private CallLogAdapter mAdapter;
 
 	public CallListViewFragment() {
@@ -39,11 +36,10 @@ public class CallListViewFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mContext = getActivity();
-		dataMgr = new DataManager(mContext);
-
 		View rootView = inflater.inflate(R.layout.fragment_call, container, false);
 		ListView lv = (ListView) rootView.findViewById(R.id.list_call);
 
+		
 		mAdapter = new CallLogAdapter(mContext, R.layout.item_call);
 		lv.setAdapter(mAdapter);
 		lv.setOnItemClickListener(mItemClickListener);

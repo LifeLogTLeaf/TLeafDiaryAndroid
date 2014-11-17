@@ -1,17 +1,64 @@
 package com.tleaf.tiary.model;
 
-
 public class MyLog {
 	protected String id;
 	protected String rev;
 
 	private double latitude;
 	private double longitude;
-//	private long locationTime; -> 일단은 time으로 하고 전송타임은  sendTime으로 따로 하는게 낫지 않을까요?
-
-	private long date;
-	private String type;
+	private long myNo;
+	private String myAddress;
+	private String myAddressName;
+	private long date; //로그들의 발생 타임
 	
+	private long shackLogTime;
+	private String shackLogType;
+	
+	public MyLog() {
+		
+	}
+	
+	public MyLog(double latitude, double longitude, String myAddress, String myAddressName, long date) {
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.myAddress = myAddress;
+		this.myAddressName = myAddressName;
+		this.date = date;
+	}	
+	
+	public long getMyNo() {
+		return myNo;
+	}
+
+	public void setMyNo(long myNo) {
+		this.myNo = myNo;
+	}
+
+	public String getMyAddressName() {
+		return myAddressName;
+	}
+	public void setMyAddressName(String myAddressName) {
+		this.myAddressName = myAddressName;
+	}
+	
+	public String getMyAddress() {
+		return myAddress;
+	}
+	public void setMyAddress(String myAddress) {
+		this.myAddress = myAddress;
+	}
+	public long getShackLogTime() {
+		return shackLogTime;
+	}
+	public void setShackLogTime(long shackLogTime) {
+		this.shackLogTime = shackLogTime;
+	}
+	public String getShackLogType() {
+		return shackLogType;
+	}
+	public void setShackLogType(String shackLogType) {
+		this.shackLogType = shackLogType;
+	}
 	public String getId() {
 		return id;
 	}
@@ -36,22 +83,12 @@ public class MyLog {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-//	public long getLocationTime() {
-//		return locationTime;
-//	}
-//	public void setLocationTime(long locationTime) {
-//		this.locationTime = locationTime;
-//	}
+
 	public long getDate() {
 		return date;
 	}
 	public void setDate(long date) {
 		this.date = date;
 	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}	
+
 }

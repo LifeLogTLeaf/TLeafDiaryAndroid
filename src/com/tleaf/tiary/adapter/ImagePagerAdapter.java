@@ -59,7 +59,7 @@ public class ImagePagerAdapter extends PagerAdapter {
 			
 			@Override
 			public void onClick(View v) {
-				Util.tst(mContext, "ºäÈ®´ë");
+				Util.tst(mContext, "ë·°í™•ëŒ€");
 			}
 		});
 		

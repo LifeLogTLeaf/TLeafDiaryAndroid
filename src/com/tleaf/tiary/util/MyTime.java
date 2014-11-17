@@ -19,6 +19,7 @@ public class MyTime {
 //	Time time = new Time(Time.getCurrentTimezone());
 //	time.setToNow();
 //	time.toMillis(false);
+	
 	static public long getCurrentTime() {
 		long time = System.currentTimeMillis();
 		return time;

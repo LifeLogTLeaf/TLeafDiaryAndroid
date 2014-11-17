@@ -27,8 +27,8 @@
     <color name="edit_diary_date_blue">#53b7ee</color>
     <color name="dialog_add_section">#fcfcfd</color>
     <color name="no_image">#C2C2C1</color>
-    <color name="log_blue">#94D028</color>
-    <color name="log_green">#22BCD9</color>
+    <color name="log_blue">#22BCD9</color>
+    <color name="log_green">#94D028</color>
     <color name="log_yellow">#FCC42D</color>
     <color name="log_orange">#F68C36</color>
     <color name="log_red">#E9423B</color>
