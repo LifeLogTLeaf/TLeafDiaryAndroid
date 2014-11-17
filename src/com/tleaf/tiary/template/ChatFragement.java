@@ -96,6 +96,8 @@ public class ChatFragement extends BaseFragment {
 					selectedLog = "";
 					Call call = (Call) myLog;
 					selectedLog = call.getName();
+					if (selectedLog.equals("등록없음"))
+						selectedLog = call.getNumber();
 				} else if (myLog instanceof Card) { //먼저 검사해주어야 한다 //내용수정 
 					selectedLog = "";
 					Card card = (Card) myLog;
@@ -207,7 +209,9 @@ public class ChatFragement extends BaseFragment {
 
 	private void sendMessage() {
 		String newMessage = edit_chat.getText().toString().trim();
-		contentArr.get(contentNo++).setContent(newMessage);
+		contentArr.get(contentNo).setContent(newMessage);
+		if (contentNo < contentArr.size()) 
+			contentNo++;
 		if (newMessage != null && newMessage.length() > 0) {
 			edit_chat.setText("");
 			addNewMessage(new Message(newMessage, true));
