@@ -139,3 +139,6 @@ by csg
 by csg
 -temporary commit
 
+#52
+-code 주석 삽입
+
