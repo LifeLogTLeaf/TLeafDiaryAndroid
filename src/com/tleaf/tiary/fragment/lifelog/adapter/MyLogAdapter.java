@@ -41,10 +41,10 @@ abstract public class MyLogAdapter extends BaseAdapter {
 	@Override
 	public int getCount() {
 		if (arrItem == null) {
-			// 아직 조회안한시점
+			// 아직 조회안한시점 (초기값)
 			return 0;
 		} else if (arrItem.size() == 0) {
-			// 조회했는데 0
+			// 조회했는데 0인 경우 no log뷰를 띄우기 위해 값을 1로 설정
 			return 1;
 		}
 
@@ -53,6 +53,7 @@ abstract public class MyLogAdapter extends BaseAdapter {
 	
 	@Override
 	public MyLog getItem(int position) {
+		// 조회했는데 0인 경우 array는 0이고 getCount는 1
 		if (getCount() == 1 && arrItem.size() == 0) {
 			return null;
 		}

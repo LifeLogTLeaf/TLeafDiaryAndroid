@@ -156,6 +156,7 @@ public class DiaryFragment extends BaseFragment {
 			adapter = new ImagePagerAdapter(mContext, diary.getImages(), imageLoader);
 			mPager.setAdapter(adapter);
 			mPager.setOnPageChangeListener(mPageListener);
+			
 			rl.setVisibility(View.VISIBLE);
 			int size = diary.getImages().size();
 			img_moving = new ImageView[size];

@@ -1,173 +1,155 @@
 package com.tleaf.tiary.fragment.lifelog.adapter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.view.LayoutInflater;
+import android.text.format.Time;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.tleaf.tiary.Common;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.Card;
+import com.tleaf.tiary.model.MyLog;
+import com.tleaf.tiary.model.MySms;
 import com.tleaf.tiary.util.MyTime;
+import com.tleaf.tiary.util.Util;
 
-public class CardLogAdapter extends BaseAdapter {
-	private Context mContext;
-	private LayoutInflater mInflater;
-	private ArrayList<Card> arrItem;
+public class CardLogAdapter extends MyLogAdapter {
 	private int mLayout;
-	private ImageLoader imageLoader;
-	
-	public CardLogAdapter(Context context, int layout, ArrayList<Card> item) {
-		mContext = context;
-		mInflater = (LayoutInflater)context.getSystemService(
-				Context.LAYOUT_INFLATER_SERVICE);
-		arrItem = item;
-		mLayout = layout;
-		
-		if (item == null)
-			arrItem = new ArrayList<Card>();
-	}
+	private HashSet<Integer> mFirstDayPositionSet;
 
-	public int getCount() {
-		return arrItem.size();
+
+	public CardLogAdapter(Context context, int layout) {
+		super(context);
+		mLayout = layout;
+		mFirstDayPositionSet = new HashSet<Integer>();
 	}
 
 	public Card getItem(int position) {
-		return arrItem.get(position);
+		MyLog card = super.getItem(position);
+
+		if (card != null && card instanceof Card)
+			return (Card) arrItem.get(position);
+		else {
+			return null;
+		}
 	}
 
 	public long getItemId(int position) {
 		return position;
 	}
-
-	public void updateItem(ArrayList<Card> diaryArr) {
-		arrItem.clear();
-		arrItem.addAll(diaryArr);
-		notifyDataSetChanged();
-	}
 	
-	//	String table_diary = "create table diary (no integer primary key autoincrement, " +
-	//			"date integer, " +
-	//			"title text, " +
-	//			"content text, " +
-	//			"emotion text, " +
-	//			"images text, " +
-	//			"tags text, " +
-	//			"folders text, " +
-	//			"location text, " +
-	//			"todayWeather text, " +
-	//			"temperature real, " +
-	//			"humidity real)";
+	@Override
+	public void updateItem(ArrayList<MyLog> arr) {
+		Util.ll("updateItem CardLogAdapter arr", arr.size());
+		if (arr.size() == 0) {
+			super.updateItem(arr);
+			return;
+		}
+
+		/* card log array에서 요일이 바뀌는 position을 확인한다 */
+		mFirstDayPositionSet.clear();
+		mFirstDayPositionSet.add(0);
+
+		Time time = new Time(Time.getCurrentTimezone());
+		time.setToNow();
+		int befoJulian, julian;
+
+		befoJulian = Time.getJulianDay(arr.get(0).getDate(), time.gmtoff);
+		
+		for (int i = 1; i < arr.size(); i++) {
+			julian = Time.getJulianDay(arr.get(i).getDate(), time.gmtoff);
+			if (julian != befoJulian) {
+				mFirstDayPositionSet.add(i);
+			}
+			befoJulian = julian;
+		}
+
+		super.updateItem(arr);
+
+	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final int pos = position;
 		if (convertView == null) {
 			convertView = mInflater.inflate(mLayout, parent, false);
 		}
-/*
-		TextView txt_date = (TextView)convertView.findViewById(R.id.item_txt_diary_date);
-		String dateStr = MyTime.getLongToString(mContext, arrItem.get(position).getDate());
-		txt_date.setText(dateStr);
+		Card card = getItem(position);
 
-		ImageView img = (ImageView)convertView.findViewById(R.id.item_img_diary);
-		ArrayList<String> imgArr = arrItem.get(position).getImages();
+		LinearLayout ll = (LinearLayout) convertView
+				.findViewById(R.id.layout_item_card);
+		TextView txt_nolog = (TextView) convertView
+				.findViewById(R.id.item_txt_card_nolog);
+	
+		TextView txt_name = (TextView) convertView
+				.findViewById(R.id.item_txt_name_card);
+		TextView txt_number = (TextView) convertView
+				.findViewById(R.id.item_txt_number_card);
+		TextView txt_date = (TextView) convertView
+				.findViewById(R.id.item_txt_date_card);
 		
-		initImageLoader();
-		if (imgArr != null && imgArr.size() != 0) {
-//			img.setVisibility(View.VISIBLE);
-			try {
-				imageLoader.displayImage("file://" + imgArr.get(0),
-						img, new SimpleImageLoadingListener() {
-					@Override
-					public void onLoadingStarted(String imageUri, View view) {
-						//						img_photo.setImageResource(R.drawable.no_media);
-						super.onLoadingStarted(imageUri, view);
-					}
-				});
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		
+		TextView txt_cardType = (TextView) convertView
+				.findViewById(R.id.item_txt_cardType_card);
+		
+		TextView txt_cardDate = (TextView) convertView
+				.findViewById(R.id.item_txt_cardDate_card);
+		
+		TextView txt_spendedMoney = (TextView) convertView
+				.findViewById(R.id.item_txt_spendedMoney_card);
+		
+		TextView txt_spendedPlace = (TextView) convertView
+				.findViewById(R.id.item_txt_spendedPlace_card);
+		
+		TextView txt_leftMoney = (TextView) convertView
+				.findViewById(R.id.item_txt_leftMoney_card);
+		
+		
+		RelativeLayout ll_date = (RelativeLayout) convertView
+				.findViewById(R.id.layout_item_card_day);
+		TextView txt_date_title = (TextView) convertView
+				.findViewById(R.id.item_txt_card_date);
+		
+		/* card log가 없을 경우 없음을 알리는 뷰를 visible한다, card log를 보여주는 listview와 날짜 타이틀 뷰를 gone한다 */
+		if (card == null) {
+			ll.setVisibility(View.GONE);
+			ll_date.setVisibility(View.GONE);
+			txt_nolog.setVisibility(View.VISIBLE);
+			return convertView;
+		}
+		
+		/* card log array에서 요일이 바뀌는 position일 경우 날짜 타이틀 뷰를 visible한다 */
+		if (mFirstDayPositionSet.contains(position)) {
+			ll_date.setVisibility(View.VISIBLE);
+			txt_date_title.setText(MyTime.getLongToString(mContext,
+					card.getDate()));
 		} else {
-//			img.setVisibility(View.GONE);
-			img.setBackgroundColor(mContext.getResources().getColor(R.color.background_skyblue));
+			ll_date.setVisibility(View.GONE);
 		}
+		
+		ll.setVisibility(View.VISIBLE);
+		txt_nolog.setVisibility(View.GONE);
 
-		TextView txt_title = (TextView)convertView.findViewById(R.id.item_txt_diary_title);
-		txt_title.setText(arrItem.get(position).getTitle());
-
-		TextView txt_content = (TextView)convertView.findViewById(R.id.item_txt_diary_content);
-		txt_content.setText(arrItem.get(position).getContent());
-
-
-		//사용자에게 더 있음을 알려주는 ui
-		ImageView img_tag = (ImageView)convertView.findViewById(R.id.item_img_diary_tag);
-
-		TextView txt_tag = (TextView)convertView.findViewById(R.id.item_txt_diary_tag);
-		ArrayList<String> tags = arrItem.get(position).getTags();
-		if(tags != null && tags.size() != 0) {
-			txt_tag.setVisibility(View.VISIBLE);
-			txt_tag.setText(tags.get(0));
-			img_tag.setVisibility(View.VISIBLE);
-
-		} else {
-			txt_tag.setVisibility(View.GONE);
-			img_tag.setVisibility(View.GONE);
-		}
-
-		ImageView img_folder = (ImageView)convertView.findViewById(R.id.item_img_diary_folder);
-
-		TextView txt_folder = (TextView)convertView.findViewById(R.id.item_txt_diary_folder);
-		ArrayList<String> folders = arrItem.get(position).getFolders();
-		if(folders != null && folders.size() != 0) {
-			txt_folder.setVisibility(View.VISIBLE);
-			txt_folder.setText(folders.get(0)); 
-			img_folder.setVisibility(View.VISIBLE);
-		} else { 
-			txt_folder.setVisibility(View.GONE);
-			img_folder.setVisibility(View.GONE);
-		}
-
-		ImageView img_location = (ImageView)convertView.findViewById(R.id.item_img_diary_location);
-
-		TextView txt_location = (TextView)convertView.findViewById(R.id.item_txt_diary_location);
-		String location = arrItem.get(position).getLocation().trim();
-		if(location != null && !location.equals("null") && !location.equals("")) {
-			txt_location.setVisibility(View.VISIBLE);
-			txt_location.setText(arrItem.get(position).getLocation());
-			img_location.setVisibility(View.VISIBLE);
-
-		} else {
-			txt_location.setVisibility(View.GONE);
-			img_location.setVisibility(View.GONE);
-		}
-*/
-
+		txt_name.setText(card.getName());
+		txt_number.setText(card.getNumber());
+		String dateStr = MyTime
+				.getLongToStringWithTime(mContext, card.getDate());
+		
+		txt_date.setText(dateStr);
+		
+		txt_cardType.setText("결제카드 : "+card.getCardType());
+		txt_cardDate.setText("결제시간 : "+MyTime
+				.getLongToStringWithTime(mContext, card.getCardDate()));
+		txt_spendedMoney.setText("결제금액 : " + card.getSpendedMoney()+"원");
+		txt_spendedPlace.setText("결제장소 : " + card.getSpendedPlace());
+		txt_leftMoney.setText("잔액 : "+card.getLeftMoney()+"원");
+	
 		return convertView;
 	}
-	
-	private void initImageLoader() {
-		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-		.cacheOnDisc().imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
-		.bitmapConfig(Bitmap.Config.RGB_565).build();
 
-		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
-				mContext).defaultDisplayImageOptions(defaultOptions).memoryCache(
-						new WeakMemoryCache());
-
-		ImageLoaderConfiguration config = builder.build();
-		imageLoader = ImageLoader.getInstance();
-		imageLoader.init(config);
-	}
 }

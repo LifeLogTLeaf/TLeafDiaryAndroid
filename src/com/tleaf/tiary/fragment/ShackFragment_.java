@@ -25,7 +25,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.MyGallery;
-import com.tleaf.tiary.photo.GalleryAdapter_;
 import com.tleaf.tiary.util.Util;
 
 
@@ -33,7 +32,7 @@ public class ShackFragment_ extends BaseFragment {
 
 	private GridView gridGallery;
 	private Handler handler;
-	private GalleryAdapter_ adapter;
+//	private test_GalleryAdapter_ adapter;
 
 	private ImageView imgSinglePick;
 	private Button btnGalleryPickMul;

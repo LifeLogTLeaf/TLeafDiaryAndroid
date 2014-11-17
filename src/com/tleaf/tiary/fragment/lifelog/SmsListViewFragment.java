@@ -17,8 +17,7 @@ import com.tleaf.tiary.fragment.BaseFragment;
 import com.tleaf.tiary.fragment.lifelog.adapter.SmsLogAdapter;
 
 public class SmsListViewFragment extends BaseFragment {
-	private Activity mContext;
-	private DataManager dataMgr;
+
 	private SmsLogAdapter mAdapter ;
 
 	public SmsListViewFragment() {

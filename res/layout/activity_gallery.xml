@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/background_grey"
     android:orientation="vertical" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
@@ -51,26 +51,22 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnGalleryOk"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="확인" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" >
 
         <GridView
-            android:id="@+id/grid_gallery"
+            android:id="@+id/gridview_gallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:horizontalSpacing="1dp"
             android:numColumns="3"
+            android:padding="@null"
             android:stretchMode="columnWidth"
             android:verticalSpacing="1dp"
-            tools:listitem="@layout/item_gallery" />
+            tools:listitem="@layout/item_gallery" >
+        </GridView>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -84,5 +80,11 @@
                 android:src="@drawable/no_media" />
         </RelativeLayout>
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnGalleryOk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="확인" />
 
 </LinearLayout>

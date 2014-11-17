@@ -2,11 +2,13 @@ package com.tleaf.tiary.util;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class Util {
@@ -69,7 +71,9 @@ public class Util {
 	{
 		InputMethodManager imm = (InputMethodManager) context
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.showSoftInput(editView, 2);//0
+		
+		boolean result = imm.showSoftInput(editView, InputMethodManager.SHOW_IMPLICIT);//0
+		Util.ll("showKeyboard result", result);
 	}
 	
 
