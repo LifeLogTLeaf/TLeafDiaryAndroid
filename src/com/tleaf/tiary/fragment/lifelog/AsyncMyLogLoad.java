@@ -26,6 +26,7 @@ import com.tleaf.tiary.util.MyPreference;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
+/** 사용자 로그들을 asyncTack를 이용해 주집하는 클래스 **/
 public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 {
 	private Context mContext;
@@ -89,7 +90,7 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 			ArrayList<MySms> smsUpdatedArr = new ArrayList<MySms>();
 			smsUpdatedArr.addAll(collectSmsByType(Common.KEY_SMSINBOX_BASETIME));
 			dataMgr.insertSmsList(smsUpdatedArr, Common.KEY_SMSINBOX_BASETIME);
-			
+
 			ArrayList<Card> cardArr = new ArrayList<Card>();
 			cardArr.addAll(collectCard());
 			dataMgr.insertCardList(cardArr);
@@ -113,17 +114,18 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 			returnArr.addAll(bookMarkArr);
 			return returnArr;
 		case Common.GALLERY:
-//			ArrayList<MyLog> locationArr = new ArrayList<MyLog>();
-//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
-//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
-//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
-//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
-//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
-//			return locationArr;
+			//			ArrayList<MyLog> locationArr = new ArrayList<MyLog>();
+			//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			//			return locationArr;
 		}
 		return new ArrayList<MyLog>();
 	}
 
+	/** 각 어답터에게 결과 리스트를 보내는 메서드 **/
 	@Override
 	protected void onPostExecute(ArrayList<MyLog> result) {
 		super.onPostExecute(result);
@@ -134,6 +136,7 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 	}
 
 	//pref set은 db 메소드에서
+	/** 안드로이드 자원에서 전화 목록을 가져오는 메서드 **/
 	private ArrayList<Call> collectCall() { 
 		MyPreference pref = new MyPreference(mContext);
 		long callBaseTime = pref.getLongPref(Common.KEY_CALL_BASETIME, pref.getLongPref(Common.KEY_INSTALL_TIME));
@@ -211,6 +214,7 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 		return callArr;
 	}
 
+	/** 안드로이드 자원에서 문자 목록을 가져오는 메서드 **/
 	private ArrayList<MySms> collectSmsByType(String typeIdx) {
 		MyPreference pref = new MyPreference(mContext);
 
@@ -293,6 +297,7 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 		return smsArr;
 	}
 
+	/** 사용자 내부 디비에 전화 테이블에서 수신 목록만 가져와서 카드 문자만 모으는 메서드 **/
 	private ArrayList<Card> collectCard() {
 		MyPreference pref = new MyPreference(mContext);
 
@@ -301,57 +306,60 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 
 		HashMap<String, String> cardInfoArr = Common.getCardArr();
 		ArrayList<MyLog> smsArr = dataMgr.getSmsListByType(Common.INCOMING, cardBaseTime);
-		
-//		private long no;
-//		private String name;
-//		private String number;
-//		private String type;
-//		private String message;
-		
+
+		//		private long no;
+		//		private String name;
+		//		private String number;
+		//		private String type;
+		//		private String message;
+
 		ArrayList<Card> cardArr = new ArrayList<Card>();
 		Card card;
 		for (int i=0; i <smsArr.size(); i++) {
 			MySms sms = (MySms)(smsArr.get(i));
 			if (cardInfoArr.containsKey(sms.getNumber())) {
-//				Util.ll("collectCard sms getDate", MyTime.getLongToString(sms.getDate()));
-//				Util.ll("collectCard sms getNo", sms.getNo());
-////				Util.ll("collectCard sms getName", sms.getName()); -> null
-//				Util.ll("collectCard sms getNumber", sms.getNumber());
-//				Util.ll("collectCard sms getType", sms.getType());
-//				Util.ll("collectCard sms getMessage", sms.getMessage());
-				
-//				card = (Card) sms; //확인
+				//				Util.ll("collectCard sms getDate", MyTime.getLongToString(sms.getDate()));
+				//				Util.ll("collectCard sms getNo", sms.getNo());
+				////				Util.ll("collectCard sms getName", sms.getName()); -> null
+				//				Util.ll("collectCard sms getNumber", sms.getNumber());
+				//				Util.ll("collectCard sms getType", sms.getType());
+				//				Util.ll("collectCard sms getMessage", sms.getMessage());
+
+				//				card = (Card) sms; //확인
 				card = new Card();
 				card.setDate(sms.getDate());
 				card.setNo(sms.getNo());
-//				card.setName(sms.getName());
+				//				card.setName(sms.getName());
 				card.setNumber(sms.getNumber());
-//				card.setType(sms.getType());
+				//				card.setType(sms.getType());
 				card.setMessage(sms.getMessage());
-				
+
 				card.setCardType(cardInfoArr.get(card.getNumber()));
-				
-//				Util.ll("collectCard card getDate", MyTime.getLongToString(card.getDate()));
-//				Util.ll("collectCard card getNo", card.getNo());
-////				Util.ll("collectCard card getName", card.getName()); -> null
-//				Util.ll("collectCard card getNumber", card.getNumber());
-//				Util.ll("collectCard card getType", card.getType());
-//				Util.ll("collectCard card getMessage", card.getMessage());
-				
+
+				//				Util.ll("collectCard card getDate", MyTime.getLongToString(card.getDate()));
+				//				Util.ll("collectCard card getNo", card.getNo());
+				////				Util.ll("collectCard card getName", card.getName()); -> null
+				//				Util.ll("collectCard card getNumber", card.getNumber());
+				//				Util.ll("collectCard card getType", card.getType());
+				//				Util.ll("collectCard card getMessage", card.getMessage());
+
 				card = analyzeSmsForCard(card);
 				cardArr.add(card);
 			}
 		}
 		return cardArr;
 	}
-	
-//	private long cardNo;
-//	private String cardType;
-//	private long cardDate;
-//	private int spendedMoney;
-//	private String spendedPlace;
-//	private int leftMoney;
 
+	//	private long cardNo;
+	//	private String cardType;
+	//	private long cardDate;
+	//	private int spendedMoney;
+	//	private String spendedPlace;
+	//	private int leftMoney;
+
+	/** 신한카드 문자를 파싱하는 메서드 **/
+	/** [Web발신]
+		신한체크승인    08/12 11:18     4,100원         롯데쇼핑(주)롭  잔액89,800원**/
 	private Card parseShinHan(Card card) {
 		try {
 			StringTokenizer tokenizer = new StringTokenizer(card.getMessage());
@@ -377,17 +385,17 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 			mTime.set(0, minute, hour, monthDay, month-1, 2014); //2014 //month-1
 			card.setCardDate(mTime.toMillis(false));
 			Util.ll("파싱결과 setCardDate", MyTime.getLongToString(card.getCardDate()));
-			
+
 			String money = tokenizer.nextToken();
 			money = money.trim();
 			money = money.replace(",", "");
 			money = money.replace("원", "");
 			card.setSpendedMoney(Integer.parseInt(money));
 			Util.ll("파싱결과 setSpendedMoney", card.getSpendedMoney());
-			
+
 			card.setSpendedPlace(tokenizer.nextToken());
 			Util.ll("파싱결과 setSpendedPlace", card.getSpendedPlace());
-			
+
 			String leftMoney = tokenizer.nextToken();
 			leftMoney = leftMoney.trim();
 			leftMoney = leftMoney.replace("잔액", "");
@@ -408,7 +416,7 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 		return card;
 	}
 
-
+	/** 수집된 문자중에서 전화번호로 어떤 카드의 문자인지 확인하는 메서드 **/
 	private Card analyzeSmsForCard (Card card) {
 		Card parsedCard = null;
 		if(card.getCardType().equals(Common.NAME_SHINHAN)) {

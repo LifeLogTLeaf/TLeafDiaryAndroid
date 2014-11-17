@@ -16,6 +16,9 @@ import android.widget.ImageView;
 
 import com.tleaf.tiary.R;
 
+
+/** 이미지 뷰의 상단 부분만 라운딩 해주는 커스텀 이미지뷰 
+ * 다이어리 리스트 뷰의 한 다이어리 이미지에 사용한다**/
 public class SemiRoundImageView  extends ImageView
 {
 

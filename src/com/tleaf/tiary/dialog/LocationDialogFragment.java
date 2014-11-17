@@ -24,7 +24,7 @@ import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.util.Util;
 
-
+/** 장소 선택을 위한 커스텀 다이어로그 프래그먼트 클래스 **/
 public class LocationDialogFragment extends DialogFragment {
 
 	//	private final int initialize = 1;
@@ -38,8 +38,6 @@ public class LocationDialogFragment extends DialogFragment {
 	private DataManager dataMgr;
 
 	private EditText edit_location;
-
-
 
 	private TextView[] txt_userLocation;
 
@@ -154,6 +152,7 @@ public class LocationDialogFragment extends DialogFragment {
 		return mv;
 	}
 
+	/** 다이어로그에 위치 목록을 동적으로 생성하는 메서드 **/
 	private void setLocationList(String location) {
 		ll.removeAllViews();
 		ArrayList<String> userLocations = new ArrayList<String>();
@@ -194,7 +193,7 @@ public class LocationDialogFragment extends DialogFragment {
 	//	}
 
 
-
+	/** 다이어로그 선택에 따른 사용자 선택값 관리 **/
 	private OnClickListener cl = new OnClickListener() {
 
 		@Override

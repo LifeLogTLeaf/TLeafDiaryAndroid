@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.util.Util;
 
+/** 다이어리 에디터 뷰에서 이미지를 horizontal lisview로 보여줄 수 이미지를 바인딩 해주는 리스트뷰 어답터 **/
 public class PhotoEditAdapter extends BaseAdapter {
 
 //	private boolean isAdding = false;

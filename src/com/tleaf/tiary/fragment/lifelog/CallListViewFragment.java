@@ -25,6 +25,7 @@ import com.tleaf.tiary.fragment.lifelog.adapter.CallLogAdapter;
 import com.tleaf.tiary.model.Call;
 import com.tleaf.tiary.model.Diary;
 
+/** 전 로그 리스트 뷰를 담당하는 프래그먼트 클래스 **/
 public class CallListViewFragment extends BaseFragment {
 
 	private CallLogAdapter mAdapter;
@@ -55,6 +56,7 @@ public class CallListViewFragment extends BaseFragment {
 			}
 		});
 		
+		/** 뷰 상단에 분류 탭에 따른 다른 콜로그리스트를 불러온다 **/
 		TextView txt_incoming = (TextView) rootView.findViewById(R.id.txt_incoming);
 		txt_incoming.setOnClickListener(new OnClickListener() {
 

@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+/** 홈 뷰를 담당하는 홈프래금먼트 클래스
+ * 메인뷰와 다이어리 리스트 뷰를 갖는다**/
 public class HomeFragement extends BaseFragment {
 	
 	private ViewPager vp_home;

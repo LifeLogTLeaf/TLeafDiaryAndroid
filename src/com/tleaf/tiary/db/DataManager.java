@@ -23,6 +23,7 @@ import com.tleaf.tiary.util.MyPreference;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
+/** 어플리케이션과 splite를 연결해주는 db interface 클래스 **/
 public class DataManager {
 
 	private Context mContext = null;

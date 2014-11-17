@@ -17,6 +17,8 @@ import com.tleaf.tiary.fragment.BaseFragment;
 import com.tleaf.tiary.fragment.lifelog.adapter.LocationLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.SmsLogAdapter;
 
+
+/** 장소 로그 리스트 뷰를 담당하는 프래그먼트 클래스 **/
 public class LocationListView extends BaseFragment {
 
 	private LocationLogAdapter mAdapter ;

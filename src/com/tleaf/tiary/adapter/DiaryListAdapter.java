@@ -24,6 +24,7 @@ import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.SemiRoundImageView;
 import com.tleaf.tiary.util.Util;
 
+/** 넘겨받은 다이어리 array로 다이어리 리스트뷰를 채우는 리스트뷰 어답터 **/
 public class DiaryListAdapter extends BaseAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;

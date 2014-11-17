@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/** 액션바에 있는 스피너의 리스트뷰를 채우는 리스트뷰 어답터 **/
 public class SpinnerListAdapter extends BaseAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;

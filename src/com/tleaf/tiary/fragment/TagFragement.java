@@ -28,6 +28,7 @@ import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.Util;
 
+/** 태그검색 기능을 담당하는 태그 뷰를 담당하는 클래스 **/
 public class TagFragement extends BaseFragment {
 
 	private Context mContext;
@@ -135,6 +136,7 @@ public class TagFragement extends BaseFragment {
 		}
 	};
 
+	/** 검색 목록에 들어간 태그를 삭제 클릭시 처리하는 메서드 **/
 	private OnClickListener cl_delete = new OnClickListener() {
 
 		@Override
@@ -148,6 +150,7 @@ public class TagFragement extends BaseFragment {
 		}
 	};
 
+	/** 태그 검색어를 추가시 검색 목록에 태그를 동적으로 추가해주는 메서드 **/
 	private void putTagTextViewInLayout(String tag) {//(int lastIndex) {
 		int no = 0;
 		LinearLayout layout = new LinearLayout(mContext);
@@ -180,6 +183,7 @@ public class TagFragement extends BaseFragment {
 		ll.addView(layout, no++);
 	}
 
+	/** 태그 검색 목록에 따른 다이어리 목록을 가져오는 메서드 **/
 	private void setDiaryList() {
 		Util.ll("tagArr", tagArr.toString());
 		diaryArr.clear();

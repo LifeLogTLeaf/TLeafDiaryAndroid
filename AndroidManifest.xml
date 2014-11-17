@@ -56,9 +56,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="eu.janmuller.android.simplecropimage.CropImage"
-            android:screenOrientation="portrait" />
+<!--         <activity -->
+<!--             android:name="eu.janmuller.android.simplecropimage.CropImage" -->
+<!--             android:screenOrientation="portrait" /> -->
 
         <provider
             android:name=".photo.InternalStorageContentProvider"

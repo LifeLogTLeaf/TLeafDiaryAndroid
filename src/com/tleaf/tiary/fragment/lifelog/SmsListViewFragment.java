@@ -16,6 +16,8 @@ import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.fragment.BaseFragment;
 import com.tleaf.tiary.fragment.lifelog.adapter.SmsLogAdapter;
 
+
+/** 문자 로그 리스트 뷰를 담당하는 프래그먼트 클래스 **/
 public class SmsListViewFragment extends BaseFragment {
 
 	private SmsLogAdapter mAdapter ;

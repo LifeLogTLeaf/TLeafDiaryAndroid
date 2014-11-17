@@ -20,6 +20,8 @@ import com.tleaf.tiary.model.MyLog;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
+
+/** 전화 로그 리스트 뷰를 전화 로그로 채워주는 리스트뷰 어답터 **/
 public class CallLogAdapter extends MyLogAdapter {
 	private int mLayout;
 	private HashSet<Integer> mFirstDayPositionSet;

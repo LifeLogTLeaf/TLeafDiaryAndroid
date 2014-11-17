@@ -7,8 +7,8 @@ import android.content.Context;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 
+/** 시간 관련한 메서드를 담는 클래스 **/
 public class MyTime {
-
 
 	static public Time getCurrentTimeToTime() {
 		Time time = new Time(Time.getCurrentTimezone());
@@ -16,16 +16,16 @@ public class MyTime {
 		return time;
 	}
 
-//	Time time = new Time(Time.getCurrentTimezone());
-//	time.setToNow();
-//	time.toMillis(false);
-	
+	//	Time time = new Time(Time.getCurrentTimezone());
+	//	time.setToNow();
+	//	time.toMillis(false);
+
 	static public long getCurrentTime() {
 		long time = System.currentTimeMillis();
 		return time;
 	}
 
-	
+
 	//호출형식 : MyTime.getTodayToString(mContext, time.toMillis(false))
 	static public String getLongToString(Context context, long millis) {
 		return DateUtils.formatDateTime(context,
@@ -35,12 +35,12 @@ public class MyTime {
 	}
 
 	static public String getLongToString(long time) {
-        Date date = new Date(time);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String currentDate = dateFormat.format(date);
-        return currentDate;
+		Date date = new Date(time);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String currentDate = dateFormat.format(date);
+		return currentDate;
 	}
-	
+
 	static public String getLongToStringWithTime(Context context, long millis) {
 		return DateUtils.formatDateTime(context,
 				millis, DateUtils.FORMAT_SHOW_DATE
@@ -53,7 +53,7 @@ public class MyTime {
 		return DateUtils.formatDateTime(context,
 				millis, DateUtils.FORMAT_SHOW_TIME);
 	}
-	
+
 	//호출형식 : MyTime.getTodayToString(mContext, time.toMillis(false))
 	//	static public String getTodayToString(Context context, long millis) {
 	//		return DateUtils.formatDateTime(context,

@@ -48,6 +48,7 @@ import com.tleaf.tiary.photo.PhotoEditAdapter;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
+/** 다이어리 에디터 뷰를 담당하는 프래그먼트 클래스 **/
 public class DiaryEditFragment extends BaseFragment {
 
 	private boolean edit;
@@ -174,6 +175,7 @@ public class DiaryEditFragment extends BaseFragment {
 		imageLoader.init(config);
 	}
 
+	/** 다이어리 에디터 뷰가 처음 작성 모드일 때 뷰를 세팅해주는 메서드 **/
 	private void setComponent() {
 
 		layout_menu = (LinearLayout) rootView
@@ -240,6 +242,7 @@ public class DiaryEditFragment extends BaseFragment {
 		horiView.setAdapter(adapter);
 	}
 
+	/** 다이어리 생성 모드일 때 해당 변수를 초기화하는 메서드 **/
 	private void setCreatedDiary() {
 		txt_date.setText(MyTime.getLongToStringWithTime(mContext,
 				mTime.toMillis(false)));
@@ -249,6 +252,7 @@ public class DiaryEditFragment extends BaseFragment {
 		// adapter.isAdding(false);
 	}
 
+	/** 다이어리 에디터 뷰가 수정 모드일 때 뷰를 세팅해주는 메서드 **/
 	private void setEditedDairy() {
 		String dateStr = MyTime.getLongToStringWithTime(mContext,
 				editedDiary.getDate());
@@ -299,6 +303,7 @@ public class DiaryEditFragment extends BaseFragment {
 
 	}
 
+	/** 이미지가 있을 때만 레이아웃이 나오도록 설정하는 메서드 **/
 	private void setImageLayout() {
 		if (selectedImages != null && selectedImages.size() != 0) {
 			horiView.setVisibility(View.VISIBLE);
@@ -307,6 +312,7 @@ public class DiaryEditFragment extends BaseFragment {
 		}
 	}
 
+	/** 태그, 폴더, 장소 정보가 있을 때만 레이아웃이 나오도록 설정하는 메서드 **/
 	private void setInfoLayout() {
 		String tagStr = txt_tag.getText().toString();
 		String tagFolder = txt_folder.getText().toString();
@@ -329,6 +335,7 @@ public class DiaryEditFragment extends BaseFragment {
 		}
 	};
 
+	/** 하단에 다이어리 에디터 시 사용되는 메뉴의 클릭을 처리하는 메서드 **/
 	private void onClickMenu(int viewId) {
 		switch (viewId) {
 		case R.id.txt_edit_date:
@@ -427,6 +434,7 @@ public class DiaryEditFragment extends BaseFragment {
 		}
 	}
 
+	/** 호출한 인텐트의 결과를 받는 메서드 **/
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// Util.tst(mContext,
@@ -442,11 +450,13 @@ public class DiaryEditFragment extends BaseFragment {
 		}
 	}
 
+	/** 이미지를 보여주는 뷰페이저 어답터에게 새로운 이미지 배열을 넘겨준다 **/
 	private void displayPhoto() {
 		adapter.addAll(selectedImages);
 		setImageLayout();
 	}
 
+	/** 커스텀 다이어로그가 다이어리 프래그먼트에 넘긴 데이터 값을 받는 리스너 **/
 	private DialogResultListener dialogResultListener = new DialogResultListener() {
 
 		@Override
@@ -507,6 +517,7 @@ public class DiaryEditFragment extends BaseFragment {
 
 	};
 
+	/** 다이어리 저장을 처리하는 메서드 **/
 	private void saveDiary() {
 		Util.hideKeyboard(mContext, txt_content.getApplicationWindowToken());
 		Diary mDiary = new Diary();

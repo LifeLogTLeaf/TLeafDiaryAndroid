@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.Message;
 
+/** 채팅 리스트뷰를 대화로 채워주는 리스트뷰 어답터 **/
 public class ChatAdapter extends BaseAdapter {
 
 	private Context mContext;

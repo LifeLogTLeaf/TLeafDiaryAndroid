@@ -23,6 +23,7 @@ import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.util.Util;
 
+/** 이모티콘 선택을 위한 커스텀 다이어로그 프래그먼트 클래스 **/
 public class EmotionDialogFragment extends DialogFragment {
 
 	private DialogResultListener resultListener;

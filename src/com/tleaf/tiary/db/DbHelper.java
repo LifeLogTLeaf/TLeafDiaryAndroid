@@ -9,7 +9,6 @@ import com.tleaf.tiary.R;
 import com.tleaf.tiary.util.MyTime;
 
 /*
- * 작성자: 최슬기
  * 기능: 앱의 db를 초기화 하는 클래스이다. 
  * 
  * SQLiteOpenHelper를 상속받은 클래스이다.

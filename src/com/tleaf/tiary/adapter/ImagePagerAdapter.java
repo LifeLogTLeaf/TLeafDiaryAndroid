@@ -21,7 +21,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.util.Util;
 
-
+/** 다이어리뷰에서 사용자가 선택한 여러장의 이미지를 pagerAdpater를 통해 보여준다 **/
 public class ImagePagerAdapter extends PagerAdapter {
 	private LayoutInflater mInflater;
 	private Context mContext;

@@ -29,6 +29,9 @@ import com.tleaf.tiary.adapter.MenuListAdapter;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.model.MyMenuItem;
 
+
+
+
 /**
  * Fragment used for managing interactions for and presentation of a navigation
  * drawer. See the <a href=
@@ -36,6 +39,9 @@ import com.tleaf.tiary.model.MyMenuItem;
  * > design guidelines</a> for a complete explanation of the behaviors
  * implemented here.
  */
+
+
+/** 네비게이션 프래그먼트 뷰를 담당하는 프래그먼트 클래스 **/
 public class NavigationDrawerFragment extends Fragment {
 
 	/**
@@ -141,7 +147,6 @@ public class NavigationDrawerFragment extends Fragment {
 		mParent.add(new MyMenuItem(R.drawable.tag, getString(R.string.tag)));
 		mParent.add(new MyMenuItem(R.drawable.emotion3,
 				getString(R.string.emotion)));
-		mParent.add(new MyMenuItem(R.drawable.tree2, getString(R.string.shack)));
 		mParent.add(new MyMenuItem(R.drawable.setting,
 				getString(R.string.setting)));
 

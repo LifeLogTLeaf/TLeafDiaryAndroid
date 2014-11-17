@@ -23,8 +23,8 @@ import com.tleaf.tiary.Common;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.util.Util;
-
-
+ 
+/** 폴더 선택을 위한 커스텀 다이어로그 프래그먼트 클래스 **/
 public class FolderDialogFragment extends DialogFragment {
 
 	private final int initialize = 1; //true;
@@ -115,6 +115,7 @@ public class FolderDialogFragment extends DialogFragment {
 		return mv;
 	}
 
+	/** 다이어로그에 폴더 목록을 동적으로 생성하는 메서드 **/
 	private void setFolderList(int type) {
 		ll.removeAllViews();
 		ArrayList<String> userFolders = new ArrayList<String>();
@@ -142,7 +143,7 @@ public class FolderDialogFragment extends DialogFragment {
 
 	}
 	
-
+	/** 다이어로그 선택에 따른 사용자 선택값 관리 **/
 	private OnClickListener cl = new OnClickListener() {
 
 		@Override

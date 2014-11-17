@@ -16,6 +16,7 @@ import com.sangmuk.month.ViewPager.OnPageChangeListener;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.calendar.MonthPagerAdapter;
 
+/** 다이어리를 월뷰 형식으로 보여주는 프래그먼트 **/
 public class DiaryMonthFragment extends BaseFragment {
 
 	private Context mContext;

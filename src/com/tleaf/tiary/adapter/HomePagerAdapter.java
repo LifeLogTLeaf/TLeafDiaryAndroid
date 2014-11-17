@@ -35,8 +35,16 @@ import com.tleaf.tiary.fragment.lifelog.adapter.CallLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.CardLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.SmsLogAdapter;
 import com.tleaf.tiary.model.Diary;
+import com.tleaf.tiary.model.MyLog;
+import com.tleaf.tiary.template.LogPagerAdapter.OnItemClickLogPagerListener;
+import com.tleaf.tiary.util.Util;
 
+/** 홈메뉴에 해당되는 홈프래그먼트에서 뷰페이져 뷰에 해당 뷰들을 연결하는 pager adapter **/
 public class HomePagerAdapter extends PagerAdapter {
+	
+//	public interface OnItemClickHomePagerListener {
+//		void onClick();
+//	}
 
 	private LayoutInflater mInflater;
 	private Activity mActivity;
@@ -51,11 +59,14 @@ public class HomePagerAdapter extends PagerAdapter {
 	private ArrayList<Diary> arItem;
 	private DataManager dataMgr;
 
+//	private OnItemClickLogPagerListener mOnItemClickhomePager;
+	
 	public HomePagerAdapter(Activity activity, Context context, DataManager dataMgr) {
 		mActivity = activity;
 		mContext = context;
 		mInflater = LayoutInflater.from(context);
 		this.dataMgr = dataMgr;
+//		this.mOnItemClickhomePager = mOnItemClickhomePager;
 	}
 
 	@Override
@@ -94,6 +105,7 @@ public class HomePagerAdapter extends PagerAdapter {
 		return rootView;
 	}
 
+	/** 첫번째 뷰를 얻는 메서드 **/
 	private View setFirstLayout(View rootView) {
 		ImageView img = (ImageView) rootView.findViewById(R.id.img_background);
 
@@ -142,12 +154,20 @@ public class HomePagerAdapter extends PagerAdapter {
 		
 		//		txt_bookmark.setText(""+dataMgr.getLogCountByType(Common.STRING_BOOKMARK));
 		//		txt_bookmark.setOnClickListener(logClickListener);
+		LinearLayout ll_next = (LinearLayout) rootView.findViewById(R.id.item_layout_next);
+		ll_next.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Util.tst(mContext, "swipe!");
+			}
+		});
 
 
 		return rootView;
 	}
 
-
+	/** 첫번째 뷰에서 각 로그 레이아웃에 클릭 이벤트를 받은 온클릭리스너 **/
 	private View.OnClickListener logClick = new OnClickListener() {
 
 		@Override
@@ -179,7 +199,7 @@ public class HomePagerAdapter extends PagerAdapter {
 	};
 
 
-
+	/** 두번째 뷰를 얻는 메서드 **/
 	private View setSecondLayout(View rootView) {
 		ListView lv = (ListView) rootView.findViewById(R.id.list_gen);
 		LinearLayout ll = (LinearLayout) rootView
@@ -199,6 +219,7 @@ public class HomePagerAdapter extends PagerAdapter {
 		return rootView;
 	}
 
+	
 	private ArrayList<Diary> getDiaryListByType() {
 		arItem = new ArrayList<Diary>(); 
 		arItem = dataMgr.getDiaryList();
@@ -206,6 +227,7 @@ public class HomePagerAdapter extends PagerAdapter {
 
 	}
 
+	/** 두번째 뷰에서 다이어리 아이템 클릭을 받는 클릭 리스너 **/
 	private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
