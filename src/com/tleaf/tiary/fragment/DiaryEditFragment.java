@@ -507,6 +507,7 @@ public class DiaryEditFragment extends BaseFragment {
 
 	};
 
+	//TODO
 	private void saveDiary() {
 		Util.hideKeyboard(mContext, txt_content.getApplicationWindowToken());
 		Diary mDiary = new Diary();

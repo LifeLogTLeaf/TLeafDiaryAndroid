@@ -51,7 +51,6 @@ public class DataManager {
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
 		row.put("date", diary.getDate());
-
 		Util.ll("insertDiary getDate", diary.getDate());
 
 		row.put("title", diary.getTitle());
@@ -80,7 +79,6 @@ public class DataManager {
 		return true;
 
 	}
-
 
 	public boolean updateDiary(Diary diary) { //완료
 		db = dbHelper.getWritableDatabase();
@@ -137,7 +135,6 @@ public class DataManager {
 			return false;
 	}
 
-
 	public boolean updateFolderByDiary(Diary diary) { //완료
 		boolean resuslt_delete = deleteDiaryFolder(diary.getNo());
 		boolean resuslt_insert = insertFolderByDiary(diary);
@@ -146,7 +143,6 @@ public class DataManager {
 		else 
 			return false;
 	}
-
 
 	public boolean insertImageByDiary(Diary diary) { //완료
 		if (diary.getNo() == -1) 
@@ -188,7 +184,6 @@ public class DataManager {
 		return true;
 	}
 
-
 	public boolean setDiaryTagRelation(long diaryNo, long tagNo){ //완료
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
@@ -199,6 +194,7 @@ public class DataManager {
 		return true;
 
 	}
+	
 	public boolean insertFolderByDiary(Diary diary) { //밖으로 빼고, return만한다면 //완료
 		if (diary.getNo() == -1) 
 			return false;
@@ -306,7 +302,6 @@ public class DataManager {
 		return true;
 
 	}
-
 
 	public boolean deleteImageByDiary(long diaryNo) { //완료
 		Util.ll("no", diaryNo);
@@ -460,7 +455,6 @@ public class DataManager {
 		return tagNoArr;
 	}
 
-
 	//해당 다이어리가 담긴 폴더들을 다이어리번호로 가져온다
 	public ArrayList<String> getFoldersByDiaryNo(long diaryNo) { //완료
 		ArrayList<String> folderArr = new ArrayList<String>();
@@ -505,7 +499,6 @@ public class DataManager {
 		return folderNoArr;
 	}
 
-
 	public ArrayList<String> getDistinctTagList() { //완료
 		ArrayList<String> arr = new ArrayList<String>();
 
@@ -540,7 +533,6 @@ public class DataManager {
 		return arr;
 	}
 
-
 	public ArrayList<String> getDistinctLocationList() { //완료
 		ArrayList<String> locationArr = new ArrayList<String>();
 
@@ -558,7 +550,6 @@ public class DataManager {
 		dbHelper.close();
 		return locationArr;
 	}
-
 
 	public Diary getDiaryByNo(Long diaryNo) {
 		Util.ll("diaryNo", diaryNo);
@@ -650,7 +641,6 @@ public class DataManager {
 		return tagno;
 	}
 
-
 	//리스트뷰의 0번지가 가장 최신 
 	//no 내림차순으로 가져와서 0번지부터 저장시
 	private ArrayList<Long> getDiaryNoByFolderNo(long folderNo) {
@@ -685,9 +675,6 @@ public class DataManager {
 		return arrDiaryNo;
 	}
 
-
-
-
 	public ArrayList<Diary> getDiaryListByFolderName(String folderName) {
 		db = dbHelper.getReadableDatabase(); 
 
@@ -721,10 +708,6 @@ public class DataManager {
 		return arItem;
 	}
 
-
-
-
-
 	public int getEmotionCount(String emotion) {
 
 		//		DB = DBHELPER.GETREADABLEDATABASE(); 
@@ -738,7 +721,6 @@ public class DataManager {
 		//		}
 		return 0;
 	}
-
 
 	public ArrayList<Card> getCardList() { 
 		return null;
@@ -760,7 +742,6 @@ public class DataManager {
 
 	}
 
-
 	public boolean insertMyLogList(ArrayList<MyLog> logArr) {
 		if (logArr != null && logArr.size() != 0) {
 			db = dbHelper.getWritableDatabase();
@@ -778,8 +759,6 @@ public class DataManager {
 		}
 		return true;
 	}
-
-
 
 	public boolean insertSmsList(ArrayList<MySms> smsArr, String timetype) {  //완료
 		if (smsArr != null && smsArr.size() != 0) {
@@ -809,7 +788,6 @@ public class DataManager {
 		return true;
 	}
 
-
 	public boolean insertCallList(ArrayList<Call> callArr) {  //완료
 		if (callArr != null && callArr.size() != 0) {
 			db = dbHelper.getWritableDatabase();
@@ -833,9 +811,6 @@ public class DataManager {
 		}
 		return true;
 	}
-
-
-
 
 	public ArrayList<MyLog> getCallList() { //완료
 		//		Util.tst(mContext, "getDiaryList()");
