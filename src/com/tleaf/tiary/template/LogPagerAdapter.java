@@ -90,7 +90,7 @@ public class LogPagerAdapter extends PagerAdapter {
 			break;
 		case 1:
 			smsAdapter = new SmsLogAdapter(mContext, R.layout.item_sms);
-			new AsyncMyLogLoad(mActivity, Common.SMS, smsAdapter).execute();
+			new AsyncMyLogLoad(mActivity, Common.SMS, smsAdapter).execute(); //mActivity
 			lv_log.setAdapter(smsAdapter);
 			lv_log.setOnItemClickListener(cl);
 			break;

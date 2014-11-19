@@ -27,6 +27,7 @@ import com.tleaf.tiary.fragment.HomeFragement;
 import com.tleaf.tiary.fragment.ShackFragment;
 import com.tleaf.tiary.fragment.TagFragement;
 import com.tleaf.tiary.fragment.TemplateSearchFragment;
+import com.tleaf.tiary.fragment.lifelog.AsyncMyLogLoad;
 import com.tleaf.tiary.fragment.lifelog.MyLifeLogFragement;
 import com.tleaf.tiary.util.MyPreference;
 import com.tleaf.tiary.util.MyTime;

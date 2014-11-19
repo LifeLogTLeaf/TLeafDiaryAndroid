@@ -13,6 +13,7 @@ import com.tleaf.tiary.Common;
 import com.tleaf.tiary.model.BookMark;
 import com.tleaf.tiary.model.Call;
 import com.tleaf.tiary.model.Card;
+import com.tleaf.tiary.model.Contact;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.model.MyLog;
 import com.tleaf.tiary.model.MySms;
@@ -41,6 +42,8 @@ public class DataManager {
 	private final String SMS = "sms";
 	private final String CARD = "card";
 
+	private final String CONTACT = "contact";
+
 	private final String TEMPLATE = "template";
 	private final String TEMPLATE_CONTENT = "template_content";
 
@@ -48,7 +51,7 @@ public class DataManager {
 	private ContentValues row;
 
 	private MyPreference pref;
-	
+
 	private long todayTime;
 
 	public DataManager(Context context) {
@@ -792,24 +795,55 @@ public class DataManager {
 
 	}
 
-//	public boolean insertMyLogList(ArrayList<MyLog> logArr) {
-//		if (logArr != null && logArr.size() != 0) {
-//			db = dbHelper.getWritableDatabase();
-//			for(int i=0; i< logArr.size(); i++) {
-//				row = new ContentValues();
-//				row.put("id", logArr.get(i).getId());
-//				row.put("rev", logArr.get(i).getRev());
-//				row.put("latitude", logArr.get(i).getLatitude());
-//				row.put("longitude", logArr.get(i).getLongitude());
-//				row.put("date", logArr.get(i).getDate());
-//				row.put("type", logArr.get(i).getShackLogType());
-//				db.insert(CALL, null, row);
-//			}
-//			dbHelper.close();
-//		}
-//		return true;
-//	}
+	public Contact getContactNameByContactNumber(String myNumber) {
+		Util.ll("getContactNameByContactNumber myNumber", myNumber);
+		db = dbHelper.getReadableDatabase(); 
+		String sql = "select * from " + CONTACT + " where number = '" +  myNumber + "'";
 
+		Cursor cursor = db.rawQuery(sql, null);
+		
+		cursor.moveToFirst();
+		Util.ll("getContactNameByContactNumber cursor size", cursor.getCount());
+		
+		long no = cursor.getInt(0);
+		String name = cursor.getString(1);
+		String number = cursor.getString(2);
+
+		Contact contact = new Contact();
+		contact.setNo(no);
+		contact.setName(name);
+		contact.setNumber(number);
+		
+		cursor.close();
+		dbHelper.close();
+		return contact;
+	}
+
+	public void insertContact(ArrayList<Contact>  contactArr) { 
+		if (contactArr != null && contactArr.size() != 0) {
+			Util.ll("insertContact  contactArr.size()",  contactArr.size());
+			db = dbHelper.getWritableDatabase();
+
+			//			long max = -1;
+			for(int i=0; i< contactArr.size(); i++) {
+				row = new ContentValues();
+				row.put("name", contactArr.get(i).getName());
+				row.put("number", contactArr.get(i).getNumber());
+				Util.ll("insertContact getName" , contactArr.get(i).getName());
+				Util.ll("insertContact getNumber" , contactArr.get(i).getNumber());
+				
+				db.insert(CONTACT, null, row);
+
+				//				if(cardArr.get(i).getDate() > max){
+				//					max  = cardArr.get(i).getDate();
+				//				}
+			}
+			//			if (max > 0) {
+			//				pref.setLongPref(Common.KEY_CARD_BASETIME, max);
+			//			}
+			dbHelper.close();
+		}
+	}
 
 	/** 카드로그를 카드 테이블에 넣는다 **/
 	public boolean insertCardList(ArrayList<Card> cardArr) { 
@@ -924,29 +958,33 @@ public class DataManager {
 		dbHelper.close();
 		return arItem;
 	}	
-	
-	
+
+
 	/** 각 로그테이블에서 오늘의 로그 개수를 세온다 **/
-	public int getLogCountByType(String type) { //완료
+	public int getLogCountByType(String logType) { //완료
 		//		Util.tst(mContext, "getDiaryList()");
 		db = dbHelper.getReadableDatabase(); 
-		
+
 		String dateType;
-		if (type.equals(CARD))
+		if (logType.equals(CARD))
 			dateType = "cardDate";
 		else 
 			dateType = "date";
-		
-		String sql = "select count(*) from " + type + " where "+  dateType + " >= '" + todayTime + "'";
+
+		String sql = "select count(*) from " + logType + " where "+  dateType + " >= '" + todayTime + "'";
 
 		Cursor cursor = db.rawQuery(sql, null);
-		int count = cursor.getCount();
-		
+		cursor.moveToFirst();
+		int count = cursor.getInt(0);
+
+		if (logType.equals(CARD)) {
+			Util.ll("getLogCountByType CARD count", count);
+		}
 		cursor.close();
 		dbHelper.close();
 		return count;
 	}	
-	
+
 	/** 전화 테이블에서 전화 타입(수신, 발신, 부재중)에 따른 전화기록을 가져온다 **/
 	public ArrayList<MyLog> getCallListByType(String subType) { //완료
 		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
@@ -979,7 +1017,7 @@ public class DataManager {
 	}
 
 	/** 문자 테이블에서 문자 타입(수신, 발신)에 따른 문자기록을 가져온다
-	  * 또한 card정보를 파싱하기 위해 기준 타임 이후 수신메시지만 가져온다 **/
+	 * 또한 card정보를 파싱하기 위해 기준 타임 이후 수신메시지만 가져온다 **/
 	public ArrayList<MyLog> getSmsListByType(String subType, long baseTime) { //완료
 		ArrayList<MyLog> arItem = new ArrayList<MyLog>();
 		db = dbHelper.getReadableDatabase(); 

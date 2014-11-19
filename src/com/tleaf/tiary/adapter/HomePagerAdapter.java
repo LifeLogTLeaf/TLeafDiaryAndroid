@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,10 +42,10 @@ import com.tleaf.tiary.util.Util;
 
 /** 홈메뉴에 해당되는 홈프래그먼트에서 뷰페이져 뷰에 해당 뷰들을 연결하는 pager adapter **/
 public class HomePagerAdapter extends PagerAdapter {
-	
-//	public interface OnItemClickHomePagerListener {
-//		void onClick();
-//	}
+
+	//	public interface OnItemClickHomePagerListener {
+	//		void onClick();
+	//	}
 
 	private LayoutInflater mInflater;
 	private Activity mActivity;
@@ -59,14 +60,14 @@ public class HomePagerAdapter extends PagerAdapter {
 	private ArrayList<Diary> arItem;
 	private DataManager dataMgr;
 
-//	private OnItemClickLogPagerListener mOnItemClickhomePager;
-	
+	//	private OnItemClickLogPagerListener mOnItemClickhomePager;
+
 	public HomePagerAdapter(Activity activity, Context context, DataManager dataMgr) {
 		mActivity = activity;
 		mContext = context;
 		mInflater = LayoutInflater.from(context);
 		this.dataMgr = dataMgr;
-//		this.mOnItemClickhomePager = mOnItemClickhomePager;
+		//		this.mOnItemClickhomePager = mOnItemClickhomePager;
 	}
 
 	@Override
@@ -107,6 +108,14 @@ public class HomePagerAdapter extends PagerAdapter {
 
 	/** 첫번째 뷰를 얻는 메서드 **/
 	private View setFirstLayout(View rootView) {
+		Time t = new Time();
+		t.setToNow();
+
+		TextView txt_date = (TextView) rootView.findViewById(R.id.txt_date);
+		txt_date.setText("" + t.year + "." + (t.month + 1) + "." + t.monthDay);
+
+
+
 		ImageView img = (ImageView) rootView.findViewById(R.id.img_background);
 
 		TextView txt_call = (TextView) rootView.findViewById(R.id.txt_cnt_call);
@@ -120,7 +129,7 @@ public class HomePagerAdapter extends PagerAdapter {
 		txt_sms.setText(""+dataMgr.getLogCountByType(Common.STRING_SMS));
 		RelativeLayout rl_sms = (RelativeLayout) rootView.findViewById(R.id.rl_home_sms);
 		rl_sms.setOnClickListener(logClick);
-		
+
 		//		txt_sms.setOnClickListener(logClickListener);
 
 
@@ -128,14 +137,14 @@ public class HomePagerAdapter extends PagerAdapter {
 		txt_card.setText(""+dataMgr.getLogCountByType(Common.STRING_CARD));
 		RelativeLayout rl_card = (RelativeLayout) rootView.findViewById(R.id.rl_home_card);
 		rl_card.setOnClickListener(logClick);
-		
+
 		//		txt_card.setOnClickListener(logClickListener);
 
 
 		TextView txt_gallery = (TextView) rootView.findViewById(R.id.txt_cnt_gallery);
 		RelativeLayout rl_gallery = (RelativeLayout) rootView.findViewById(R.id.rl_home_gallery);
 		rl_gallery.setOnClickListener(logClick);
-		
+
 		//		txt_gallery.setText(""+dataMgr.getLogCountByType(Common.STRING_GALLERY));
 		//		txt_gallery.setOnClickListener(logClickListener);
 
@@ -143,7 +152,7 @@ public class HomePagerAdapter extends PagerAdapter {
 		TextView txt_location = (TextView) rootView.findViewById(R.id.txt_cnt_location);
 		RelativeLayout rl_location = (RelativeLayout) rootView.findViewById(R.id.rl_home_location);
 		rl_location.setOnClickListener(logClick);
-		
+
 		//		txt_location.setText(""+dataMgr.getLogCountByType(Common.STRING_LOCATION));
 		//		txt_location.setOnClickListener(logClickListener);
 
@@ -151,12 +160,12 @@ public class HomePagerAdapter extends PagerAdapter {
 		TextView txt_bookmark = (TextView) rootView.findViewById(R.id.txt_cnt_bookmark);
 		RelativeLayout rl_bookmark = (RelativeLayout) rootView.findViewById(R.id.rl_home_bookmark);
 		rl_bookmark.setOnClickListener(logClick);
-		
+
 		//		txt_bookmark.setText(""+dataMgr.getLogCountByType(Common.STRING_BOOKMARK));
 		//		txt_bookmark.setOnClickListener(logClickListener);
 		LinearLayout ll_next = (LinearLayout) rootView.findViewById(R.id.item_layout_next);
 		ll_next.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Util.tst(mContext, "swipe!");
@@ -219,7 +228,7 @@ public class HomePagerAdapter extends PagerAdapter {
 		return rootView;
 	}
 
-	
+
 	private ArrayList<Diary> getDiaryListByType() {
 		arItem = new ArrayList<Diary>(); 
 		arItem = dataMgr.getDiaryList();

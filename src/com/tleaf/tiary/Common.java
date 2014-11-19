@@ -71,6 +71,7 @@ public class Common {
 	public static final String NUMBER_SHINHAN = "01024504006";//"15447200";
 	public static final String NAME_SHINHAN = "신한체크승인";
 	
+	public static String IS_SAVEDCONTACTS = "isSavedContacts";
 	
 	
 	public static final ArrayList<String> emotionArr = new ArrayList<String>();

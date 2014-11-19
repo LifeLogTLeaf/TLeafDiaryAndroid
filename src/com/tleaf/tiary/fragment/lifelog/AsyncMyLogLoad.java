@@ -1,10 +1,10 @@
 package com.tleaf.tiary.fragment.lifelog;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CallLog;
+import android.provider.ContactsContract;
 import android.text.format.Time;
 
 import com.tleaf.tiary.Common;
@@ -20,6 +21,7 @@ import com.tleaf.tiary.fragment.lifelog.adapter.MyLogAdapter;
 import com.tleaf.tiary.model.BookMark;
 import com.tleaf.tiary.model.Call;
 import com.tleaf.tiary.model.Card;
+import com.tleaf.tiary.model.Contact;
 import com.tleaf.tiary.model.MyLog;
 import com.tleaf.tiary.model.MySms;
 import com.tleaf.tiary.util.MyPreference;
@@ -38,9 +40,13 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 	private int mType;
 	private String mSubType;
 
+	public AsyncMyLogLoad(Context context) {
+		dataMgr = new DataManager(context);
+	}
+
 	public AsyncMyLogLoad(Context context, int type, MyLogAdapter adapter) {
 		mContext =context; 
-		dataMgr = new DataManager(mContext);
+		dataMgr = new DataManager(context);
 		mType = type;
 		mSubType = null;
 		mAdapter = adapter;
@@ -49,7 +55,7 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 
 	public AsyncMyLogLoad(Context context, int type, String subType, MyLogAdapter adapter) {
 		mContext =context; 
-		dataMgr = new DataManager(mContext);
+		dataMgr = new DataManager(context);
 		mType = type;
 		mSubType = subType;
 		mAdapter = adapter;
@@ -58,7 +64,8 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 
 	@Override
 	protected void onPreExecute() {
-		pDialog = ProgressDialog.show(mContext, "로딩 중", "기다려주세요");	
+		if(mContext != null)
+			pDialog = ProgressDialog.show(mContext, "로딩 중", "기다려주세요");	
 	}
 
 	@Override
@@ -73,18 +80,12 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 			dataMgr.insertCallList(callArr);
 			return dataMgr.getCallList();
 		case Common.SMS:
+			insertSmsInDb();
 			if (mSubType != null) {
 				return dataMgr.getSmsListByType(mSubType, -1);
-			} 
-			ArrayList<MySms> smsArr = new ArrayList<MySms>();
-			smsArr.addAll(collectSmsByType(Common.KEY_SMSINBOX_BASETIME));
-			dataMgr.insertSmsList(smsArr, Common.KEY_SMSINBOX_BASETIME);
-
-			smsArr.clear();
-			smsArr.addAll(collectSmsByType(Common.KEY_SMSSENT_BASETIME));
-			dataMgr.insertSmsList(smsArr, Common.KEY_SMSSENT_BASETIME);
-
-			return dataMgr.getSmsList();
+			} else {
+				return dataMgr.getSmsList();
+			}
 		case Common.CARD:
 			//inbox를 업데이트 시킨 후 카드로그를 추출한다
 			ArrayList<MySms> smsUpdatedArr = new ArrayList<MySms>();
@@ -125,14 +126,26 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 		return new ArrayList<MyLog>();
 	}
 
+	private void insertSmsInDb() {
+		ArrayList<MySms> smsArr = new ArrayList<MySms>();
+		smsArr.addAll(collectSmsByType(Common.KEY_SMSINBOX_BASETIME));
+		dataMgr.insertSmsList(smsArr, Common.KEY_SMSINBOX_BASETIME);
+
+		smsArr.clear();
+		smsArr.addAll(collectSmsByType(Common.KEY_SMSSENT_BASETIME));
+		dataMgr.insertSmsList(smsArr, Common.KEY_SMSSENT_BASETIME);
+	}
+
 	/** 각 어답터에게 결과 리스트를 보내는 메서드 **/
 	@Override
 	protected void onPostExecute(ArrayList<MyLog> result) {
 		super.onPostExecute(result);
 		Util.ll("onPostExecute arr", result.size());
 		mAdapter.updateItem(result);
-		if(pDialog != null)
+		if(pDialog != null) {
 			pDialog.dismiss();
+			pDialog = null;
+		}
 	}
 
 	//pref set은 db 메소드에서
@@ -216,6 +229,7 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 
 	/** 안드로이드 자원에서 문자 목록을 가져오는 메서드 **/
 	private ArrayList<MySms> collectSmsByType(String typeIdx) {
+		saveContact();
 		MyPreference pref = new MyPreference(mContext);
 
 		long smsInBoxBaseTime = pref.getLongPref(Common.KEY_SMSINBOX_BASETIME, pref.getLongPref(Common.KEY_INSTALL_TIME));
@@ -275,7 +289,14 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 			// 번호analysis
 			String num = cursor.getString(numidx);
 			sms.setNumber(num);
+			Util.ll("collectSmsByType num", num);
 
+			// 번호로 주소록에서 이름을 가져온다
+			String name = dataMgr.getContactNameByContactNumber(num).getName();
+			if (name == null || (name != null && name.equals("null")))
+				name = "";
+			sms.setName(name);
+			Util.ll("collectSmsByType name", name);
 
 			// 날짜
 			long date = cursor.getLong(dateidx);
@@ -382,7 +403,9 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 			int minute = Integer.parseInt(timeTokenizer.nextToken());
 			//			spendTime.setHours(hour);
 			//			spendTime.setMinutes(minute);
-			mTime.set(0, minute, hour, monthDay, month-1, 2014); //2014 //month-1
+			Time t = new Time();
+			t.setToNow();
+			mTime.set(0, minute, hour, monthDay, month-1, t.year); 
 			card.setCardDate(mTime.toMillis(false));
 			Util.ll("파싱결과 setCardDate", MyTime.getLongToString(card.getCardDate()));
 
@@ -424,5 +447,131 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 		}
 		return parsedCard;
 	}
-}
 
+	private String getNameByNumberInDevice(String myNumber) {	
+		String name = "";
+		ContentResolver cr = mContext.getContentResolver();
+
+		Cursor cursor = cr.query(
+				ContactsContract.Contacts.CONTENT_URI,null,null,null,null);
+
+		int ididx = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+		int nameidx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+
+		while (cursor.moveToNext()) {
+			String tmpName = cursor.getString(nameidx); 
+
+			// 전화 번호는 서브 쿼리로 조사해야 함.
+			String id = cursor.getString(ididx);
+			Cursor cursor2 = cr.query(ContactsContract.CommonDataKinds.
+					Phone.CONTENT_URI, null, 
+					ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+					new String[]{id}, null);
+
+			//			int typeidx = cursor2.getColumnIndex(
+			//					ContactsContract.CommonDataKinds.Phone.TYPE);
+			int numidx = cursor2.getColumnIndex(
+					ContactsContract.CommonDataKinds.Phone.NUMBER);
+
+			// 전화의 타입에 따라 여러 개가 존재한다.
+			while (cursor2.moveToNext()) {
+				String num = cursor2.getString(numidx);
+				if (num.equals(myNumber)) {
+					name = tmpName;
+					break;
+				}
+				//				switch (cursor2.getInt(typeidx)) {
+				//				case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+				//					result.append(" Mobile:" + num);
+				//					break;
+				//				case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+				//					result.append(" Home:" + num);
+				//					break;
+				//				case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+				//					result.append(" Work:" + num);
+				//					break;
+				//				}
+			}
+			cursor2.close();
+		}
+		cursor.close();
+
+		Util.ll("getNameByNumber name", name);
+		return name;
+	}
+
+	public void saveContact() {
+		MyPreference pref = new MyPreference(mContext);
+		boolean isSavedContacts = pref.getBooleanPref(Common.IS_SAVEDCONTACTS);
+
+		Util.ll("isSavedContacts", isSavedContacts);
+		if (isSavedContacts)
+			return;
+		else 
+			pref.setBooleanPref(Common.IS_SAVEDCONTACTS, true);
+
+		ArrayList<Contact> contactArr = new ArrayList<Contact>();
+
+		ContentResolver cr = mContext.getContentResolver();
+		Cursor cursor = cr.query(
+				ContactsContract.Contacts.CONTENT_URI,null,null,null,null);
+
+		int ididx = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+		int nameidx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+
+		String name = "", num = "";
+
+		while (cursor.moveToNext()) {
+			Contact contact = new Contact();
+			name = cursor.getString(nameidx); 
+
+			// 전화 번호는 서브 쿼리로 조사해야 함.
+			String id = cursor.getString(ididx);
+			Cursor cursor2 = cr.query(ContactsContract.CommonDataKinds.
+					Phone.CONTENT_URI, null, 
+					ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+					new String[]{id}, null);
+
+			//			int typeidx = cursor2.getColumnIndex(
+			//					ContactsContract.CommonDataKinds.Phone.TYPE);
+			int numidx = cursor2.getColumnIndex(
+					ContactsContract.CommonDataKinds.Phone.NUMBER);
+
+			// 전화의 타입에 따라 여러 개가 존재한다.
+			while (cursor2.moveToNext()) {
+				num = cursor2.getString(numidx);
+				num = num.replace("+", "");
+				num = num.replace("-", "");
+				num = num.replace("*", "");
+				num = num.replace("#", "");
+				num = num.replace("82", "0");
+
+				//				switch (cursor2.getInt(typeidx)) {
+				//				case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+				//					result.append(" Mobile:" + num);
+				//					break;
+				//				case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+				//					result.append(" Home:" + num);
+				//					break;
+				//				case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+				//					result.append(" Work:" + num);
+				//					break;
+				//				}
+			}
+
+			cursor2.close();
+			contact.setName(name);
+			contact.setNumber(num);
+			contactArr.add(contact);
+		}
+		cursor.close();
+
+		if (contactArr == null) {
+			Util.ll("contactArr", "null");
+		} else { 
+			Util.ll("contactArr size", contactArr.size());
+		}
+		dataMgr.insertContact(contactArr);
+
+	}
+}
