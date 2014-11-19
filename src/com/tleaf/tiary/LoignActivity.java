@@ -2,6 +2,7 @@ package com.tleaf.tiary;
 
 import com.tleaf.tiary.activity.ShackLoginActivity;
 import com.tleaf.tiary.activity.ShackSignUpActivity;
+import com.tleaf.tiary.activity.ShackWebViewActivity;
 import com.tleaf.tiary.core.AppContext;
 import com.tleaf.tiary.core.DeclareView;
 import com.tleaf.tiary.core.ViewMapper;
@@ -18,12 +19,11 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.TextView;
 
 public class LoignActivity extends Activity implements OnClickListener{
+	@DeclareView( id = R.id.txt_login, click = "this")
+	TextView txt_login;
 	
 	@DeclareView( id = R.id.txt_singup, click = "this")
 	TextView txt_singup;
-	
-	@DeclareView( id = R.id.txt_login, click = "this")
-	TextView txt_login;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +60,12 @@ public class LoignActivity extends Activity implements OnClickListener{
 	@Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.txt_singup: 
-            	startActivity(new Intent(LoignActivity.this, ShackSignUpActivity.class));
-                break;
             case R.id.txt_login:
-            	startActivity(new Intent(LoignActivity.this, MainActivity.class));//ShackLoginActivity
-                break;
+            	startActivity(new Intent(LoignActivity.this, ShackWebViewActivity.class));
+            	break;
+            case R.id.txt_singup:
+            	startActivity(new Intent(LoignActivity.this, MainActivity.class));
+            	break;
             default:
                 break;
         }

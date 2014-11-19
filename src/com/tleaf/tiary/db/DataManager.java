@@ -2,6 +2,9 @@ package com.tleaf.tiary.db;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -9,7 +12,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.format.Time;
 import android.util.Log;
 
+import com.google.gson.JsonParser;
 import com.tleaf.tiary.Common;
+import com.tleaf.tiary.core.AppContext;
 import com.tleaf.tiary.model.BookMark;
 import com.tleaf.tiary.model.Call;
 import com.tleaf.tiary.model.Card;
@@ -19,11 +24,14 @@ import com.tleaf.tiary.model.MySms;
 import com.tleaf.tiary.model.MyTemplate;
 import com.tleaf.tiary.model.TemplateContent;
 import com.tleaf.tiary.model.Weather;
+import com.tleaf.tiary.network.HttpMethod;
+import com.tleaf.tiary.network.Request;
+import com.tleaf.tiary.network.Response;
 import com.tleaf.tiary.util.MyPreference;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
-public class DataManager {
+public class DataManager implements Request.Callback{
 
 	private Context mContext = null;
 	private DbHelper dbHelper = null;
@@ -49,6 +57,9 @@ public class DataManager {
 	private MyPreference pref;
 	
 	private long todayTime;
+	
+	private boolean isUpdate, isDelete;
+	private ArrayList<String> updateFile;
 
 	public DataManager(Context context) {
 		mContext = context;
@@ -64,6 +75,11 @@ public class DataManager {
 
 	/** 다이어리를 다이어리, 이미지, 태그, 폴더 테이블에 추가한다 **/
 	public boolean insertDiary(Diary diary) { //완료
+		//TODO (Young) Insert Dairy into server
+		// 임베디드 데이터베이스에서 데이터를 삭제할때 해당 Column에는 서버에 삭제할 도큐먼트 아이디를 저장하고 있어야한다. 그래야
+		// 거기서 도큐먼트 아이디를 읽어와서 서버의 데이터도 삭제한다.
+		new Request(AppContext.getTlSession(), "api/user/app/log", HttpMethod.POST, this, diary).execute();		
+		
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
 		row.put("date", diary.getDate());
@@ -73,13 +89,12 @@ public class DataManager {
 		row.put("content", diary.getContent());
 		row.put("emotion", diary.getEmotion());
 		row.put("location", diary.getLocation());
-
+		
 		if(diary.getWeather() != null) {
 			row.put("todayWeather", diary.getWeather().getTodayWeather());
 			row.put("temperature", diary.getWeather().getTemperature());
 			row.put("humidity", diary.getWeather().getHumidity());
 		}
-
 
 		long diaryNo = db.insert(DIARY, null, row);	
 		diary.setNo(diaryNo);
@@ -87,13 +102,14 @@ public class DataManager {
 		boolean result_image = insertImageByDiary(diary);
 		boolean result_tag = insertTagByDiary(diary);
 		boolean result_folder = insertFolderByDiary(diary);
-
+		
 		if (!result_image || !result_tag || !result_folder)
 			return false;
 
 		dbHelper.close();
+		
+		
 		return true;
-
 	}
 	
 	/** 수정된 다이어리를 다이어리, 이미지, 태그, 폴더 테이블에 반영한다 **/
@@ -164,11 +180,13 @@ public class DataManager {
 			return false;
 	}
 
-	/** 새로추가하는 다이어리의 새로운 이미지를 이미지 테이블에 넣는다 **/
+	/* 새로추가하는 다이어리의 새로운 이미지를 이미지 테이블에 넣는다 */
 	public boolean insertImageByDiary(Diary diary) { //완료
 		if (diary.getNo() == -1) 
 			return false;
 		if (diary.getImages() != null && diary.getImages().size() != 0) {
+			isUpdate = true;
+			updateFile = diary.getImages();
 			db = dbHelper.getWritableDatabase();
 			for(int i=0; i<diary.getImages().size(); i++) {
 				row = new ContentValues();
@@ -182,7 +200,7 @@ public class DataManager {
 		return true;
 	}
 
-	/** 새로추가하는 다이어리의 새로운 태그를 태그 테이블에 넣는다 **/
+	/* 새로추가하는 다이어리의 새로운 태그를 태그 테이블에 넣는다 */
 	public boolean insertTagByDiary(Diary diary) { //완료
 		if (diary.getNo() == -1) 
 			return false;
@@ -217,7 +235,7 @@ public class DataManager {
 		return true;
 	}
 
-	/** 새로추가하는 다이어리의 새로운 폴더를 폴더 테이블에 넣는다 **/
+	/* 새로추가하는 다이어리의 새로운 폴더를 폴더 테이블에 넣는다 */
 	public boolean insertFolderByDiary(Diary diary) { //밖으로 빼고, return만한다면 //완료
 		if (diary.getNo() == -1) 
 			return false;
@@ -291,7 +309,7 @@ public class DataManager {
 		return result;
 	}
 
-	/** 태그 테이블에서 태그명으로 태그 pk인 no를 찾는다 **/
+	/* 태그 테이블에서 태그명으로 태그 pk인 no를 찾는다 */
 	private long getTagNo(String tag) {
 		db = dbHelper.getReadableDatabase(); 
 		String sql = "select no from " + TAG + " where tag = '" + tag + "'";
@@ -305,7 +323,7 @@ public class DataManager {
 		return tagNo;
 	}
 
-	/** 폴더 테이블에서 폴더명으로 폴더 pk인 no를 찾는다 **/
+	/* 폴더 테이블에서 폴더명으로 폴더 pk인 no를 찾는다 */
 	private long getFolderNo(String folder) {
 		db = dbHelper.getReadableDatabase(); 
 		String sql = "select no from " + FOLDER + " where folder = '" + folder + "'";
@@ -319,7 +337,7 @@ public class DataManager {
 		return folderNo;
 	}
 
-	/** 다이어리를 새로 추가할 때 다이어리 테이블과 폴더 테이블를 연계하는 중간 테이블에 관계를 삽입한다 **/
+	/* 다이어리를 새로 추가할 때 다이어리 테이블과 폴더 테이블를 연계하는 중간 테이블에 관계를 삽입한다 */
 	public boolean setDiaryFolderRelation(long diaryNo, long folderNo){ //완료
 		db = dbHelper.getWritableDatabase();
 		row = new ContentValues();
@@ -331,7 +349,7 @@ public class DataManager {
 
 	}
 
-	/** 다이어리 pk에 해당하는 이미지를 이미지 테이블에서 삭제한다 **/
+	/* 다이어리 pk에 해당하는 이미지를 이미지 테이블에서 삭제한다 */
 	public boolean deleteImageByDiary(long diaryNo) { //완료
 		Util.ll("no", diaryNo);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -342,7 +360,7 @@ public class DataManager {
 		return true;
 	}
 
-	/** 다이어리를 삭제할 때 다이어리테이블과 태그 테이블을 연계하는 중간 테이블에 관계를 삭제한다 **/
+	/* 다이어리를 삭제할 때 다이어리테이블과 태그 테이블을 연계하는 중간 테이블에 관계를 삭제한다 */
 	public boolean deleteDiaryTag(long diaryNo) { //완료
 		Util.ll("no", diaryNo);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -353,7 +371,7 @@ public class DataManager {
 		return true;
 	}
 
-	/** 다이어리를 삭제할 때 다이어리테이블과 폴더 테이블을 연계하는 중간 테이블에 관계를 삭제한다 **/
+	/* 다이어리를 삭제할 때 다이어리테이블과 폴더 테이블을 연계하는 중간 테이블에 관계를 삭제한다 */
 	public boolean deleteDiaryFolder(long diaryNo) { //완료
 		Util.ll("no", diaryNo);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -364,7 +382,7 @@ public class DataManager {
 		return true;
 	}
 
-	/** 다이어리를 삭제하기위해 다이어리, 이미지, 태그, 폴더 테이블 및 관계 테이블에서 해당 정보를 삭제한다 **/
+	/** 다이어리를 삭제하기위해 다이어리, 이미지, 태그, 폴더 테이블 및 관계 테이블에서 해당 정보를 삭제한다 */
 	public boolean deleteDiary(long diaryNo) { //완료
 		Util.ll("no", diaryNo);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -376,6 +394,10 @@ public class DataManager {
 		deleteDiaryTag(diaryNo);
 		deleteDiaryFolder(diaryNo);
 		dbHelper.close();
+		
+		// TODO Young's Code
+		isDelete = true;
+		
 		return true;
 	}
 
@@ -919,6 +941,7 @@ public class DataManager {
 	
 	
 	/** 각 로그테이블에서 오늘의 로그 개수를 세온다 **/
+	@Deprecated
 	public int getLogCountByType(String type) { //완료
 		//		Util.tst(mContext, "getDiaryList()");
 		db = dbHelper.getReadableDatabase(); 
@@ -936,7 +959,7 @@ public class DataManager {
 		
 		cursor.close();
 		dbHelper.close();
-		return count;
+		return count;	
 	}	
 	
 	/** 전화 테이블에서 전화 타입(수신, 발신, 부재중)에 따른 전화기록을 가져온다 **/
@@ -1220,7 +1243,30 @@ public class DataManager {
 	//	String insert_template2_5 = "insert into table_template_content values (4, 1, '오늘 갑작스런 지출이 있으셨나요?\n항목:금액 형식으로 입력해주세요\n(예)가족 식사: 100,000 ', " +
 	//			"'', 'cust', '원')";
 
-
+	/* (non-Javadoc)
+	 * @see com.tleaf.tiary.network.Request.Callback#onRecieve(com.tleaf.tiary.network.Response)
+	 */
+	@Override
+	public void onRecieve(Response response) {
+		// TODO Auto-generated method stub
+		Log.i("DBHelper",""+response.getStatus());
+		Log.i("DBHelper",response.getJsonStringData());
+		
+		// TODO if need to update
+		if(isUpdate){
+			isUpdate = false;
+			String id = null, rev = null;
+			try {
+				JSONObject jsonObject = new JSONObject(response.getJsonStringData());
+				id = jsonObject.getString("_id");
+				rev = jsonObject.getString("_rev");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			new Request(AppContext.getTlSession(), "api/user/file", HttpMethod.FILEPOST, this, id, rev, updateFile).execute();		
+		}
+	}
 
 	//	private ArrayList<String> getArrayList(long diaryNo, String table) {
 	//		ArrayList<String> arr = new ArrayList<String>();

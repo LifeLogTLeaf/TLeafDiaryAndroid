@@ -6,5 +6,6 @@ package com.tleaf.tiary.network;
 public enum HttpMethod {
     GET,
     POST,
-    DELETE
+    DELETE,
+    FILEPOST
 }

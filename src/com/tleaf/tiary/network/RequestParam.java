@@ -1,16 +1,23 @@
 package com.tleaf.tiary.network;
 
+import java.util.ArrayList;
+
+import org.apache.http.entity.mime.content.InputStreamBody;
+
 
 /**
  * Created by jangyoungjin on 10/29/14.
  */
 public class RequestParam {
+	private String docId;
+	private String docRev;
     private String url;
     private HttpMethod httpMethod;
     private Request.Callback callback;
     private Object data;
     private TLeafSession session;
     private RequestQueryParam queryParam;
+    private ArrayList<String> files;
 
     public RequestParam() {
     }
@@ -62,4 +69,28 @@ public class RequestParam {
     public void setQueryParam(RequestQueryParam queryParam) {
         this.queryParam = queryParam;
     }
+
+	public String getDocId() {
+		return docId;
+	}
+
+	public void setDocId(String docId) {
+		this.docId = docId;
+	}
+
+	public String getDocRev() {
+		return docRev;
+	}
+
+	public void setDocRev(String docRev) {
+		this.docRev = docRev;
+	}
+
+	public ArrayList<String> getFiles() {
+		return files;
+	}
+
+	public void setFiles(ArrayList<String> files) {
+		this.files = files;
+	}
 }
