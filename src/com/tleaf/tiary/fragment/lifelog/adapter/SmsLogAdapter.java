@@ -23,6 +23,8 @@ import com.tleaf.tiary.model.MySms;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
+
+/** 문자 로그 리스트 뷰를 문자 로그로 채워주는 리스트뷰 어답터 **/
 public class SmsLogAdapter extends MyLogAdapter {
 	private int mLayout;
 	private HashSet<Integer> mFirstDayPositionSet;

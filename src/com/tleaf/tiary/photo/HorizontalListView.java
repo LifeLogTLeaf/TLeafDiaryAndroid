@@ -42,6 +42,7 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.Scroller;
 
+/** 가로 리스트 뷰를 만들어주는 리스트 뷰 클래스 **/
 public class HorizontalListView extends AdapterView<ListAdapter> {
 
 	public boolean mAlwaysOverrideTouch = true;

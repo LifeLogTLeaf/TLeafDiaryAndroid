@@ -17,6 +17,7 @@ import com.tleaf.tiary.fragment.BaseFragment;
 import com.tleaf.tiary.fragment.lifelog.adapter.LocationLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.SmsLogAdapter;
 
+/** 갤러리 로그 리스트 뷰를 담당하는 프래그먼트 클래스 **/
 public class GalleryListViewFragment extends BaseFragment {
 	private Activity mContext;
 

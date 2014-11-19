@@ -17,16 +17,15 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 
-
-public class RoundImageView extends ImageView
-{
+/** 이미지 뷰를 라운딩 해주는 커스텀 이미지뷰 **/
+public class RoundImageView extends ImageView {
 
 	private Bitmap roundBitmap;
 	private Bitmap b;
 	private Bitmap bitmap;
 	private int w, h;
 	private int pixels;
-	
+
 	public RoundImageView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
@@ -72,7 +71,7 @@ public class RoundImageView extends ImageView
 				getContext(), bitmap, pixels, w, h, false, false, false, false);
 		canvas.drawBitmap(roundBitmap, 0, 0, null);
 	}
-	
+
 	public void setImageRounding(boolean leftTop, boolean rightTop, boolean leftBottom, boolean rightBottom) {
 		roundBitmap= RoundImageView.getRoundedCornerBitmap(
 				getContext(), bitmap, pixels, w, h, leftTop, rightTop, leftBottom, rightBottom);
@@ -127,7 +126,7 @@ public class RoundImageView extends ImageView
 		float xScale = (float) w / sourceWidth;
 		float yScale = (float) h / sourceHeight;
 		float scale;// = Math.max(xScale, yScale);
-		
+
 		scale = Math.max(xScale, yScale);
 
 		// Now get the size of the source bitmap when scaled

@@ -27,11 +27,13 @@ import com.tleaf.tiary.fragment.HomeFragement;
 import com.tleaf.tiary.fragment.ShackFragment;
 import com.tleaf.tiary.fragment.TagFragement;
 import com.tleaf.tiary.fragment.TemplateSearchFragment;
+import com.tleaf.tiary.fragment.lifelog.AsyncMyLogLoad;
 import com.tleaf.tiary.fragment.lifelog.MyLifeLogFragement;
 import com.tleaf.tiary.util.MyPreference;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
+/** 앱이 처음 시작시 실행되는 액티비티, 네비게이션 프래그먼트를 갖는다 **/
 public class MainActivity extends Activity implements
 NavigationDrawerFragment.NavigationDrawerCallbacks,
 ActionBar.OnNavigationListener {
@@ -148,9 +150,6 @@ ActionBar.OnNavigationListener {
 			case Common.EMOTION:
 				fragment = new EmotionFragement();
 				break;
-			case Common.SHACK:
-				fragment = new ShackFragment();
-				break;
 			case Common.SETIING:
 				fragment = new ExpandableListFragment(); // SettingFragement();
 				break;
@@ -193,29 +192,29 @@ ActionBar.OnNavigationListener {
 	}
 
 	public void onSectionAttached(int number) {
-		switch (number) {
-		case 1:
-			mTitle = getString(R.string.home);
-			break;
-		case 2:
-			mTitle = getString(R.string.mylifelog);
-			break;
-		case 3:
-			mTitle = getString(R.string.write);
-			break;
-		case 4:
-			mTitle = getString(R.string.folder);
-			break;
-		case 5:
-			mTitle = getString(R.string.tag);
-			break;
-		case 6:
-			mTitle = getString(R.string.emotion);
-			break;
-		case 7:
-			mTitle = getString(R.string.setting);
-			break;
-		}
+//		switch (number) {
+//		case 1:
+//			mTitle = getString(R.string.home);
+//			break;
+//		case 2:
+//			mTitle = getString(R.string.mylifelog);
+//			break;
+//		case 3:
+//			mTitle = getString(R.string.write);
+//			break;
+//		case 4:
+//			mTitle = getString(R.string.folder);
+//			break;
+//		case 5:
+//			mTitle = getString(R.string.tag);
+//			break;
+//		case 6:
+//			mTitle = getString(R.string.emotion);
+//			break;
+//		case 7:
+//			mTitle = getString(R.string.setting);
+//			break;
+//		}
 	}
 
 	public void restoreActionBar() {
@@ -246,10 +245,10 @@ ActionBar.OnNavigationListener {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
+		//		int id = item.getItemId();
+		//		if (id == R.id.action_settings) {
+		//			return true;
+		//		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -346,8 +345,8 @@ ActionBar.OnNavigationListener {
 		super.onDestroy();
 		if(!AppContext.getPreference().getBooleanPref("isAutoLogin")) AppContext.getPreference().setBooleanPref("isLogin", false);
 	}
-	
-	
+
+
 
 	// public void switchContent(Fragment fragment, boolean addBackStack) {
 	// exitApplication = false;

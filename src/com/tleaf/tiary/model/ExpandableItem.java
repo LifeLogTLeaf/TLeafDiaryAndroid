@@ -1,5 +1,6 @@
 package com.tleaf.tiary.model;
 
+/** expandablelistview에 채워지는 항목을 담는 모델 클래스 **/
 public class ExpandableItem {
 	private String title;
 	private String content;

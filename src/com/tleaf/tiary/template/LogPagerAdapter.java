@@ -21,6 +21,7 @@ import com.tleaf.tiary.fragment.lifelog.adapter.LocationLogAdapter;
 import com.tleaf.tiary.fragment.lifelog.adapter.SmsLogAdapter;
 import com.tleaf.tiary.model.MyLog;
 
+/** 채팅에 로그입력시 로그들을 pagerAdapter를 통해 뷰를 바인딩 해주는 어답터 클래스 **/
 public class LogPagerAdapter extends PagerAdapter {
 
 	public interface OnItemClickLogPagerListener {
@@ -89,7 +90,7 @@ public class LogPagerAdapter extends PagerAdapter {
 			break;
 		case 1:
 			smsAdapter = new SmsLogAdapter(mContext, R.layout.item_sms);
-			new AsyncMyLogLoad(mActivity, Common.SMS, smsAdapter).execute();
+			new AsyncMyLogLoad(mActivity, Common.SMS, smsAdapter).execute(); //mActivity
 			lv_log.setAdapter(smsAdapter);
 			lv_log.setOnItemClickListener(cl);
 			break;

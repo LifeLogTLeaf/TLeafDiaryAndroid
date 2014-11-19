@@ -3,6 +3,7 @@ package com.tleaf.tiary;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/** 전역변수 및 전역 메서드를 담고 있는 클래스 **/
 public class Common {
 
 	public static final int HOME = 0;
@@ -12,9 +13,8 @@ public class Common {
 	public static final int FOLDER = 4;
 	public static final int TAG = 5;
 	public static final int EMOTION = 6;
-	public static final int SHACK = 7;
-	public static final int SETIING = 8;
-	public static final int LOCATION = 9;
+	public static final int SETIING = 7;
+	public static final int LOCATION = 8;
 
 	public static final int CALL = 10;
 	public static final int SMS = 11;
@@ -71,6 +71,7 @@ public class Common {
 	public static final String NUMBER_SHINHAN = "01024504006";//"15447200";
 	public static final String NAME_SHINHAN = "신한체크승인";
 	
+	public static String IS_SAVEDCONTACTS = "isSavedContacts";
 	
 	
 	public static final ArrayList<String> emotionArr = new ArrayList<String>();

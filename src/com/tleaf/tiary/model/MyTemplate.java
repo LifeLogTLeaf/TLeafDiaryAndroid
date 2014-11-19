@@ -2,6 +2,7 @@ package com.tleaf.tiary.model;
 
 import java.util.ArrayList;
 
+/** 하나의 템플릿에 대한 정보를 담고 있는 모델 클래스 **/
 public class MyTemplate {
 	private long no;
 	private String name;

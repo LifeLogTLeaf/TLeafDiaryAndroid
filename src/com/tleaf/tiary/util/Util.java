@@ -10,10 +10,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-
+/** 어플리케이션을 위한 util 클래스 **/
 public class Util {
-	
-	
+
 	public static void tst(Context context, String msg) {
 		Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 	}
@@ -21,7 +20,7 @@ public class Util {
 	public static void ll(String tag, String msg) {
 		Log.d(tag, msg);
 	}
-	
+
 	public static void ll(String tag, long msg) {
 		Log.d(tag, ""+msg);
 	}
@@ -29,7 +28,7 @@ public class Util {
 	public static void ll(String tag, int msg) {
 		Log.d(tag, ""+msg);
 	}
-	
+
 	public static void ll(String tag, boolean msg) {
 		Log.d(tag, ""+msg);
 	}
@@ -44,7 +43,7 @@ public class Util {
 		}
 		return str; 
 	}
-	
+
 	public static ArrayList<String> covertStringToArray(String str) {
 
 		ArrayList<String> arr = new ArrayList<String>();
@@ -59,22 +58,22 @@ public class Util {
 		return arr;
 	}
 
-	
+
 	public static void hideKeyboard(Context context, IBinder windowToken)
 	{
 		InputMethodManager imm = (InputMethodManager) context
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(windowToken, 0);
 	}
-	
+
 	public static void showKeyboard(Context context, View editView)
 	{
 		InputMethodManager imm = (InputMethodManager) context
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		
+
 		boolean result = imm.showSoftInput(editView, InputMethodManager.SHOW_IMPLICIT);//0
 		Util.ll("showKeyboard result", result);
 	}
-	
+
 
 }

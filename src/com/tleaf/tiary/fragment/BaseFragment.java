@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 
+/** 프래그먼트가 공통적인 정보를 갖는 상위 클래스로서 모든 프래그먼트가 상속한다 **/
 public abstract class BaseFragment extends Fragment {
 	protected Activity mActivity;
 	protected Context mContext;

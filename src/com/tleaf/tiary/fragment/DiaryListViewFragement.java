@@ -16,6 +16,7 @@ import com.tleaf.tiary.R;
 import com.tleaf.tiary.adapter.DiaryListAdapter;
 import com.tleaf.tiary.model.Diary;
 
+/** 다이어리 리스트뷰를 담당하는 다이어리리스트뷰프래그먼트 **/
 public class DiaryListViewFragement extends BaseFragment {
 
 	private String type;
@@ -54,6 +55,7 @@ public class DiaryListViewFragement extends BaseFragment {
 		return rootView;
 	}
 
+	/** 다이어리 선택시 다이어리 뷰로 이동 **/
 	private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -64,6 +66,7 @@ public class DiaryListViewFragement extends BaseFragment {
 		}
 	};
 
+	/** db에서 다이어리 목록을 가져온다 **/
 	private ArrayList<Diary> getDiaryListByType() {
 		arItem = new ArrayList<Diary>(); 
 		if (type.equals("all")) {

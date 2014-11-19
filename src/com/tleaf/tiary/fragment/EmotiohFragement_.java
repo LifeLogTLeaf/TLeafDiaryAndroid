@@ -14,6 +14,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+/** 감정프래그먼트를 담당하는 클래스 **/
 public class EmotiohFragement_ extends BaseFragment {
 
 	private boolean isContinued = false;
@@ -79,7 +80,7 @@ public class EmotiohFragement_ extends BaseFragment {
 	}
 
 	
-	
+	/** 더보기 아이콘을 클릭할시 더 보여주는 로직을 담당하는 메서드 **/
 	private OnClickListener mListener = new OnClickListener() {
 
 		@Override

@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.MyGallery;
 
+/** 포토 목록을 보여주는 갤러리 액티비티에 갤러리를 채워주는 그리드뷰 어답터 **/
 public class MyGalleryAdapter extends BaseAdapter {
 
 	private Context mContext;

@@ -1,5 +1,6 @@
 package com.tleaf.tiary.model;
 
+/** 채팅시 한 대화를 담는 모델 클래스 **/
 public class Message {
 	private String message;
 	boolean isMine;
@@ -26,7 +27,6 @@ public class Message {
 		this.isMine = false;
 		this.isStatusMessage = status;
 	}
-
 
 
 	public String getMessage() {

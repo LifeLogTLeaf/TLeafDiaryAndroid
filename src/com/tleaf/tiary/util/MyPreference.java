@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+/** 어플리케이션에서 관리하는 정보를 저장하는  SharedPreferences 클래스 **/
 public class MyPreference {
 	private SharedPreferences pref;
 	private SharedPreferences.Editor edit;

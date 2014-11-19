@@ -1,10 +1,10 @@
 package com.tleaf.tiary.fragment.lifelog;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CallLog;
+import android.provider.ContactsContract;
 import android.text.format.Time;
 
 import com.tleaf.tiary.Common;
@@ -20,12 +21,14 @@ import com.tleaf.tiary.fragment.lifelog.adapter.MyLogAdapter;
 import com.tleaf.tiary.model.BookMark;
 import com.tleaf.tiary.model.Call;
 import com.tleaf.tiary.model.Card;
+import com.tleaf.tiary.model.Contact;
 import com.tleaf.tiary.model.MyLog;
 import com.tleaf.tiary.model.MySms;
 import com.tleaf.tiary.util.MyPreference;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
+/** 사용자 로그들을 asyncTack를 이용해 주집하는 클래스 **/
 public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 {
 	private Context mContext;
@@ -37,9 +40,13 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 	private int mType;
 	private String mSubType;
 
+	public AsyncMyLogLoad(Context context) {
+		dataMgr = new DataManager(context);
+	}
+
 	public AsyncMyLogLoad(Context context, int type, MyLogAdapter adapter) {
 		mContext =context; 
-		dataMgr = new DataManager(mContext);
+		dataMgr = new DataManager(context);
 		mType = type;
 		mSubType = null;
 		mAdapter = adapter;
@@ -48,7 +55,7 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 
 	public AsyncMyLogLoad(Context context, int type, String subType, MyLogAdapter adapter) {
 		mContext =context; 
-		dataMgr = new DataManager(mContext);
+		dataMgr = new DataManager(context);
 		mType = type;
 		mSubType = subType;
 		mAdapter = adapter;
@@ -57,7 +64,8 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 
 	@Override
 	protected void onPreExecute() {
-		pDialog = ProgressDialog.show(mContext, "로딩 중", "기다려주세요");	
+		if(mContext != null)
+			pDialog = ProgressDialog.show(mContext, "로딩 중", "기다려주세요");	
 	}
 
 	@Override
@@ -72,24 +80,18 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 			dataMgr.insertCallList(callArr);
 			return dataMgr.getCallList();
 		case Common.SMS:
+			insertSmsInDb();
 			if (mSubType != null) {
 				return dataMgr.getSmsListByType(mSubType, -1);
-			} 
-			ArrayList<MySms> smsArr = new ArrayList<MySms>();
-			smsArr.addAll(collectSmsByType(Common.KEY_SMSINBOX_BASETIME));
-			dataMgr.insertSmsList(smsArr, Common.KEY_SMSINBOX_BASETIME);
-
-			smsArr.clear();
-			smsArr.addAll(collectSmsByType(Common.KEY_SMSSENT_BASETIME));
-			dataMgr.insertSmsList(smsArr, Common.KEY_SMSSENT_BASETIME);
-
-			return dataMgr.getSmsList();
+			} else {
+				return dataMgr.getSmsList();
+			}
 		case Common.CARD:
 			//inbox를 업데이트 시킨 후 카드로그를 추출한다
 			ArrayList<MySms> smsUpdatedArr = new ArrayList<MySms>();
 			smsUpdatedArr.addAll(collectSmsByType(Common.KEY_SMSINBOX_BASETIME));
 			dataMgr.insertSmsList(smsUpdatedArr, Common.KEY_SMSINBOX_BASETIME);
-			
+
 			ArrayList<Card> cardArr = new ArrayList<Card>();
 			cardArr.addAll(collectCard());
 			dataMgr.insertCardList(cardArr);
@@ -113,27 +115,41 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 			returnArr.addAll(bookMarkArr);
 			return returnArr;
 		case Common.GALLERY:
-//			ArrayList<MyLog> locationArr = new ArrayList<MyLog>();
-//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
-//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
-//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
-//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
-//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
-//			return locationArr;
+			//			ArrayList<MyLog> locationArr = new ArrayList<MyLog>();
+			//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			//			locationArr.add(new MyLog(0, 0, "서울시 강남구 역삼동 5번지", "아남타워", MyTime.getCurrentTime()));
+			//			return locationArr;
 		}
 		return new ArrayList<MyLog>();
 	}
 
+	private void insertSmsInDb() {
+		ArrayList<MySms> smsArr = new ArrayList<MySms>();
+		smsArr.addAll(collectSmsByType(Common.KEY_SMSINBOX_BASETIME));
+		dataMgr.insertSmsList(smsArr, Common.KEY_SMSINBOX_BASETIME);
+
+		smsArr.clear();
+		smsArr.addAll(collectSmsByType(Common.KEY_SMSSENT_BASETIME));
+		dataMgr.insertSmsList(smsArr, Common.KEY_SMSSENT_BASETIME);
+	}
+
+	/** 각 어답터에게 결과 리스트를 보내는 메서드 **/
 	@Override
 	protected void onPostExecute(ArrayList<MyLog> result) {
 		super.onPostExecute(result);
 		Util.ll("onPostExecute arr", result.size());
 		mAdapter.updateItem(result);
-		if(pDialog != null)
+		if(pDialog != null) {
 			pDialog.dismiss();
+			pDialog = null;
+		}
 	}
 
 	//pref set은 db 메소드에서
+	/** 안드로이드 자원에서 전화 목록을 가져오는 메서드 **/
 	private ArrayList<Call> collectCall() { 
 		MyPreference pref = new MyPreference(mContext);
 		long callBaseTime = pref.getLongPref(Common.KEY_CALL_BASETIME, pref.getLongPref(Common.KEY_INSTALL_TIME));
@@ -211,7 +227,9 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 		return callArr;
 	}
 
+	/** 안드로이드 자원에서 문자 목록을 가져오는 메서드 **/
 	private ArrayList<MySms> collectSmsByType(String typeIdx) {
+		saveContact();
 		MyPreference pref = new MyPreference(mContext);
 
 		long smsInBoxBaseTime = pref.getLongPref(Common.KEY_SMSINBOX_BASETIME, pref.getLongPref(Common.KEY_INSTALL_TIME));
@@ -271,7 +289,14 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 			// 번호analysis
 			String num = cursor.getString(numidx);
 			sms.setNumber(num);
+			Util.ll("collectSmsByType num", num);
 
+			// 번호로 주소록에서 이름을 가져온다
+			String name = dataMgr.getContactNameByContactNumber(num).getName();
+			if (name == null || (name != null && name.equals("null")))
+				name = "";
+			sms.setName(name);
+			Util.ll("collectSmsByType name", name);
 
 			// 날짜
 			long date = cursor.getLong(dateidx);
@@ -293,6 +318,7 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 		return smsArr;
 	}
 
+	/** 사용자 내부 디비에 전화 테이블에서 수신 목록만 가져와서 카드 문자만 모으는 메서드 **/
 	private ArrayList<Card> collectCard() {
 		MyPreference pref = new MyPreference(mContext);
 
@@ -301,57 +327,60 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 
 		HashMap<String, String> cardInfoArr = Common.getCardArr();
 		ArrayList<MyLog> smsArr = dataMgr.getSmsListByType(Common.INCOMING, cardBaseTime);
-		
-//		private long no;
-//		private String name;
-//		private String number;
-//		private String type;
-//		private String message;
-		
+
+		//		private long no;
+		//		private String name;
+		//		private String number;
+		//		private String type;
+		//		private String message;
+
 		ArrayList<Card> cardArr = new ArrayList<Card>();
 		Card card;
 		for (int i=0; i <smsArr.size(); i++) {
 			MySms sms = (MySms)(smsArr.get(i));
 			if (cardInfoArr.containsKey(sms.getNumber())) {
-//				Util.ll("collectCard sms getDate", MyTime.getLongToString(sms.getDate()));
-//				Util.ll("collectCard sms getNo", sms.getNo());
-////				Util.ll("collectCard sms getName", sms.getName()); -> null
-//				Util.ll("collectCard sms getNumber", sms.getNumber());
-//				Util.ll("collectCard sms getType", sms.getType());
-//				Util.ll("collectCard sms getMessage", sms.getMessage());
-				
-//				card = (Card) sms; //확인
+				//				Util.ll("collectCard sms getDate", MyTime.getLongToString(sms.getDate()));
+				//				Util.ll("collectCard sms getNo", sms.getNo());
+				////				Util.ll("collectCard sms getName", sms.getName()); -> null
+				//				Util.ll("collectCard sms getNumber", sms.getNumber());
+				//				Util.ll("collectCard sms getType", sms.getType());
+				//				Util.ll("collectCard sms getMessage", sms.getMessage());
+
+				//				card = (Card) sms; //확인
 				card = new Card();
 				card.setDate(sms.getDate());
 				card.setNo(sms.getNo());
-//				card.setName(sms.getName());
+				//				card.setName(sms.getName());
 				card.setNumber(sms.getNumber());
-//				card.setType(sms.getType());
+				//				card.setType(sms.getType());
 				card.setMessage(sms.getMessage());
-				
+
 				card.setCardType(cardInfoArr.get(card.getNumber()));
-				
-//				Util.ll("collectCard card getDate", MyTime.getLongToString(card.getDate()));
-//				Util.ll("collectCard card getNo", card.getNo());
-////				Util.ll("collectCard card getName", card.getName()); -> null
-//				Util.ll("collectCard card getNumber", card.getNumber());
-//				Util.ll("collectCard card getType", card.getType());
-//				Util.ll("collectCard card getMessage", card.getMessage());
-				
+
+				//				Util.ll("collectCard card getDate", MyTime.getLongToString(card.getDate()));
+				//				Util.ll("collectCard card getNo", card.getNo());
+				////				Util.ll("collectCard card getName", card.getName()); -> null
+				//				Util.ll("collectCard card getNumber", card.getNumber());
+				//				Util.ll("collectCard card getType", card.getType());
+				//				Util.ll("collectCard card getMessage", card.getMessage());
+
 				card = analyzeSmsForCard(card);
 				cardArr.add(card);
 			}
 		}
 		return cardArr;
 	}
-	
-//	private long cardNo;
-//	private String cardType;
-//	private long cardDate;
-//	private int spendedMoney;
-//	private String spendedPlace;
-//	private int leftMoney;
 
+	//	private long cardNo;
+	//	private String cardType;
+	//	private long cardDate;
+	//	private int spendedMoney;
+	//	private String spendedPlace;
+	//	private int leftMoney;
+
+	/** 신한카드 문자를 파싱하는 메서드 **/
+	/** [Web발신]
+		신한체크승인    08/12 11:18     4,100원         롯데쇼핑(주)롭  잔액89,800원**/
 	private Card parseShinHan(Card card) {
 		try {
 			StringTokenizer tokenizer = new StringTokenizer(card.getMessage());
@@ -374,20 +403,22 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 			int minute = Integer.parseInt(timeTokenizer.nextToken());
 			//			spendTime.setHours(hour);
 			//			spendTime.setMinutes(minute);
-			mTime.set(0, minute, hour, monthDay, month-1, 2014); //2014 //month-1
+			Time t = new Time();
+			t.setToNow();
+			mTime.set(0, minute, hour, monthDay, month-1, t.year); 
 			card.setCardDate(mTime.toMillis(false));
 			Util.ll("파싱결과 setCardDate", MyTime.getLongToString(card.getCardDate()));
-			
+
 			String money = tokenizer.nextToken();
 			money = money.trim();
 			money = money.replace(",", "");
 			money = money.replace("원", "");
 			card.setSpendedMoney(Integer.parseInt(money));
 			Util.ll("파싱결과 setSpendedMoney", card.getSpendedMoney());
-			
+
 			card.setSpendedPlace(tokenizer.nextToken());
 			Util.ll("파싱결과 setSpendedPlace", card.getSpendedPlace());
-			
+
 			String leftMoney = tokenizer.nextToken();
 			leftMoney = leftMoney.trim();
 			leftMoney = leftMoney.replace("잔액", "");
@@ -408,7 +439,7 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 		return card;
 	}
 
-
+	/** 수집된 문자중에서 전화번호로 어떤 카드의 문자인지 확인하는 메서드 **/
 	private Card analyzeSmsForCard (Card card) {
 		Card parsedCard = null;
 		if(card.getCardType().equals(Common.NAME_SHINHAN)) {
@@ -416,5 +447,131 @@ public class AsyncMyLogLoad extends AsyncTask<Void, Void, ArrayList<MyLog>>
 		}
 		return parsedCard;
 	}
-}
 
+	private String getNameByNumberInDevice(String myNumber) {	
+		String name = "";
+		ContentResolver cr = mContext.getContentResolver();
+
+		Cursor cursor = cr.query(
+				ContactsContract.Contacts.CONTENT_URI,null,null,null,null);
+
+		int ididx = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+		int nameidx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+
+		while (cursor.moveToNext()) {
+			String tmpName = cursor.getString(nameidx); 
+
+			// 전화 번호는 서브 쿼리로 조사해야 함.
+			String id = cursor.getString(ididx);
+			Cursor cursor2 = cr.query(ContactsContract.CommonDataKinds.
+					Phone.CONTENT_URI, null, 
+					ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+					new String[]{id}, null);
+
+			//			int typeidx = cursor2.getColumnIndex(
+			//					ContactsContract.CommonDataKinds.Phone.TYPE);
+			int numidx = cursor2.getColumnIndex(
+					ContactsContract.CommonDataKinds.Phone.NUMBER);
+
+			// 전화의 타입에 따라 여러 개가 존재한다.
+			while (cursor2.moveToNext()) {
+				String num = cursor2.getString(numidx);
+				if (num.equals(myNumber)) {
+					name = tmpName;
+					break;
+				}
+				//				switch (cursor2.getInt(typeidx)) {
+				//				case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+				//					result.append(" Mobile:" + num);
+				//					break;
+				//				case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+				//					result.append(" Home:" + num);
+				//					break;
+				//				case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+				//					result.append(" Work:" + num);
+				//					break;
+				//				}
+			}
+			cursor2.close();
+		}
+		cursor.close();
+
+		Util.ll("getNameByNumber name", name);
+		return name;
+	}
+
+	public void saveContact() {
+		MyPreference pref = new MyPreference(mContext);
+		boolean isSavedContacts = pref.getBooleanPref(Common.IS_SAVEDCONTACTS);
+
+		Util.ll("isSavedContacts", isSavedContacts);
+		if (isSavedContacts)
+			return;
+		else 
+			pref.setBooleanPref(Common.IS_SAVEDCONTACTS, true);
+
+		ArrayList<Contact> contactArr = new ArrayList<Contact>();
+
+		ContentResolver cr = mContext.getContentResolver();
+		Cursor cursor = cr.query(
+				ContactsContract.Contacts.CONTENT_URI,null,null,null,null);
+
+		int ididx = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+		int nameidx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+
+		String name = "", num = "";
+
+		while (cursor.moveToNext()) {
+			Contact contact = new Contact();
+			name = cursor.getString(nameidx); 
+
+			// 전화 번호는 서브 쿼리로 조사해야 함.
+			String id = cursor.getString(ididx);
+			Cursor cursor2 = cr.query(ContactsContract.CommonDataKinds.
+					Phone.CONTENT_URI, null, 
+					ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+					new String[]{id}, null);
+
+			//			int typeidx = cursor2.getColumnIndex(
+			//					ContactsContract.CommonDataKinds.Phone.TYPE);
+			int numidx = cursor2.getColumnIndex(
+					ContactsContract.CommonDataKinds.Phone.NUMBER);
+
+			// 전화의 타입에 따라 여러 개가 존재한다.
+			while (cursor2.moveToNext()) {
+				num = cursor2.getString(numidx);
+				num = num.replace("+", "");
+				num = num.replace("-", "");
+				num = num.replace("*", "");
+				num = num.replace("#", "");
+				num = num.replace("82", "0");
+
+				//				switch (cursor2.getInt(typeidx)) {
+				//				case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+				//					result.append(" Mobile:" + num);
+				//					break;
+				//				case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+				//					result.append(" Home:" + num);
+				//					break;
+				//				case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+				//					result.append(" Work:" + num);
+				//					break;
+				//				}
+			}
+
+			cursor2.close();
+			contact.setName(name);
+			contact.setNumber(num);
+			contactArr.add(contact);
+		}
+		cursor.close();
+
+		if (contactArr == null) {
+			Util.ll("contactArr", "null");
+		} else { 
+			Util.ll("contactArr size", contactArr.size());
+		}
+		dataMgr.insertContact(contactArr);
+
+	}
+}

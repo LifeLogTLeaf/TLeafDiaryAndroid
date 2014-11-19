@@ -16,6 +16,7 @@ import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.ExpandableItem;
 import com.tleaf.tiary.model.MyMenuItem;
 
+/** 설정 뷰에서 항목들을 expandablelistview로 보여줄 때 들어갈 데이터를 바인딩 해주는 expadablelistview 어답터 **/
 public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;

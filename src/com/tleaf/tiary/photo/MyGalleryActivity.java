@@ -40,8 +40,9 @@ import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.MyGallery;
 import com.tleaf.tiary.util.Util;
 
-import eu.janmuller.android.simplecropimage.CropImage;
+//import eu.janmuller.android.simplecropimage.CropImage;
 
+/** 포토 목록을 보여주는 갤러리 액티비티 클래스 **/
 public class MyGalleryActivity extends Activity {
 
 	private GridView gv_gallery;
@@ -279,14 +280,14 @@ public class MyGalleryActivity extends Activity {
 	
 	private void startCropImage() {
 
-		Intent intent = new Intent(this, CropImage.class);
-		intent.putExtra(CropImage.IMAGE_PATH, mFileTemp.getPath());
-		intent.putExtra(CropImage.SCALE, true);
-
-		intent.putExtra(CropImage.ASPECT_X, 3);
-		intent.putExtra(CropImage.ASPECT_Y, 2);
-
-		startActivityForResult(intent, Common.REQUEST_CODE_CROP_IMAGE);
+//		Intent intent = new Intent(this, CropImage.class);
+//		intent.putExtra(CropImage.IMAGE_PATH, mFileTemp.getPath());
+//		intent.putExtra(CropImage.SCALE, true);
+//
+//		intent.putExtra(CropImage.ASPECT_X, 3);
+//		intent.putExtra(CropImage.ASPECT_Y, 2);
+//
+//		startActivityForResult(intent, Common.REQUEST_CODE_CROP_IMAGE);
 	}
 
 
@@ -321,21 +322,21 @@ public class MyGalleryActivity extends Activity {
 			break;
 		case Common.REQUEST_CODE_CROP_IMAGE:
 
-			String path = data.getStringExtra(CropImage.IMAGE_PATH);
-			if (path == null) {
-				return;
-			}
-
-			//                bitmap = BitmapFactory.decodeFile(mFileTemp.getPath());
-			//이미지를 넘긴다
-			//                mImageView.setImageBitmap(bitmap);
-
-			Util.ll("mFileTemp.getPath()", mFileTemp.getPath());
-			Intent cropedData = new Intent();
-			cropedData.putExtra("type", "crop");
-			cropedData.putExtra("path", mFileTemp.getPath());
-			setResult(RESULT_OK, cropedData);
-			finish();
+//			String path = data.getStringExtra(CropImage.IMAGE_PATH);
+//			if (path == null) {
+//				return;
+//			}
+//
+//			//                bitmap = BitmapFactory.decodeFile(mFileTemp.getPath());
+//			//이미지를 넘긴다
+//			//                mImageView.setImageBitmap(bitmap);
+//
+//			Util.ll("mFileTemp.getPath()", mFileTemp.getPath());
+//			Intent cropedData = new Intent();
+//			cropedData.putExtra("type", "crop");
+//			cropedData.putExtra("path", mFileTemp.getPath());
+//			setResult(RESULT_OK, cropedData);
+//			finish();
 			break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);

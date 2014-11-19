@@ -29,14 +29,31 @@
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/txt_expand_child_template_title"
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="템플릿"
-                android:textColor="@color/background_white"
-                android:textSize="20sp" />
+                android:layout_gravity="center_horizontal"
+                android:alpha="0.7"
+                android:background="@drawable/shape_skyblue_title" >
+
+                <!-- <RelativeLayout -->
+                <!-- android:layout_width="wrap_content" -->
+                <!-- android:layout_height="wrap_content" -->
+                <!-- android:alpha="0.4" -->
+                <!-- android:background="@color/background_skyblue" > -->
+                <!-- </RelativeLayout> -->
+
+                <TextView
+                    android:id="@+id/txt_expand_child_template_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="템플릿"
+                    android:textColor="@color/diary_title"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+            <!-- android:background="@color/background_skyblue" -->
 
             <TextView
                 android:id="@+id/txt_expand_child_template_info"

@@ -5,7 +5,14 @@
 
     <ExpandableListView
         android:id="@+id/list_expand"
-        android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/background_grey"
+        android:choiceMode="singleChoice"
+        android:divider="@null"
+        android:groupIndicator="@null"
+        android:padding="10dp" />
+
+    <!-- android:dividerHeight="0.5dp" -->
+
 </LinearLayout>

@@ -13,6 +13,8 @@ import com.tleaf.tiary.MainActivity;
 import com.tleaf.tiary.R;
 import com.tleaf.tiary.fragment.BaseFragment;
 
+/** 메뉴 중 마이 라이프 로그 뷰를 담당하는 프래그먼트 클래스
+ * 여러 로그 프래그먼트를 연결해준다 **/
 public class MyLifeLogFragement extends BaseFragment {
 
 	private RelativeLayout layout_call;
@@ -48,6 +50,7 @@ public class MyLifeLogFragement extends BaseFragment {
 		return rootView;
 	}
 
+	/** 사용자가 선택한 로그 아이콘에 따른 로그 프래그먼트를 보여주는 메서드 **/
 	private OnClickListener cl = new OnClickListener() {
 		@Override
 		public void onClick(View v) {

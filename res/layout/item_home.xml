@@ -11,9 +11,35 @@
         android:src="@drawable/main_log" />
 
     <LinearLayout
+        android:id="@+id/item_layout_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:gravity="right|center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="confirm my life records "
+            android:textColor="@color/diary_title"
+            android:textSize="12sp" >
+        </TextView>
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/arrow"
+            android:tint="@color/diary_title" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
 
@@ -33,10 +59,19 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/txt_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="5dp"
+            android:text="2014.11.19"
+            android:textColor="@color/diary_edit_edittext_hint"
+            android:textSize="35sp"
+            android:textStyle="italic|bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="my life logs..."
             android:textColor="@color/diary_title"
             android:textSize="20sp"
@@ -274,29 +309,6 @@
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:gravity="center"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="confirm my life records "
-            android:textColor="@color/background_white"
-            android:textSize="15sp" >
-        </TextView>
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/arrow"
-            android:tint="@color/background_white" />
     </LinearLayout>
 
 </RelativeLayout>

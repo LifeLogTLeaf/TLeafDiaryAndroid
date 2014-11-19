@@ -36,6 +36,7 @@ import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
+/** 다이어리를 보여주는 프래그먼트를 담당하는 클래스 **/
 public class DiaryFragment extends BaseFragment {
 
 	private Diary diary;
@@ -174,7 +175,7 @@ public class DiaryFragment extends BaseFragment {
 
 	}
 
-
+	/** 이미지를 담고 있는 뷰페이저가 이동했을 때 하단에 이미지뷰 속성을 변경하는 메서드 **/
 	private SimpleOnPageChangeListener mPageListener = new SimpleOnPageChangeListener() {
 		public void onPageSelected(int position) {
 			//			adapter.getItemPosition(object);
@@ -207,6 +208,7 @@ public class DiaryFragment extends BaseFragment {
 		}
 	};
 
+	/** 다이어리 하단에 수정 또는 삭제 클릭을 받는 메서드 **/
 	private void onClickMenu(int viewId) {
 		switch (viewId) {
 		case R.id.img_diary_modify:

@@ -16,6 +16,7 @@ import com.tleaf.tiary.R;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.model.MyMenuItem;
 
+/** 메뉴프래그먼트에서 expandablelistview에 넘겨받은 array로 리스트뷰를 채우는 어답터 **/
 public class MenuListAdapter extends BaseExpandableListAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;
@@ -73,6 +74,7 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
 		return false;
 	}
 
+	/** expandablelistview에서 타이틀에 해당하는 뷰를 얻는 메서드 **/
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
@@ -91,6 +93,7 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
 
 	}
 
+	/** expandablelistview에서 서브 메뉴에 해당하는 뷰를 얻는 메서드 **/
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
@@ -111,6 +114,7 @@ public class MenuListAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 	
+	/** 사용자가 동적으로 폴더를 생성하기 때문에 폴더리스트를 열때마다 db에서 불러온다 **/
 	public void refreshData() {
 		DataManager dataMgr = new DataManager(mContext);
 		mChild.get(mContext.getString(R.string.folder)).clear();

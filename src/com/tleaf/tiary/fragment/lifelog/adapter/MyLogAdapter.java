@@ -18,6 +18,7 @@ import com.tleaf.tiary.model.MySms;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
+/** 로그들을 보여주는 로그 리스트뷰 어답터의 공통적인 속성을 뽑아내 상위 어답터로 만든다 **/
 abstract public class MyLogAdapter extends BaseAdapter {
 
 	protected Context mContext;

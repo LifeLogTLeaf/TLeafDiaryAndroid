@@ -1,5 +1,6 @@
 package com.tleaf.tiary.model;
 
+/** 모든 로그들의 공통적인 속성을 갖는 모델 클래스를 상위 클래스로 만들어 모든 로그들이 상속 받는다 **/
 public class MyLog {
 	protected String id;
 	protected String rev;

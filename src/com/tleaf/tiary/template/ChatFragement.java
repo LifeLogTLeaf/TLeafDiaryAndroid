@@ -37,6 +37,7 @@ import com.tleaf.tiary.template.LogPagerAdapter.OnItemClickLogPagerListener;
 import com.tleaf.tiary.util.MyTime;
 import com.tleaf.tiary.util.Util;
 
+/** 채팅 뷰인 채팅 프래그먼트 클래스 **/
 public class ChatFragement extends BaseFragment {
 
 	private ArrayList<Message> messages;
@@ -96,6 +97,8 @@ public class ChatFragement extends BaseFragment {
 					selectedLog = "";
 					Call call = (Call) myLog;
 					selectedLog = call.getName();
+					if (selectedLog.equals("등록없음"))
+						selectedLog = call.getNumber();
 				} else if (myLog instanceof Card) { //먼저 검사해주어야 한다 //내용수정 
 					selectedLog = "";
 					Card card = (Card) myLog;
@@ -148,6 +151,7 @@ public class ChatFragement extends BaseFragment {
 		return rootView;
 	}
 
+	/** editText에 포커스에 따른 로직을 관리하는 메서드 **/
 	private OnFocusChangeListener editTextFocusCl = new OnFocusChangeListener() {
 
 		@Override
@@ -181,6 +185,7 @@ public class ChatFragement extends BaseFragment {
 		}
 	};
 
+	/** 사용자가 로그 입력 아이콘을 눌렀을 경우 처리하는 메서드**/
 	private void setLogInputMode() {
 		Util.hideKeyboard(mContext, edit_chat.getApplicationWindowToken());
 		ll_change.setVisibility(View.VISIBLE);
@@ -191,6 +196,7 @@ public class ChatFragement extends BaseFragment {
 		currentIcon = Common.KEYBOARD;
 	}
 
+	/** 사용자가 키보드 입력 아이콘을 눌렀을 경우 처리하는 메서드**/
 	private void setKeyboardInputMode() {
 		ll_change.setVisibility(View.GONE);
 		edit_chat.setFocusableInTouchMode(true);
@@ -205,9 +211,12 @@ public class ChatFragement extends BaseFragment {
 		currentIcon = Common.LOG;
 	}
 
+	/** 사용자가 edittext에 입력한 값을 받아 메시지를 보내는 메서드**/
 	private void sendMessage() {
 		String newMessage = edit_chat.getText().toString().trim();
-		contentArr.get(contentNo++).setContent(newMessage);
+		contentArr.get(contentNo).setContent(newMessage);
+		if (contentNo < contentArr.size()) 
+			contentNo++;
 		if (newMessage != null && newMessage.length() > 0) {
 			edit_chat.setText("");
 			addNewMessage(new Message(newMessage, true));
@@ -216,6 +225,7 @@ public class ChatFragement extends BaseFragment {
 	}
 
 
+	/** 메시지 array에 메시지를 추가하고 어답터에게 알리는 메서드 **/
 	private void addNewMessage(Message msg) {
 		messages.add(msg);
 		mAdapter.notifyDataSetChanged();
@@ -231,8 +241,7 @@ public class ChatFragement extends BaseFragment {
 		}, DateUtils.SECOND_IN_MILLIS);
 	}
 
-
-
+	/** 채팅에 입력받는 값에 따라 해당 하는 로그 리스트를 보여주는 메서드 **/
 	private void setLogPagerLcoation(String responseType) {
 		if (responseType != null && !responseType.equals("null")) {
 			Util.ll("responseType", responseType);
@@ -258,7 +267,8 @@ public class ChatFragement extends BaseFragment {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
+	/** 발신자, 수신자와의 채팅을 위한 시간차를 처리하는 메서드 **/
 	private class SendingMessage extends AsyncTask<Void, String, Message> {
 		@Override
 		protected Message doInBackground(Void... params) {
@@ -303,6 +313,7 @@ public class ChatFragement extends BaseFragment {
 
 	}
 
+	/** 채팅의 종료를 처리하는 메서드 **/
 	private void exitChat() {
 		Diary diary = new Diary();
 		String fullSetence = "";

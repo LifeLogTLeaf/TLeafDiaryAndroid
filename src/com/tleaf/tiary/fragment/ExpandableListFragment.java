@@ -20,6 +20,7 @@ import com.tleaf.tiary.fragment.lifelog.MyLifeLogFragement;
 import com.tleaf.tiary.model.ExpandableItem;
 import com.tleaf.tiary.util.Util;
 
+/** 설정을 보여주는 프래그먼트를 담당하는 클래스 **/
 public class ExpandableListFragment extends BaseFragment {
 
 	private Context mContext;
@@ -49,21 +50,43 @@ public class ExpandableListFragment extends BaseFragment {
 		});
 
 		ArrayList<String> mParent = new ArrayList<String>();
-		mParent.add("기본설정1");
-		mParent.add("기본설정2");
-		mParent.add("기본설정3");
+		mParent.add("내 정보");
+		mParent.add("잠금");
+		mParent.add("일기 관리");
+		mParent.add("안내");
 
-		ArrayList<ExpandableItem> mChildItem = new ArrayList<ExpandableItem>();
+		ArrayList<ExpandableItem> mChildItem1 = new ArrayList<ExpandableItem>();
 
-		mChildItem.add(new ExpandableItem("나의설정", "설정설명입니다"));
-		mChildItem.add(new ExpandableItem("나의설정", "설정설명입니다"));
-		mChildItem.add(new ExpandableItem("나의설정", "설정설명입니다"));
+		mChildItem1.add(new ExpandableItem("로그인", "설정설명입니다"));
+		mChildItem1.add(new ExpandableItem("비밀번호 수정", "설정설명입니다"));
+		mChildItem1.add(new ExpandableItem("계정 탈퇴", "설정설명입니다"));
+
+		ArrayList<ExpandableItem> mChildItem2 = new ArrayList<ExpandableItem>();
+
+		mChildItem2.add(new ExpandableItem("잠금 설정", "설정설명입니다"));
+		mChildItem2.add(new ExpandableItem("암호 변경", "설정설명입니다"));
+
+		ArrayList<ExpandableItem> mChildItem3 = new ArrayList<ExpandableItem>();
+
+		mChildItem3.add(new ExpandableItem("일기 내보내기", "설정설명입니다"));
+		mChildItem3.add(new ExpandableItem("일기 가져오기", "설정설명입니다"));
+		mChildItem3.add(new ExpandableItem("동기화", "설정설명입니다"));
+
+		ArrayList<ExpandableItem> mChildItem4 = new ArrayList<ExpandableItem>();
+
+		mChildItem4.add(new ExpandableItem("Tiary 정보", "설정설명입니다"));
 
 		HashMap<String, ArrayList<ExpandableItem>> mChild = new HashMap<String, ArrayList<ExpandableItem>>();
 
 
-		for(int i = 0; i < mParent.size(); i++) 
-			mChild.put(mParent.get(i), mChildItem);
+//		for(int i = 0; i < mParent.size(); i++) 
+//			mChild.put(mParent.get(i), mChildItem);
+		
+		mChild.put(mParent.get(0), mChildItem1);
+		mChild.put(mParent.get(1), mChildItem2);
+		mChild.put(mParent.get(2), mChildItem3);
+		mChild.put(mParent.get(3), mChildItem4);
+		
 
 		MyExpandableListAdapter mAdapter = new MyExpandableListAdapter(mContext, R.layout.item_expandable_parent, R.layout.item_expandable_child, mParent, mChild); // this.getActivity()
 		exListView.setAdapter(mAdapter);

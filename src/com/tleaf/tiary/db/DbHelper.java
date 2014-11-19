@@ -9,7 +9,6 @@ import com.tleaf.tiary.R;
 import com.tleaf.tiary.util.MyTime;
 
 /*
- * 작성자: 최슬기
  * 기능: 앱의 db를 초기화 하는 클래스이다. 
  * 
  * SQLiteOpenHelper를 상속받은 클래스이다.
@@ -132,7 +131,12 @@ public class DbHelper extends SQLiteOpenHelper {
 				"front text, " +
 				"end text, " +
 				"type text, " +
-				"foreign key(templateno) references template(no))";		
+				"foreign key(templateno) references template(no))";	
+		
+		String table_contact = "create table contact (no integer primary key autoincrement, " +
+				"name text, " +
+				"number text)"; 
+
 
 		String insert_template1 = "insert into template values (0, 'My life log', 'Daily', '하루동안 발생한 로그로 일기를 작성해보세요', 'tiary')";
 		String insert_template2 = "insert into template values (1, '오늘의 지출', 'Money', '가계부, 이제 일일이 적지 않아요', 'tiary')";
@@ -140,7 +144,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		String insert_template4 = "insert into template values (3, '나의 다이어트 일기', 'Diet', '음식, 운동 단 하나의 기록도 놓치지 마세요', 'tiary')";
 //		MyTime.getLongToString(MyTime.getCurrentTime())
 		
-		String insert_template2_1 = "insert into template_content values (0, 1, '안녕하세요 오늘은 2014년 11월 14일 입니다', " +
+		String insert_template2_1 = "insert into template_content values (0, 1, '안녕하세요 오늘은 2014년 11월 19일 입니다', " +
 				"null, null, null, null)";
 		String insert_template2_2 = "insert into template_content values (1, 1, '오늘도 현명하게 소비하셨나요? 아니시라면 오늘부터 Tiary를 통해 가계부 습관들 들여보아요! 질문에 키워드로 답변해주세요', " +
 				"null, null, null, '" + Common.STRING_CARD +"')";
@@ -170,6 +174,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
 		db.execSQL(table_template);
 		db.execSQL(table_template_content);
+		db.execSQL(table_contact);
+
 
 		db.execSQL(insert_template1);
 		db.execSQL(insert_template2);

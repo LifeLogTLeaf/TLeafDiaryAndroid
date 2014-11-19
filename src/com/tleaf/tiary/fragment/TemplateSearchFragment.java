@@ -23,6 +23,8 @@ import com.tleaf.tiary.model.TemplateContent;
 import com.tleaf.tiary.template.ChatFragement;
 import com.tleaf.tiary.util.Util;
 
+/** 템플릿 검색 및 템플릿 연결을 담당하는 프래그먼트 클래스
+ * expandable listview로 구성된다  **/
 public class TemplateSearchFragment extends BaseFragment {
 
 	private ExpandableListView exListView;
@@ -78,7 +80,7 @@ public class TemplateSearchFragment extends BaseFragment {
 
 	}
 
-
+	/** expandable listview에 차일드 뷰를 셋팅하는 메서드 **/
 	private void selectChildItem(int position, int childPosition) {
 		Util.tst(mContext, "position"+position+",childPosition"+childPosition);
 		FragmentManager fragmentManager = getFragmentManager();

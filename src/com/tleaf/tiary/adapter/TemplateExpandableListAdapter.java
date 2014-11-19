@@ -15,6 +15,8 @@ import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.MyTemplate;
 import com.tleaf.tiary.util.Util;
 
+/** 템플릿 검색 뷰에서 템플릿 항목을 expandablelistview로 보여줄 때 뷰를 바인딩해주는 expandablelistview adapter **/
+
 public class TemplateExpandableListAdapter extends BaseExpandableListAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;

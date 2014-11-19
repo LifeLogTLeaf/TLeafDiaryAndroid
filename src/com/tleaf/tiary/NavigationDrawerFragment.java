@@ -29,6 +29,9 @@ import com.tleaf.tiary.adapter.MenuListAdapter;
 import com.tleaf.tiary.db.DataManager;
 import com.tleaf.tiary.model.MyMenuItem;
 
+
+
+
 /**
  * Fragment used for managing interactions for and presentation of a navigation
  * drawer. See the <a href=
@@ -36,6 +39,9 @@ import com.tleaf.tiary.model.MyMenuItem;
  * > design guidelines</a> for a complete explanation of the behaviors
  * implemented here.
  */
+
+
+/** 네비게이션 프래그먼트 뷰를 담당하는 프래그먼트 클래스 **/
 public class NavigationDrawerFragment extends Fragment {
 
 	/**
@@ -135,13 +141,12 @@ public class NavigationDrawerFragment extends Fragment {
 		mParent.add(new MyMenuItem(R.drawable.home, getString(R.string.home)));
 		mParent.add(new MyMenuItem(R.drawable.person6,
 				getString(R.string.mylifelog)));
-		mParent.add(new MyMenuItem(R.drawable.template6, getString(R.string.template)));
+		mParent.add(new MyMenuItem(R.drawable.chat, getString(R.string.template)));
 		mParent.add(new MyMenuItem(R.drawable.write, getString(R.string.write)));
 		mParent.add(new MyMenuItem(R.drawable.folder, getString(R.string.folder)));
 		mParent.add(new MyMenuItem(R.drawable.tag, getString(R.string.tag)));
 		mParent.add(new MyMenuItem(R.drawable.emotion3,
 				getString(R.string.emotion)));
-		mParent.add(new MyMenuItem(R.drawable.tree2, getString(R.string.shack)));
 		mParent.add(new MyMenuItem(R.drawable.setting,
 				getString(R.string.setting)));
 
@@ -306,7 +311,7 @@ public class NavigationDrawerFragment extends Fragment {
 		// showGlobalContextActionBar, which controls the top-left area of the
 		// action bar.
 		if (mDrawerLayout != null && isDrawerOpen()) {
-			inflater.inflate(R.menu.global, menu);
+//			inflater.inflate(R.menu.global, menu);
 			showGlobalContextActionBar();
 		}
 		super.onCreateOptionsMenu(menu, inflater);

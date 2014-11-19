@@ -21,6 +21,8 @@ import com.tleaf.tiary.R;
 import com.tleaf.tiary.model.Diary;
 import com.tleaf.tiary.util.MyTime;
 
+
+/** 갤러리 로그 리스트 뷰를 갤러리 로그로 채워주는 리스트뷰 어답터 **/
 public class GalleryLogAdapter extends BaseAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;
